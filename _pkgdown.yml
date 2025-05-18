@@ -1,0 +1,18 @@
+url: https://github.com/jexica0921/DeepRHealth
+template:
+  bootstrap: 5
+
+# articles: {}
+# reference:
+#   - title: "All functions"
+#     contents:
+#       - `starts_with("lookup_")`
+#       - `starts_with("get_")`
+#       - `starts_with("map_")`
+#       - `starts_with("atc_")`
+#       - MedCode
+
+# navbar:
+#   structure:
+#     left: [intro, reference, articles, news]
+#     right: github

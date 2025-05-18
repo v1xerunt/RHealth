@@ -1,0 +1,44 @@
+Package: DeepRHealth
+Type: Package
+Title: Tools for Medical Code Mapping and Clinical Data Analysis
+Version: 0.1.0
+Authors@R: c(
+    person(
+      "Zhixia", "Ren",
+      email = "jexica0921@gmail.com",
+      role = c("aut", "cre")
+    )
+  )
+Description: MA toolkit for standardized medical code lookup, hierarchical
+    exploration, and cross-vocabulary mapping (e.g., ICD9CM to CCSCM),
+    inspired by the PyHealth framework. Provides tidyverse-compatible
+    interfaces for clinical code translation and transformation tasks.
+License: MIT + file LICENSE
+Encoding: UTF-8
+LazyData: true
+URL: https://github.com/jexica0921/DeepRHealth
+BugReports: https://github.com/jexica0921/DeepRHealth/issues
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.2
+Depends: R (>= 4.1.0)
+Suggests:
+    devtools (>= 2.4.5),
+    usethis,
+    testthat (>= 3.0.0),
+    lintr (>= 3.2.0),
+    styler (>= 1.10.3),
+    pkgdown (>= 2.1.1),
+    roxygen2 (>= 7.3.2)
+Imports:
+    R6,
+    httr,
+    readr,
+    dplyr,
+    rappdirs,
+    fs
+Remotes: 
+    r-lib/devtools,
+    r-lib/lintr,
+    r-lib/pkgdown,
+    r-lib/roxygen2
+Config/testthat/edition: 3

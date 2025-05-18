@@ -5,9 +5,9 @@
 # Session Data files
 .RData
 .RDataTmp
+.Rdata
 
-# User-specific files
-.Ruserdata
+# User-specific files (已有 .Ruserdata)
 
 # Example code in package build process
 *-Ex.R
@@ -20,6 +20,7 @@
 
 # RStudio files
 .Rproj.user/
+*.Rproj~
 
 # produced vignettes
 vignettes/*.html
@@ -38,6 +39,7 @@ vignettes/*.pdf
 
 # R Environment Variables
 .Renviron
+.Renviron.local
 
 # pkgdown site
 docs/
@@ -47,3 +49,9 @@ po/*~
 
 # RStudio Connect folder
 rsconnect/
+
+# macOS specific
+.DS_Store
+
+# Quarto specific
+.quarto/

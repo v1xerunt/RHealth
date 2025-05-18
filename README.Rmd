@@ -1,133 +1,108 @@
+---
+output: github_document
+---
+
 <!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%"
+)
+```
 
 # DeepRHealth
 
 <!-- badges: start -->
-
 <!-- badges: end -->
-
-DeepRHealth is an R toolkit designed for medical informatics and health
-data analysis. This README focuses on the functionalities provided by
-its medcode module. The medcode module within DeepRHealth offers tools
-for working with various medical coding systems, inspired by
-PyHealth.medcode. Its key capabilities include:
+DeepRHealth is an R toolkit designed for medical informatics and health data analysis. This README focuses on the functionalities provided by its medcode module.
+The medcode module within DeepRHealth offers tools for working with various medical coding systems, inspired by PyHealth.medcode. Its key capabilities include:
 
 - Looking up medical code descriptions.
 - Navigating code hierarchies (finding ancestors and descendants).
-- Mapping codes across different coding systems (e.g., ICD-9-CM to
-  CCSCM).
-- Utilizing specific utilities for ATC (Anatomical Therapeutic Chemical)
-  codes. The module manages data by downloading necessary .csv files
-  from a cloud source, caching them locally, and loading them for
-  efficient querying.
+- Mapping codes across different coding systems (e.g., ICD-9-CM to CCSCM).
+- Utilizing specific utilities for ATC (Anatomical Therapeutic Chemical) codes.
+The module manages data by downloading necessary .csv files from a cloud source, caching them locally, and loading them for efficient querying.
 
 ## Installation
 
-You can install the development version of DeepRHealth from
-[GitHub](https://github.com/) with:
+You can install the development version of DeepRHealth from [GitHub](https://github.com/) with:
 
 ``` r
 # install.packages("pak")
 pak::pak("DeepRHealth")
 ```
-
 Alternatively, using devtools:
-
 ``` r
 # install.packages("devtools")
 devtools::install_github("DeepRHealth")
 ```
 
 ## medcode Module: Core Features & Examples
-
-Once DeepRHealth is installed, you can load the package to access
-medcode functionalities:
-
+Once DeepRHealth is installed, you can load the package to access medcode functionalities:
 ``` r
 library(DeepRHealth)
 ```
-
 ### 1. Code Lookup with lookup_code()
-
 Retrieve the description for a specific medical code.
-
-``` r
+```r
 # Example: Look up ICD-9-CM code "428.0"
 code_description <- lookup_code(code = "428.0", system = "ICD9CM")
 print(code_description)
 ```
-
 ### 2. Hierarchy Navigation
-
-Explore relationships within coding systems. \#### Get Ancestors with
-get_ancestors():
-
-``` r
+Explore relationships within coding systems.
+#### Get Ancestors with get_ancestors():
+```r
 # Example: Find ancestors for ICD-9-CM code "428.22"
 ancestor_codes <- get_ancestors(code = "428.22", system = "ICD9CM")
 print(ancestor_codes)
 ```
-
 #### Get Descendants with get_descendants():
-
-``` r
+```r
 # Example: Find descendants for ICD-9-CM code "428"
 descendant_codes <- get_descendants(code = "428", system = "ICD9CM")
 print(head(descendant_codes)) # Showing first few for brevity
 print(paste("Total descendants for '428':", length(descendant_codes)))
 ```
-
 ### 3. Cross-System Mapping with map_code()
-
-Translate codes from one system to another. First, see available
-mappings:
-
-``` r
+Translate codes from one system to another. First, see available mappings:
+```r
 supported_cross()
 ```
-
 Then, map a code:
-
-``` r
+```r
 # Example: Map ICD-9-CM "428.0" to CCSCM
 mapped_ccscm_code <- map_code(code = "428.0", from = "ICD9CM", to = "CCSCM")
 print(mapped_ccscm_code)
 ```
-
 ### 4. ATC Specific Utilities
-
 #### ATC Level Conversion with atc_convert():
-
-``` r
+```r
 atc_code <- "L01BA01" # Methotrexate
 print(paste("L1 (Anatomical Main Group):", atc_convert(atc_code, level = 1)))
 print(paste("L3 (Therapeutic/Pharmacological Subgroup):", atc_convert(atc_code, level = 3)))
 print(paste("L4 (Chemical/Therapeutic/Pharmacological Subgroup):", atc_convert(atc_code, level = 4)))
 ```
-
 #### Drug-Drug Interactions (DDI) with get_ddi():
-
-``` r
+```r
 ddi_data <- get_ddi()
 print("First few known Drug-Drug Interactions (ATC pairs):")
 print(head(ddi_data))
 ```
 
 ## Development Status of medcode Module
-
-The medcode module is a core component of the DeepRHealth package and is
-under active development. Key functionalities (as demonstrated above)
-are implemented.
+The medcode module is a core component of the DeepRHealth package and is under active development. Key functionalities (as demonstrated above) are implemented.
 
 ### Future Work for medcode (and DeepRHealth overall):
-
 - Completion of all Roxygen documentation.
 - Addition of comprehensive unit tests using testthat.
-- Development of detailed vignettes showcasing use cases for medcode and
-  other DeepRHealth modules.
-- Full setup and deployment of the pkgdown website for DeepRHealth. \##
-  Note on Data for medcode The medcode module downloads required medical
-  coding data (.csv files) from r getOption(“DeepRHealth.medcode_base”,
-  default = “<https://storage.googleapis.com/pyhealth/resource/>”) and
-  caches them locally in r rappdirs::user_cache_dir(“DeepRHealth”,
-  “medcode”) for subsequent use.
+- Development of detailed vignettes showcasing use cases for medcode and other DeepRHealth modules.
+- Full setup and deployment of the pkgdown website for DeepRHealth.
+## Note on Data for medcode
+The medcode module downloads required medical coding data (.csv files) from r getOption("DeepRHealth.medcode_base", default = "https://storage.googleapis.com/pyhealth/resource/") and caches them locally in r rappdirs::user_cache_dir("DeepRHealth", "medcode") for subsequent use.
+
+
+
