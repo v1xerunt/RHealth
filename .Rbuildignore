@@ -1,0 +1,17 @@
+^.*\.Rproj$
+^\.Rproj\.user$
+^\.git$
+^\.gitignore$
+^\.gitattributes$
+^renv$
+^renv\.lock$
+^01dev_config.R$
+^02document_genera.R$
+^README\.Rmd$
+^_pkgdown\.yml$
+^docs$
+^pkgdown$
+# 你特定的Demo文件
+^DeepRHealth---medcode Module Demo\.html$
+^DeepRHealth---medcode Module Demo\.qmd$
+^LICENSE\.md$
