@@ -2,6 +2,11 @@ url: https://v1xerunt.github.io/RHealth
 template:
   bootstrap: 5
 
+# For development version
+development:
+  mode: auto # or 'release' or 'devel'
+  destination: dev # Deploys dev version to a 'dev' subdirectory
+
 # articles: {}
 # reference:
 #   - title: "All functions"
