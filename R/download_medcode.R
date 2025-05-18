@@ -13,19 +13,19 @@
 #'
 #' @details
 #' By default, when the package is loaded, \code{.onLoad()} sets
-#' \code{options(DeepRHealth.medcode_base)} to
+#' \code{options(RHealth.medcode_base)} to
 #' \code{"https://storage.googleapis.com/pyhealth/resource/"}.
 #' The CSV will be downloaded from
-#' \code{file.path(getOption("DeepRHealth.medcode_base"),
+#' \code{file.path(getOption("RHealth.medcode_base"),
 #' paste0(name, ".csv"))}.
 #'
 #' To override the download location, set your own base URL before calling:
 #' \preformatted{
-#' options(DeepRHealth.medcode_base = "https://your.server/medcode/")
+#' options(RHealth.medcode_base = "https://your.server/medcode/")
 #' }
 #'
 #' Cached files are stored under:
-#' \code{file.path(rappdirs::user_cache_dir("DeepRHealth"), "medcode")}.
+#' \code{file.path(rappdirs::user_cache_dir("RHealth"), "medcode")}.
 #'
 #' @examples
 #' \dontrun{
@@ -33,7 +33,7 @@
 #' path1 <- download_medcode("ICD10")
 #'
 #' # Use a custom server
-#' options(DeepRHealth.medcode_base = "https://internal.example.com/medcode/")
+#' options(RHealth.medcode_base = "https://internal.example.com/medcode/")
 #' path2 <- download_medcode("CPT")
 #' }
 #'
@@ -47,11 +47,11 @@
 #' @importFrom rappdirs user_cache_dir
 #' @importFrom httr GET write_disk
 download_medcode <- function(name) {
-  cache_dir <- fs::path(rappdirs::user_cache_dir("DeepRHealth"), "medcode")
+  cache_dir <- fs::path(rappdirs::user_cache_dir("RHealth"), "medcode")
   fs::dir_create(cache_dir, recurse = TRUE)
   dest <- fs::path(cache_dir, paste0(name, ".csv"))
   if (!fs::file_exists(dest)) {
-    url <- paste0(getOption("DeepRHealth.medcode_base"), name, ".csv")
+    url <- paste0(getOption("RHealth.medcode_base"), name, ".csv")
     httr::GET(url, httr::write_disk(dest, overwrite = TRUE))
   }
   dest

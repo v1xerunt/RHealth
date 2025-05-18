@@ -7,6 +7,6 @@
 # * https://testthat.r-lib.org/articles/special-files.html
 
 library(testthat)
-library(DeepRHealth)
+library(RHealth)
 
-test_check("DeepRHealth")
+test_check("RHealth")

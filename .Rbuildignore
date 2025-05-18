@@ -12,6 +12,6 @@
 ^docs$
 ^pkgdown$
 # 你特定的Demo文件
-^DeepRHealth---medcode Module Demo\.html$
-^DeepRHealth---medcode Module Demo\.qmd$
+^RHealth---medcode Module Demo\.html$
+^RHealth---medcode Module Demo\.qmd$
 ^LICENSE\.md$

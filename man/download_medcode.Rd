@@ -20,19 +20,19 @@ caches it locally, and returns the path to the cached file.
 }
 \details{
 By default, when the package is loaded, \code{.onLoad()} sets
-\code{options(DeepRHealth.medcode_base)} to
+\code{options(RHealth.medcode_base)} to
 \code{"https://storage.googleapis.com/pyhealth/resource/"}.
 The CSV will be downloaded from
-\code{file.path(getOption("DeepRHealth.medcode_base"),
+\code{file.path(getOption("RHealth.medcode_base"),
 paste0(name, ".csv"))}.
 
 To override the download location, set your own base URL before calling:
 \preformatted{
-options(DeepRHealth.medcode_base = "https://your.server/medcode/")
+options(RHealth.medcode_base = "https://your.server/medcode/")
 }
 
 Cached files are stored under:
-\code{file.path(rappdirs::user_cache_dir("DeepRHealth"), "medcode")}.
+\code{file.path(rappdirs::user_cache_dir("RHealth"), "medcode")}.
 }
 \examples{
 \dontrun{
@@ -40,7 +40,7 @@ Cached files are stored under:
 path1 <- download_medcode("ICD10")
 
 # Use a custom server
-options(DeepRHealth.medcode_base = "https://internal.example.com/medcode/")
+options(RHealth.medcode_base = "https://internal.example.com/medcode/")
 path2 <- download_medcode("CPT")
 }
 
