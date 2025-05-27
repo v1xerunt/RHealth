@@ -19,13 +19,13 @@ This package is built upon its python version
 
 ## Citing RHealth :handshake:
 
-Zhixia Ren, Ji Song, Liantao Ma, Ewen M Harrison, and Junyi Gao. 2025.
+Ji Song, Zhixia Ren, Liantao Ma, Ewen M Harrison, and Junyi Gao. 2025.
 “RHealth: A Deep Learning Toolkit for Healthcare Predictive Modeling”.
 GitHub.
 
 ``` bibtex
-@misc{Ren2025,
-  author = {Zhixia Ren, Ji Song, Liantao Ma, Ewen M Harrison, Junyi Gao},
+@misc{Ji2025,
+  author = {Ji Song, Zhixia Ren, Liantao Ma, Ewen M Harrison, Junyi Gao},
   title = {RHealth},
   year = {2025},
   publisher = {GitHub},
