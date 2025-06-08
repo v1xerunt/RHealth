@@ -32,8 +32,12 @@ jobs:
         with:
           use-public-rspm: true
 
-      - uses: r-lib/actions/setup-r-dependencies@v2
+      - name: Install dependencies
+        uses: r-lib/actions/setup-r-dependencies@v2
         with:
+          extra-repositories: |
+            R-multiverse=https://community.r-multiverse.org
+
           extra-packages: any::pkgdown, local::.
           needs: website
 
