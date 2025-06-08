@@ -68,7 +68,7 @@ BaseDataset <- R6::R6Class(
     #' @param tables Character vector of table keys defined in the config.
     #' @param dataset_name Optional custom name; defaults to the R6 class name.
     #' @param config_path Path to YAML or  schema describing each table.
-    #' @param dev Logical.  If TRUE, limits to 1 000 patients for speed.
+    #' @param dev Logical.  If TRUE, limits to 1000 patients for speed.
     initialize = function(root,
                           tables,
                           dataset_name = NULL,
@@ -88,7 +88,7 @@ BaseDataset <- R6::R6Class(
     #--------------------------------------------------------------------
     #' @description
     #' Materialise (collect) the lazy event dataframe.  In dev‑mode only the
-    #' first 1 000 patients are kept.
+    #' first 1000 patients are kept.
     #' @return A polars DataFrame containing all selected events.
     collected_global_event_df = function() {
     if (is.null(self$.collected_global_event_df)) {
@@ -301,7 +301,7 @@ BaseDataset <- R6::R6Class(
     #' Apply a \code{BaseTask} to build a \code{SampleDataset}.
     #' @param task A \code{BaseTask} instance; if NULL, \code{default_task()} is
     #'   used.
-    #' @param num_workers Integer ≥ 1.  Number of parallel workers.
+    #' @param num_workers Integer ≥1.  Number of parallel workers.
     #' @return A populated \code{SampleDataset}.
     set_task = function(task = NULL, num_workers = 1) {
       task <- task %||% self$default_task()
@@ -440,10 +440,10 @@ BaseDataset <- R6::R6Class(
 #' @keywords internal
 .ensure_parquet <- function(csv_path, parquet_path) {
   if (file.exists(parquet_path) && file.info(parquet_path)$size > 0)
-    return(invisible(parquet_path))              # 真正的 parquet 才算缓存命中
+    return(invisible(parquet_path))
 
   message("[cache] DuckDB COPY → ", basename(parquet_path))
-  tmp_parq <- tempfile(fileext = ".parquet")     # 先写临时文件
+  tmp_parq <- tempfile(fileext = ".parquet")
   on.exit(unlink(tmp_parq), add = TRUE)
 
   con <- DBI::dbConnect(duckdb::duckdb(), dbdir = ":memory:")
@@ -473,7 +473,6 @@ BaseDataset <- R6::R6Class(
 
   DBI::dbExecute(con, sql)
 
-  ## ---- 仅当写出的 parquet > 0 字节才替换正式缓存 ------------------------
   if (file.info(tmp_parq)$size == 0)
     stop("DuckDB COPY failed; produced empty parquet: ", basename(csv_path))
   dir.create(dirname(parquet_path), showWarnings = FALSE)

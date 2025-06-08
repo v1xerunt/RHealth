@@ -5,8 +5,7 @@
 #' including table join specifications, per-table attributes, and the overall dataset structure.
 #' It also provides a function to load configuration from a YAML file.
 #'
-#' @docType package
-#' @name rhelth.config
+#' @name rhealth.config
 #' @import R6 checkmate yaml
 
 library(R6)

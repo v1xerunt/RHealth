@@ -5,7 +5,7 @@
 #' name, returning a tibble with all columns as character.
 #'
 #' @param name Character(1). Identifier of the medical code CSV (without the
-#'   \`.csv\` extension), e.g. \code{"ICD10"} or \code{"CPT"}.
+#'   '.csv' extension), e.g. \code{"ICD10"} or \code{"CPT"}.
 #'
 #' @return A tibble (`tibble::tibble`) in which every column is of type
 #'   character.
@@ -26,7 +26,6 @@
 #' \code{\link{download_medcode}}, \code{\link[readr]{read_csv}}
 #'
 #' @keywords internal
-#' @noRd
 #' @importFrom readr read_csv cols
 load_medcode <- function(name) {
   path <- download_medcode(name)
