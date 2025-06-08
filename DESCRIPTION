@@ -51,6 +51,7 @@ Imports:
     httr,
     readr,
     dplyr,
+    torch,
     rappdirs,
     fs
 Remotes: 
