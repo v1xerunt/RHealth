@@ -71,11 +71,5 @@ Imports:
     checkmate,
     fs,
     duckdb
-Additional_repositories: https://community.r-multiverse.org
-Remotes: 
-    r-lib/devtools,
-    r-lib/lintr,
-    r-lib/pkgdown,
-    r-lib/roxygen2，
-    r-multiverse/polars
+Additional_repositories: https://community.r-multiverse.org, https://rpolars.r-universe.dev/
 Config/testthat/edition: 3

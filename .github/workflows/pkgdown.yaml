@@ -32,14 +32,15 @@ jobs:
         with:
           use-public-rspm: true
 
+      - name: Install R package from R-universe
+        run: |
+          R -e "install.packages('polars', repos = c('https://rpolars.r-universe.dev', 'https://cloud.r-project.org'))"
+        shell: bash
+
       - name: Install dependencies
         uses: r-lib/actions/setup-r-dependencies@v2
         with:
-          extra-repositories: |
-            R-multiverse=https://community.r-multiverse.org
-
           extra-packages: any::pkgdown, local::.
-          needs: website
 
       - name: Build site
         run: pkgdown::build_site_github_pages(new_process = FALSE, install = FALSE)
