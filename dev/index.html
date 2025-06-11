@@ -32,12 +32,19 @@
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto">
+<li class="nav-item"><a class="nav-link" href="articles/Overview.html">Overview</a></li>
 <li class="nav-item"><a class="nav-link" href="reference/index.html">Reference</a></li>
+<li class="nav-item dropdown">
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
+<li><a class="dropdown-item" href="articles/quickstart.html">Quickstart: In-Hospital Mortality Prediction with RHealth</a></li>
+    <li><a class="dropdown-item" href="articles/MedCode.html">DeepRHealth::medcode Module Demo</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><a class="dropdown-item" href="articles/index.html">More articles...</a></li>
+  </ul>
+</li>
       </ul>
 <ul class="navbar-nav">
-<li class="nav-item"><form class="form-inline" role="search">
- <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="search.json">
-</form></li>
 <li class="nav-item"><a class="external-link nav-link" href="https://github.com/v1xerunt/RHealth/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
       </ul>
 </div>
@@ -49,128 +56,244 @@
   <main id="main" class="col-md-9"><div class="section level1">
 <div class="page-header"><h1 id="rhealth">RHealth<a class="anchor" aria-label="anchor" href="#rhealth"></a>
 </h1></div>
-<!-- badges: start -->
-<!-- badges: end -->
-<p>RHealth is an open-source R package specifically designed to bring comprehensive deep learning toolkits to the R community for healthcare predictive modeling. Funded by the <a href="https://r-consortium.org/all-projects/2024-group-2.html#deeprhealth-a-deep-learning-toolkit-for-healthcare-predictive-modeling" class="external-link">ISC grant from the R Consortium</a>, RHealth aims to provide an accessible, integrated environment for R users.</p>
-<p>This package is built upon its python version <a href="https://github.com/sunlabuiuc/PyHealth" class="external-link">PyHealth</a>.</p>
+<p><a href="https://v1xerunt.github.io/RHealth/"><img src="https://github.com/v1xerunt/RHealth/actions/workflows/pages/pages-build-deployment/badge.svg" alt="docs"></a></p>
+<p><strong>RHealth</strong> is an open-source R package designed to bring a comprehensive deep learning toolkit to the R community for healthcare predictive modeling. It provides an accessible, integrated environment for R users to build, train, and evaluate complex models on EHR data. This package is the R counterpart to the popular Python library <a href="https://github.com/sunlabuiuc/PyHealth" class="external-link">PyHealth</a>.</p>
+<p>RHealth is funded by the <a href="https://r-consortium.org/all-projects/2024-group-2.html#deeprhealth-a-deep-learning-toolkit-for-healthcare-predictive-modeling" class="external-link">ISC grant from the R Consortium</a>.</p>
+<ul>
+<li><a href="https://www.google.com/search?q=%23installation" class="external-link">Installation</a></li>
+<li>
+<a href="https://www.google.com/search?q=%23modules" class="external-link">Modules</a>
+<ul>
+<li><a href="https://www.google.com/search?q=%231-dataset-module" class="external-link">1. Dataset Module</a></li>
+<li><a href="https://www.google.com/search?q=%232-task-module" class="external-link">2. Task Module</a></li>
+<li><a href="https://www.google.com/search?q=%233-model-module" class="external-link">3. Model Module</a></li>
+<li><a href="https://www.google.com/search?q=%234-trainer-module" class="external-link">4. Trainer Module</a></li>
+<li><a href="https://www.google.com/search?q=%235-medical-code-module" class="external-link">5. Medical Code Module</a></li>
+</ul>
+</li>
+<li><a href="https://www.google.com/search?q=%23future-plans" class="external-link">Future Plans</a></li>
+<li><a href="https://www.google.com/search?q=%23citing-rhealth" class="external-link">Citing RHealth</a></li>
+</ul>
+<p>The detailed documentations are at <a href="https://v1xerunt.github.io/RHealth/">RHealth Documentation</a></p>
+<hr>
 <div class="section level2">
-<h2 id="citing-rhealth-handshake">Citing RHealth <span class="emoji" data-emoji="handshake">🤝</span>
-<a class="anchor" aria-label="anchor" href="#citing-rhealth-handshake"></a>
+<h2 id="id_️-citing-rhealth">✍️ Citing RHealth<a class="anchor" aria-label="anchor" href="#id_%EF%B8%8F-citing-rhealth"></a>
 </h2>
-<p>Ji Song, Zhixia Ren, Liantao Ma, Ewen M Harrison, and Junyi Gao. 2025. “RHealth: A Deep Learning Toolkit for Healthcare Predictive Modeling”. GitHub.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode bibtex"><code class="sourceCode bibtex"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="va">@misc</span>{<span class="ot">Ji2025</span>,</span>
-<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a>  <span class="dt">author</span> = {Ji Song, Zhixia Ren, Liantao Ma, Ewen M Harrison, Junyi Gao},</span>
-<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a>  <span class="dt">title</span> = {RHealth},</span>
+<p>If you use RHealth in your research, please cite our work:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode bibtex"><code class="sourceCode bibtex"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="va">@misc</span>{<span class="ot">RHealth2025</span>,</span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a>  <span class="dt">author</span> = {Ji Song, Zhixia Ren, Zhenbang Wu, John Wu, Chaoqi Yang, Jimeng Sun, Liantao Ma, Ewen M Harrison, and Junyi Gao},</span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a>  <span class="dt">title</span> = {RHealth: A Deep Learning Toolkit for Healthcare Predictive Modeling},</span>
 <span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a>  <span class="dt">year</span> = {2025},</span>
 <span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a>  <span class="dt">publisher</span> = {GitHub},</span>
 <span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a>  <span class="dt">journal</span> = {GitHub repository},</span>
-<span id="cb1-7"><a href="#cb1-7" tabindex="-1"></a>  <span class="dt">howpublished</span> = {<span class="ch">\url</span>{https://github.com/v1xerunt/RHealth}}</span>
+<span id="cb1-7"><a href="#cb1-7" tabindex="-1"></a>  <span class="dt">howpublished</span> = {<span class="ch">\url</span>{[https://github.com/v1xerunt/RHealth](https://github.com/v1xerunt/RHealth)}}</span>
 <span id="cb1-8"><a href="#cb1-8" tabindex="-1"></a>}</span></code></pre></div>
+<hr>
 </div>
 <div class="section level2">
-<h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
+<h2 id="id_-installation">📥 Installation<a class="anchor" aria-label="anchor" href="#id_-installation"></a>
 </h2>
-<p>You can install the development version of RHealth from <a href="https://github.com/" class="external-link">GitHub</a> with:</p>
+<p>Install the development version from <a href="https://github.com/" class="external-link">GitHub</a>:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># install.packages("pak")</span></span>
-<span><span class="fu">pak</span><span class="fu">::</span><span class="fu"><a href="https://pak.r-lib.org/reference/pak.html" class="external-link">pak</a></span><span class="op">(</span><span class="st">"RHealth"</span><span class="op">)</span></span></code></pre></div>
-<p>Alternatively, using devtools:</p>
+<span><span class="fu">pak</span><span class="fu">::</span><span class="fu"><a href="https://pak.r-lib.org/reference/pak.html" class="external-link">pak</a></span><span class="op">(</span><span class="st">"v1xerunt/RHealth"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Or using devtools:</span></span>
+<span><span class="co"># install.packages("devtools")</span></span>
+<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"v1xerunt/RHealth"</span><span class="op">)</span></span></code></pre></div>
+<p>Once installed, load the package to access its functionalities:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># install.packages("devtools")</span></span>
-<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"RHealth"</span><span class="op">)</span></span></code></pre></div>
-<p>Once RHealth is installed, you can load the package to access medcode functionalities:</p>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://v1xerunt.github.io/dev/RHealth" class="external-link">RHealth</a></span><span class="op">)</span></span></code></pre></div>
+<hr>
+</div>
+<div class="section level2">
+<h2 id="id_-modules">🧱 Modules<a class="anchor" aria-label="anchor" href="#id_-modules"></a>
+</h2>
+<p>RHealth is organized into several powerful, interconnected modules.</p>
+<div class="section level3">
+<h3 id="id_️-1-medical-code-module">⚕️ 1. Medical Code Module<a class="anchor" aria-label="anchor" href="#id_%EF%B8%8F-1-medical-code-module"></a>
+</h3>
+<p>This standalone module helps map medical codes between different systems.</p>
+<p><strong>Code Lookup:</strong></p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/v1xerunt/RHealth" class="external-link">RHealth</a></span><span class="op">)</span></span></code></pre></div>
-</div>
-<div class="section level2">
-<h2 id="id_1-medical-code-map">1. Medical Code Map<a class="anchor" aria-label="anchor" href="#id_1-medical-code-map"></a>
-</h2>
-<p>Our medical code mapping module provides tools to map medical codes between and within various medical coding systems. <strong>This module can be used independently.</strong></p>
-<div class="section level3">
-<h3 id="id_11-code-lookup-with-lookup_code">1.1. Code Lookup with lookup_code()<a class="anchor" aria-label="anchor" href="#id_11-code-lookup-with-lookup_code"></a>
-</h3>
-<p>Retrieve the description for a specific medical code.</p>
+<code class="sourceCode R"><span><span class="fu"><a href="reference/lookup_code.html">lookup_code</a></span><span class="op">(</span>code <span class="op">=</span> <span class="st">"428.0"</span>, system <span class="op">=</span> <span class="st">"ICD9CM"</span><span class="op">)</span></span></code></pre></div>
+<p><strong>Find Ancestors/Descendants:</strong></p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Example: Look up ICD-9-CM code "428.0"</span></span>
-<span><span class="va">code_description</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/lookup_code.html">lookup_code</a></span><span class="op">(</span>code <span class="op">=</span> <span class="st">"428.0"</span>, system <span class="op">=</span> <span class="st">"ICD9CM"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">code_description</span><span class="op">)</span></span></code></pre></div>
-</div>
-<div class="section level3">
-<h3 id="id_12-hierarchy-navigation">1.2. Hierarchy Navigation<a class="anchor" aria-label="anchor" href="#id_12-hierarchy-navigation"></a>
-</h3>
-<p>Explore relationships within coding systems. #### Get Ancestors with get_ancestors():</p>
+<code class="sourceCode R"><span><span class="co"># Get all parent codes</span></span>
+<span><span class="fu"><a href="reference/get_ancestors.html">get_ancestors</a></span><span class="op">(</span>code <span class="op">=</span> <span class="st">"428.22"</span>, system <span class="op">=</span> <span class="st">"ICD9CM"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Get all child codes</span></span>
+<span><span class="fu"><a href="reference/get_descendants.html">get_descendants</a></span><span class="op">(</span>code <span class="op">=</span> <span class="st">"428"</span>, system <span class="op">=</span> <span class="st">"ICD9CM"</span><span class="op">)</span></span></code></pre></div>
+<p><strong>Cross-System Mapping:</strong></p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Example: Find ancestors for ICD-9-CM code "428.22"</span></span>
-<span><span class="va">ancestor_codes</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/get_ancestors.html">get_ancestors</a></span><span class="op">(</span>code <span class="op">=</span> <span class="st">"428.22"</span>, system <span class="op">=</span> <span class="st">"ICD9CM"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">ancestor_codes</span><span class="op">)</span></span></code></pre></div>
-<div class="section level4">
-<h4 id="get-descendants-with-get_descendants">Get Descendants with get_descendants():<a class="anchor" aria-label="anchor" href="#get-descendants-with-get_descendants"></a>
-</h4>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Example: Find descendants for ICD-9-CM code "428"</span></span>
-<span><span class="va">descendant_codes</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/get_descendants.html">get_descendants</a></span><span class="op">(</span>code <span class="op">=</span> <span class="st">"428"</span>, system <span class="op">=</span> <span class="st">"ICD9CM"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">descendant_codes</span><span class="op">)</span><span class="op">)</span> <span class="co"># Showing first few for brevity</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"Total descendants for '428':"</span>, <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">descendant_codes</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-</div>
+<code class="sourceCode R"><span><span class="co"># Map from ICD-9 to CCS</span></span>
+<span><span class="fu"><a href="reference/map_code.html">map_code</a></span><span class="op">(</span>code <span class="op">=</span> <span class="st">"428.0"</span>, from <span class="op">=</span> <span class="st">"ICD9CM"</span>, to <span class="op">=</span> <span class="st">"CCSCM"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
-<h3 id="id_13-cross-system-mapping-with-map_code">1.3. Cross-System Mapping with map_code()<a class="anchor" aria-label="anchor" href="#id_13-cross-system-mapping-with-map_code"></a>
+<h3 id="id_️-2-dataset-module">🛢️ 2. Dataset Module<a class="anchor" aria-label="anchor" href="#id_%EF%B8%8F-2-dataset-module"></a>
 </h3>
-<p>Translate codes from one system to another. First, see available mappings:</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="reference/supported_cross.html">supported_cross</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p>Then, map a code:</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Example: Map ICD-9-CM "428.0" to CCSCM</span></span>
-<span><span class="va">mapped_ccscm_code</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/map_code.html">map_code</a></span><span class="op">(</span>code <span class="op">=</span> <span class="st">"428.0"</span>, from <span class="op">=</span> <span class="st">"ICD9CM"</span>, to <span class="op">=</span> <span class="st">"CCSCM"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">mapped_ccscm_code</span><span class="op">)</span></span></code></pre></div>
-</div>
-<div class="section level3">
-<h3 id="id_14-atc-specific-utilities">1.4. ATC Specific Utilities<a class="anchor" aria-label="anchor" href="#id_14-atc-specific-utilities"></a>
-</h3>
-<div class="section level4">
-<h4 id="atc-level-conversion-with-atc_convert">ATC Level Conversion with atc_convert():<a class="anchor" aria-label="anchor" href="#atc-level-conversion-with-atc_convert"></a>
-</h4>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">atc_code</span> <span class="op">&lt;-</span> <span class="st">"L01BA01"</span> <span class="co"># Methotrexate</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"L1 (Anatomical Main Group):"</span>, <span class="fu"><a href="reference/atc_convert.html">atc_convert</a></span><span class="op">(</span><span class="va">atc_code</span>, level <span class="op">=</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"L3 (Therapeutic/Pharmacological Subgroup):"</span>, <span class="fu"><a href="reference/atc_convert.html">atc_convert</a></span><span class="op">(</span><span class="va">atc_code</span>, level <span class="op">=</span> <span class="fl">3</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"L4 (Chemical/Therapeutic/Pharmacological Subgroup):"</span>, <span class="fu"><a href="reference/atc_convert.html">atc_convert</a></span><span class="op">(</span><span class="va">atc_code</span>, level <span class="op">=</span> <span class="fl">4</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-</div>
-<div class="section level4">
-<h4 id="drug-drug-interactions-ddi-with-get_ddi">Drug-Drug Interactions (DDI) with get_ddi():<a class="anchor" aria-label="anchor" href="#drug-drug-interactions-ddi-with-get_ddi"></a>
-</h4>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">ddi_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/get_ddi.html">get_ddi</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="st">"First few known Drug-Drug Interactions (ATC pairs):"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">ddi_data</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-</div>
-</div>
-</div>
-<div class="section level2">
-<h2 id="current-development-and-future-plans">Current Development and Future Plans<a class="anchor" aria-label="anchor" href="#current-development-and-future-plans"></a>
-</h2>
-<p>RHealth is currently under active development. The initial phase focuses on establishing two foundational modules:</p>
-<ol style="list-style-type: decimal">
-<li>
-<strong>EHR Database Module:</strong> This module is being developed to provide a standardized framework for ingesting, processing, and managing diverse Electronic Health Record (EHR) datasets. It aims to support public datasets like MIMIC-III, MIMIC-IV, and eICU, as well as user-specific data formats such as OMOP-CDM. The goal is to ensure data consistency for subsequent modeling tasks.</li>
-<li>
-<strong>EHR Code Mapping Module (medcode):</strong> This module, with its core <code>medcode</code> component, facilitates mapping between and within various medical coding systems (e.g., ICD, NDC, RxNorm). Key functionalities like code lookup, hierarchy navigation, cross-system mapping, and ATC utilities are already implemented, as demonstrated in the examples above.</li>
-</ol>
-<p>Looking further ahead, our development roadmap includes the expansion of RHealth with several key modules and enhancements:</p>
+<p>The <strong>Dataset</strong> module is the foundation of RHealth. It transforms raw, multi-table Electronic Health Record (EHR) dumps into tidy, task-ready tensors that any downstream model can consume.</p>
+<p><strong>Key Features:</strong></p>
 <ul>
 <li>
-<strong>Healthcare DL Core Module:</strong> This module will integrate traditional machine learning models (e.g., Random Forests, Support Vector Machines) and state-of-the-art healthcare-specific deep learning models (e.g., RETAIN, AdaCare, Transformers, graph networks, convolutional networks, recurrent networks).</li>
+<strong>Efficient Ingestion</strong>: Streams large CSVs using Polars <code>LazyFrame</code> to avoid loading massive files into RAM.</li>
 <li>
-<strong>Prediction Task Module:</strong> This module will be designed to handle various clinical prediction tasks using EHR data, including patient-level predictions (e.g., mortality, disease risk), intra-visit predictions (e.g., length of stay, drug recommendation), and inter-visit predictions (e.g., readmission risk, future diagnoses).</li>
+<strong>Data Harmonisation</strong>: Merges heterogeneous tables into a single, canonical event table.</li>
 <li>
-<strong>Support for Multi-modal Data Integration:</strong> Enhancements to handle and integrate diverse data types beyond structured EHR data.</li>
+<strong>Built-in Caching</strong>: Uses DuckDB for CSV → Parquet caching, enabling up to 10x faster reloads.</li>
 <li>
-<strong>Clinical Trial Applications:</strong> Developing functionalities to support research and analysis in the context of clinical trials.</li>
-<li>
-<strong>Large Language Model (LLM) Enhancement:</strong> Exploring the integration of LLMs to augment package capabilities.</li>
+<strong>Dev Mode</strong>: Allows for lightning-fast iteration by using a small subset of patients.</li>
 </ul>
-<p>RHealth aims to provide the R community with a powerful and user-friendly toolkit for healthcare predictive modeling using deep learning. We are glad to hear your feedbacks and suggestions via email or submitting issues.</p>
+<p><strong>Quick Start:</strong></p>
+<p>Define a dataset from your source files using a YAML configuration.</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># The YAML config defines tables, patient IDs, timestamps, and attributes</span></span>
+<span><span class="co"># See the full documentation for details on the YAML structure.</span></span>
+<span></span>
+<span><span class="co"># Load the dataset</span></span>
+<span><span class="va">ds</span> <span class="op">&lt;-</span> <span class="va"><a href="reference/BaseDataset.html">BaseDataset</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span></span>
+<span>  root         <span class="op">=</span> <span class="st">"path/to/mimic4"</span>,</span>
+<span>  tables       <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"patients"</span>, <span class="st">"admissions"</span>, <span class="st">"labevents"</span><span class="op">)</span>,</span>
+<span>  dataset_name <span class="op">=</span> <span class="st">"mimic4_ehr"</span>,</span>
+<span>  dev          <span class="op">=</span> <span class="cn">TRUE</span>  <span class="co"># limit to 1,000 patients for speed</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">ds</span><span class="op">$</span><span class="fu">stats</span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Dataset : mimic4_ehr</span></span>
+<span><span class="co">#&gt; Dev mode : TRUE</span></span>
+<span><span class="co">#&gt; Patients : 1 000</span></span>
+<span><span class="co">#&gt; Events   : 2 187 540</span></span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="id_-3-task-module">🎯 3. Task Module<a class="anchor" aria-label="anchor" href="#id_-3-task-module"></a>
+</h3>
+<p>The <strong>Task</strong> module defines the prediction problem. It tells RHealth <em>what</em> to predict, <em>which</em> data to use, and <em>how</em> to generate <code>(input, target)</code> samples from a patient’s event timeline.</p>
+<p>A task is defined by subclassing <code>BaseTask</code> and implementing the <code><a href="https://rdrr.io/r/base/call.html" class="external-link">call()</a></code> method.</p>
+<p><strong>Example Task Definition:</strong></p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">MyReadmissionTask</span> <span class="op">&lt;-</span> <span class="fu">R6</span><span class="fu">::</span><span class="kw"><a href="https://r6.r-lib.org/reference/R6Class.html" class="external-link">R6Class</a></span><span class="op">(</span></span>
+<span>  <span class="st">"MyReadmissionTask"</span>,</span>
+<span>  inherit <span class="op">=</span> <span class="va">BaseTask</span>,</span>
+<span>  public <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>    initialize <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="op">)</span> <span class="op">{</span></span>
+<span>      <span class="va">super</span><span class="op">$</span><span class="fu">initialize</span><span class="op">(</span></span>
+<span>        task_name     <span class="op">=</span> <span class="st">"MyReadmissionTask"</span>,</span>
+<span>        input_schema  <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>diagnoses <span class="op">=</span> <span class="st">"sequence"</span>, procedures <span class="op">=</span> <span class="st">"sequence"</span><span class="op">)</span>,</span>
+<span>        output_schema <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>outcome <span class="op">=</span> <span class="st">"binary"</span><span class="op">)</span></span>
+<span>      <span class="op">)</span></span>
+<span>    <span class="op">}</span>,</span>
+<span>    call <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">patient</span><span class="op">)</span> <span class="op">{</span></span>
+<span>      <span class="co"># Your logic to generate samples for a single patient...</span></span>
+<span>      <span class="co"># This should return a list or list-of-lists with named fields</span></span>
+<span>      <span class="co"># matching the input/output schemas.</span></span>
+<span>      </span>
+<span>      <span class="co"># Example:</span></span>
+<span>      <span class="co"># list(</span></span>
+<span>      <span class="co">#   diagnoses = c("401.9", "250.00"),</span></span>
+<span>      <span class="co">#   procedures = c("88.72"),</span></span>
+<span>      <span class="co">#   outcome = 1</span></span>
+<span>      <span class="co"># )</span></span>
+<span>    <span class="op">}</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<p><strong>Generating Samples:</strong></p>
+<p>Once a task is defined, use it with your dataset to create a <code>SampleDataset</code> compatible with <a href="https://torch.mlverse.org/docs" class="external-link">torch</a>.</p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">task</span>    <span class="op">&lt;-</span> <span class="va"><a href="reference/Readmission30DaysMIMIC4.html">Readmission30DaysMIMIC4</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="op">)</span> <span class="co"># A built-in task</span></span>
+<span><span class="va">samples</span> <span class="op">&lt;-</span> <span class="va">ds</span><span class="op">$</span><span class="fu">set_task</span><span class="op">(</span><span class="va">task</span><span class="op">)</span></span>
+<span><span class="va">loader</span>  <span class="op">&lt;-</span> <span class="fu">dataloader</span><span class="op">(</span><span class="va">samples</span>, batch_size <span class="op">=</span> <span class="fl">64</span>, shuffle <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="id_-4-model-module">🧠 4. Model Module<a class="anchor" aria-label="anchor" href="#id_-4-model-module"></a>
+</h3>
+<p>The <strong>Model</strong> module provides ready-to-use neural network architectures. All models inherit from a <code>BaseModel</code>, which automates dimension calculation, loss function selection, and device management (CPU/GPU).</p>
+<p><strong>Built-in Models:</strong></p>
+<p>RHealth includes reference implementations like <code>RNN</code>, which can be instantiated in one line:</p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/RNN.html">RNN</a></span><span class="op">(</span></span>
+<span>  dataset       <span class="op">=</span> <span class="va">samples</span>, <span class="co"># The SampleDataset from set_task()</span></span>
+<span>  embedding_dim <span class="op">=</span> <span class="fl">128</span>,</span>
+<span>  hidden_dim    <span class="op">=</span> <span class="fl">128</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<p><strong>Custom Models:</strong></p>
+<p>You can easily write your own model by inheriting from <code>BaseModel</code>.</p>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">MyDenseNet</span> <span class="op">&lt;-</span> <span class="fu">torch</span><span class="fu">::</span><span class="fu"><a href="https://torch.mlverse.org/docs/reference/nn_module.html" class="external-link">nn_module</a></span><span class="op">(</span></span>
+<span>  <span class="st">"MyDenseNet"</span>,</span>
+<span>  inherit <span class="op">=</span> <span class="va">BaseModel</span>,</span>
+<span>  initialize <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">dataset</span>, <span class="va">hidden_dim</span> <span class="op">=</span> <span class="fl">256</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="va">super</span><span class="op">$</span><span class="fu">initialize</span><span class="op">(</span><span class="va">dataset</span><span class="op">)</span> <span class="co"># IMPORTANT: handles schema setup</span></span>
+<span>    </span>
+<span>    <span class="co"># Calculate input/output dimensions automatically</span></span>
+<span>    <span class="va">in_dim</span>  <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="fu">purrr</span><span class="fu">::</span><span class="fu"><a href="https://purrr.tidyverse.org/reference/map.html" class="external-link">map_int</a></span><span class="op">(</span><span class="va">dataset</span><span class="op">$</span><span class="va">input_processors</span>, <span class="st">"size"</span><span class="op">)</span><span class="op">)</span></span>
+<span>    <span class="va">out_dim</span> <span class="op">&lt;-</span> <span class="va">self</span><span class="op">$</span><span class="fu">get_output_size</span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
+<span>    <span class="va">self</span><span class="op">$</span><span class="va">fc1</span> <span class="op">&lt;-</span> <span class="fu">nn_linear</span><span class="op">(</span><span class="va">in_dim</span>, <span class="va">hidden_dim</span><span class="op">)</span></span>
+<span>    <span class="va">self</span><span class="op">$</span><span class="va">fc2</span> <span class="op">&lt;-</span> <span class="fu">nn_linear</span><span class="op">(</span><span class="va">hidden_dim</span>, <span class="va">out_dim</span><span class="op">)</span></span>
+<span>  <span class="op">}</span>,</span>
+<span>  forward <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">inputs</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="co"># Flatten and concatenate all input features</span></span>
+<span>    <span class="va">x</span> <span class="op">&lt;-</span> <span class="fu">torch</span><span class="fu">::</span><span class="fu"><a href="https://torch.mlverse.org/docs/reference/torch_cat.html" class="external-link">torch_cat</a></span><span class="op">(</span><span class="fu">purrr</span><span class="fu">::</span><span class="fu">flatten</span><span class="op">(</span><span class="va">inputs</span><span class="op">)</span>, dim <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
+<span>    <span class="va">logits</span> <span class="op">&lt;-</span> <span class="va">self</span><span class="op">$</span><span class="fu">fc2</span><span class="op">(</span><span class="fu">torch_relu</span><span class="op">(</span><span class="va">self</span><span class="op">$</span><span class="fu">fc1</span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span>    <span class="co"># Return loss and probabilities</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>      loss   <span class="op">=</span> <span class="va">self</span><span class="op">$</span><span class="fu">get_loss_function</span><span class="op">(</span><span class="op">)</span><span class="op">(</span><span class="va">logits</span>, <span class="va">inputs</span><span class="op">[[</span><span class="va">self</span><span class="op">$</span><span class="va">label_keys</span><span class="op">]</span><span class="op">]</span><span class="op">)</span>,</span>
+<span>      y_prob <span class="op">=</span> <span class="va">self</span><span class="op">$</span><span class="fu">prepare_y_prob</span><span class="op">(</span><span class="va">logits</span><span class="op">)</span></span>
+<span>    <span class="op">)</span></span>
+<span>  <span class="op">}</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="id_-5-trainer-module">💪 5. Trainer Module<a class="anchor" aria-label="anchor" href="#id_-5-trainer-module"></a>
+</h3>
+<p>The <strong>Trainer</strong> module provides a high-level, configurable training loop that handles logging, checkpointing, evaluation, and progress bars.</p>
+<p><strong>Example Training Workflow:</strong></p>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># 1. Create data loaders</span></span>
+<span><span class="va">train_loader</span> <span class="op">&lt;-</span> <span class="fu">dataloader</span><span class="op">(</span><span class="va">train_samples</span>, batch_size <span class="op">=</span> <span class="fl">32</span>, shuffle <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="va">val_loader</span>   <span class="op">&lt;-</span> <span class="fu">dataloader</span><span class="op">(</span><span class="va">val_samples</span>,   batch_size <span class="op">=</span> <span class="fl">64</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># 2. Instantiate a model</span></span>
+<span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/RNN.html">RNN</a></span><span class="op">(</span><span class="va">train_samples</span>, embedding_dim <span class="op">=</span> <span class="fl">128</span>, hidden_dim <span class="op">=</span> <span class="fl">128</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># 3. Set up the trainer</span></span>
+<span><span class="va">trainer</span> <span class="op">&lt;-</span> <span class="va"><a href="reference/Trainer.html">Trainer</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span></span>
+<span>    <span class="va">model</span>,</span>
+<span>    metrics     <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"auroc"</span>, <span class="st">"auprc"</span><span class="op">)</span>,</span>
+<span>    output_path <span class="op">=</span> <span class="st">"experiments"</span>,</span>
+<span>    exp_name    <span class="op">=</span> <span class="st">"mortality_rnn"</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># 4. Start training</span></span>
+<span><span class="va">trainer</span><span class="op">$</span><span class="fu">train</span><span class="op">(</span></span>
+<span>    train_dataloader  <span class="op">=</span> <span class="va">train_loader</span>,</span>
+<span>    val_dataloader    <span class="op">=</span> <span class="va">val_loader</span>,</span>
+<span>    epochs            <span class="op">=</span> <span class="fl">10</span>,</span>
+<span>    learning_rate     <span class="op">=</span> <span class="fl">1e-3</span>,</span>
+<span>    weight_decay      <span class="op">=</span> <span class="fl">1e-4</span>,</span>
+<span>    max_grad_norm     <span class="op">=</span> <span class="fl">5.0</span>,</span>
+<span>    monitor           <span class="op">=</span> <span class="st">"auroc"</span> <span class="co"># Save the best model based on AUROC</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<p>Logs and model checkpoints (<code>best.ckpt</code>, <code>last.ckpt</code>) are saved automatically to <code>experiments/mortality_rnn/</code>.</p>
+<hr>
+</div>
+</div>
+<div class="section level2">
+<h2 id="id_-future-plans">🚀 Future Plans<a class="anchor" aria-label="anchor" href="#id_-future-plans"></a>
+</h2>
+<p>RHealth is under active development. Our roadmap includes:</p>
+<ul>
+<li>
+<strong>Healthcare DL Core Module</strong>: Adding more SoTA models like RETAIN, AdaCare, and Transformers.</li>
+<li>
+<strong>Prediction Task Module</strong>: Adding built-in tasks for common clinical predictions (e.g., length of stay, readmission risk).</li>
+<li>
+<strong>Multi-modal Data</strong>: Enhancing support for integrating imaging, genomics, and clinical notes.</li>
+<li>
+<strong>LLM Integration</strong>: Augmenting package capabilities with Large Language Models.</li>
+</ul>
+<p>We welcome feedback and contributions! Please submit an issue on GitHub or contact the maintainers.</p>
 </div>
 </div>
   </main><aside class="col-md-3"><div class="links">
@@ -202,6 +325,10 @@
 <ul class="list-unstyled">
 <li>Ji Song <br><small class="roles"> Author </small>   </li>
 <li>Zhixia Ren <br><small class="roles"> Author </small>   </li>
+<li>Zhenbang Wu <br><small class="roles"> Author </small>   </li>
+<li>John Wu <br><small class="roles"> Author </small>   </li>
+<li>Chaoqi Yang <br><small class="roles"> Author </small>   </li>
+<li>Jimeng Sun <br><small class="roles"> Author </small>   </li>
 <li>Liantao Ma <br><small class="roles"> Author </small>   </li>
 <li>Ewen Harrison <br><small class="roles"> Author </small>   </li>
 <li>Junyi Gao <br><small class="roles"> Author, maintainer </small>   </li>
@@ -215,7 +342,7 @@
 
 
     <footer><div class="pkgdown-footer-left">
-  <p>Developed by Ji Song, Zhixia Ren, Liantao Ma, Ewen Harrison, Junyi Gao.</p>
+  <p>Developed by Ji Song, Zhixia Ren, Zhenbang Wu, John Wu, Chaoqi Yang, Jimeng Sun, Liantao Ma, Ewen Harrison, Junyi Gao.</p>
 </div>
 
 <div class="pkgdown-footer-right">
