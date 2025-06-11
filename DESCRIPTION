@@ -1,0 +1,95 @@
+Package: RHealth
+Type: Package
+Title: A Deep Learning Toolkit for Healthcare Predictive Modeling
+Version: 0.1.0
+Authors@R: c(
+    person(
+      "Ji", "Song",
+      email = "eaad0907@163.com",
+      role = c("aut")
+    ),
+    person(
+      "Zhixia", "Ren",
+      email = "jexica0921@gmail.com",
+      role = c("aut")
+    ),
+    person(
+      "Zhenbang", "Wu",
+      email = "zw12@illinois.edu",
+      role = c("aut")
+    ),
+    person(
+      "John", "Wu",
+      email = "johnwu3@illinois.edu",
+      role = c("aut")
+    ),
+    person(
+      "Chaoqi", "Yang",
+      email = "ycqsjtu@gmail.com",
+      role = c("aut")
+    ),
+    person(
+      "Jimeng", "Sun",
+      email = "jimeng@illinois.edu",
+      role = c("aut")
+    ),
+    person(
+      "Liantao", "Ma",
+      email = "malt@pku.edu.cn",
+      role = c("aut")
+    ),
+    person(
+      "Ewen", "Harrison",
+      email = "ewen.harrison@ed.ac.uk",
+      role = c("aut")
+    ),
+    person(
+      "Junyi", "Gao",
+      email = "junyii.gao@gmail.com",
+      role = c("aut", "cre")
+    )
+  )
+Description: RHealth is an open-source R package specifically designed to bring comprehensive deep learning toolkits to the R community for healthcare predictive modeling.
+License: MIT + file LICENSE
+Encoding: UTF-8
+LazyData: true
+URL: https://v1xerunt.github.io/dev/RHealth, https://github.com/v1xerunt/RHealth
+BugReports: https://github.com/v1xerunt/RHealth/issues
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.2
+Depends: R (>= 4.1.0)
+Suggests:
+    devtools (>= 2.4.5),
+    usethis,
+    testthat (>= 3.0.0),
+    lintr (>= 3.2.0),
+    styler (>= 1.10.3),
+    pkgdown (>= 2.1.1),
+    roxygen2 (>= 7.3.2)
+Imports:
+    R6,
+    httr,
+    readr,
+    glue,
+    purrr,
+    dplyr,
+    torch,
+    rappdirs,
+    yaml,
+    psych,
+    progressr,
+    polars,
+    pROC,
+    metrica,
+    lubridate,
+    future,
+    future.apply,
+    futile.logger,
+    PRROC,
+    MLmetrics,
+    tidyr,
+    checkmate,
+    fs,
+    duckdb
+Additional_repositories: https://community.r-multiverse.org, https://rpolars.r-universe.dev/
+Config/testthat/edition: 3
