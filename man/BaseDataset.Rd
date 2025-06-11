@@ -105,7 +105,7 @@ Instantiate a \code{BaseDataset}.
 \if{latex}{\out{\hypertarget{method-BaseDataset-collected_global_event_df}{}}}
 \subsection{Method \code{collected_global_event_df()}}{
 Materialise (collect) the lazy event dataframe.  In dev‑mode only the
-first 1 000 patients are kept.
+first 1000 patients are kept.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{BaseDataset$collected_global_event_df()}\if{html}{\out{</div>}}
 }

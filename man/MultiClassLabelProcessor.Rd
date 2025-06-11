@@ -8,7 +8,7 @@ Processor for multi-class classification tasks. Converts string or integer label
 into integer indices, with one output per label.
 }
 \section{Super classes}{
-\code{\link[RHealth:Processor]{RHealth::Processor}} -> \code{\link[RHealth:FeatureProcessor]{RHealth::FeatureProcessor}} -> \code{MultiClassLabelProcessor}
+\code{RHealth::Processor} -> \code{RHealth::FeatureProcessor} -> \code{MultiClassLabelProcessor}
 }
 \section{Public fields}{
 \if{html}{\out{<div class="r6-fields">}}

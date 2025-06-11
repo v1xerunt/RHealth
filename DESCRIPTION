@@ -14,6 +14,26 @@ Authors@R: c(
       role = c("aut")
     ),
     person(
+      "Zhenbang", "Wu",
+      email = "zw12@illinois.edu",
+      role = c("aut")
+    ),
+    person(
+      "John", "Wu",
+      email = "johnwu3@illinois.edu",
+      role = c("aut")
+    ),
+    person(
+      "Chaoqi", "Yang",
+      email = "ycqsjtu@gmail.com",
+      role = c("aut")
+    ),
+    person(
+      "Jimeng", "Sun",
+      email = "jimeng@illinois.edu",
+      role = c("aut")
+    ),
+    person(
       "Liantao", "Ma",
       email = "malt@pku.edu.cn",
       role = c("aut")
@@ -33,7 +53,7 @@ Description: RHealth is an open-source R package specifically designed to bring 
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
-URL: https://github.com/v1xerunt/RHealth
+URL: https://v1xerunt.github.io/dev/RHealth, https://github.com/v1xerunt/RHealth
 BugReports: https://github.com/v1xerunt/RHealth/issues
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.2

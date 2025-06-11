@@ -17,7 +17,7 @@ This class inherits from BaseDataset and is specialized for handling MIMIC-IV Cl
 It includes tables such as discharge, discharge_detail, and radiology.
 }
 \section{Super class}{
-\code{\link[RHealth:BaseDataset]{RHealth::BaseDataset}} -> \code{MIMIC4NoteDataset}
+\code{RHealth::BaseDataset} -> \code{MIMIC4NoteDataset}
 }
 \section{Methods}{
 \subsection{Public methods}{

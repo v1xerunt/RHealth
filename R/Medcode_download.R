@@ -37,6 +37,8 @@
 #' path2 <- download_medcode("CPT")
 #' }
 #'
+#' @concept MedCode
+#'
 #' @seealso
 #' \code{\link[fs]{path}}, \code{\link[fs]{dir_create}},
 #' \code{\link[rappdirs]{user_cache_dir}},

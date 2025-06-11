@@ -21,6 +21,8 @@
 #' atc_convert("A01AA01", level = 3)
 #' atc_convert(c("B02BA02", "C03CA01"), level = 5)
 #'
+#' @concept MedCode
+#'
 #' @export
 atc_convert <- function(code, level = 5) {
   substr(code, 1, level)
@@ -43,6 +45,8 @@ atc_convert <- function(code, level = 5) {
 #' @examples
 #' ddi_tbl <- get_ddi()
 #' head(ddi_tbl)
+#'
+#' @concept MedCode
 #'
 #' @seealso
 #' \code{\link{load_medcode}}

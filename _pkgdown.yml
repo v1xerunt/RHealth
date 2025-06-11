@@ -6,21 +6,26 @@ template:
 development:
   mode: auto # or 'release' or 'devel'
   destination: dev # Deploys dev version to a 'dev' subdirectory
-# articles: {}
-# reference:
-#   - title: "All functions"
-#     contents:
-#       - `starts_with("lookup_")`
-#       - `starts_with("get_")`
-#       - `starts_with("map_")`
-#       - `starts_with("atc_")`
-#       - MedCode
 
+
+navbar:
+  structure:
+    left: [intro, "overview", reference, articles, news]
+    right: github
+  components:
+    overview:
+      text: "Overview"
+      href: articles/Overview.html
 
 articles:
-  - title: "Getting Started"
+  - title: "Articles"
+    navbar: ~
     contents:
       - quickstart
+      - MedCode
+  - title: "Internal"
+    contents:
+      - Overview
 
 reference:
   - title: "Dataset"
@@ -64,6 +69,7 @@ reference:
     desc: >
       Benchmark prediction tasks based on MIMIC-IV.
     contents:
+      - BaseTask
       - Readmission30DaysMIMIC4
       - InHospitalMortalityMIMIC4
 
@@ -88,19 +94,20 @@ reference:
       - set_logger
       - ece_confidence_binary
 
-  - title: "Code Mapping & Utilities"
+  - title: "MedCode"
     desc: >
-      Tools for code lookups, mapping, and data splits.
+      Tools in the MedCode Module.
     contents:
-      - atc_convert
-      - lookup_code
-      - map_code
-      - get_ancestors
-      - get_descendants
-      - supported_inner
-      - supported_cross
+      - has_concept("MedCode")
 
-navbar:
-  structure:
-    left: [intro, reference, articles, news]
-    right: github
+  - title: "Utilities"
+    desc: >
+      Other tools.
+    contents:
+      - create_directory
+      - .csv2parquet_path
+      - Event-from_list
+      - JoinConfig
+      - rhealth.config
+      - TableConfig
+

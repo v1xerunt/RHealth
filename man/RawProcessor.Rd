@@ -8,7 +8,7 @@ Processor that returns raw values without any transformation.
 Inherits from FeatureProcessor.
 }
 \section{Super classes}{
-\code{\link[RHealth:Processor]{RHealth::Processor}} -> \code{\link[RHealth:FeatureProcessor]{RHealth::FeatureProcessor}} -> \code{RawProcessor}
+\code{RHealth::Processor} -> \code{RHealth::FeatureProcessor} -> \code{RawProcessor}
 }
 \section{Methods}{
 \subsection{Public methods}{

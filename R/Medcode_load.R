@@ -25,6 +25,8 @@
 #' @seealso
 #' \code{\link{download_medcode}}, \code{\link[readr]{read_csv}}
 #'
+#' @concept MedCode
+#'
 #' @keywords internal
 #' @importFrom readr read_csv cols
 load_medcode <- function(name) {

@@ -51,7 +51,7 @@ samples <- task$call(patient)
 
 }
 \section{Super class}{
-\code{\link[RHealth:BaseTask]{RHealth::BaseTask}} -> \code{Readmission30DaysMIMIC4}
+\code{RHealth::BaseTask} -> \code{Readmission30DaysMIMIC4}
 }
 \section{Methods}{
 \subsection{Public methods}{

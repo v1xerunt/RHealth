@@ -8,7 +8,7 @@ Processor for binary classification labels. Supports numeric (0/1),
 logical (TRUE/FALSE), or categorical binary labels.
 }
 \section{Super classes}{
-\code{\link[RHealth:Processor]{RHealth::Processor}} -> \code{\link[RHealth:FeatureProcessor]{RHealth::FeatureProcessor}} -> \code{BinaryLabelProcessor}
+\code{RHealth::Processor} -> \code{RHealth::FeatureProcessor} -> \code{BinaryLabelProcessor}
 }
 \section{Public fields}{
 \if{html}{\out{<div class="r6-fields">}}

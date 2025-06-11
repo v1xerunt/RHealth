@@ -25,3 +25,4 @@ head(ddi_tbl)
 \seealso{
 \code{\link{load_medcode}}
 }
+\concept{MedCode}

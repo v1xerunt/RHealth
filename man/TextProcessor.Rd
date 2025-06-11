@@ -7,7 +7,7 @@
 Processor for textual input. Inherits from FeatureProcessor and defines a minimal no-op process method.
 }
 \section{Super classes}{
-\code{\link[RHealth:Processor]{RHealth::Processor}} -> \code{\link[RHealth:FeatureProcessor]{RHealth::FeatureProcessor}} -> \code{TextProcessor}
+\code{RHealth::Processor} -> \code{RHealth::FeatureProcessor} -> \code{TextProcessor}
 }
 \section{Methods}{
 \subsection{Public methods}{

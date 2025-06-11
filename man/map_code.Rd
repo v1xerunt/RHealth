@@ -36,3 +36,4 @@ map_code("I10", from = "ICD10CM", to = "CCSCM")
 \seealso{
 \code{\link{load_medcode}}, \code{\link{supported_cross}}
 }
+\concept{MedCode}

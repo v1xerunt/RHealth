@@ -8,7 +8,7 @@ Task for predicting in-hospital mortality using MIMIC-IV dataset.
 Uses lab results from the first 48 hours after admission as input features.
 }
 \section{Super class}{
-\code{\link[RHealth:BaseTask]{RHealth::BaseTask}} -> \code{InHospitalMortalityMIMIC4}
+\code{RHealth::BaseTask} -> \code{InHospitalMortalityMIMIC4}
 }
 \section{Public fields}{
 \if{html}{\out{<div class="r6-fields">}}

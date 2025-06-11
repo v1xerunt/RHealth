@@ -7,7 +7,7 @@
 Processor for scalar regression labels. Converts values to a 1D float tensor.
 }
 \section{Super classes}{
-\code{\link[RHealth:Processor]{RHealth::Processor}} -> \code{\link[RHealth:FeatureProcessor]{RHealth::FeatureProcessor}} -> \code{RegressionLabelProcessor}
+\code{RHealth::Processor} -> \code{RHealth::FeatureProcessor} -> \code{RegressionLabelProcessor}
 }
 \section{Methods}{
 \subsection{Public methods}{

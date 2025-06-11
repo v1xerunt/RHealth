@@ -34,4 +34,5 @@ icd10_tbl <- load_medcode("ICD10")
 \seealso{
 \code{\link{download_medcode}}, \code{\link[readr]{read_csv}}
 }
+\concept{MedCode}
 \keyword{internal}

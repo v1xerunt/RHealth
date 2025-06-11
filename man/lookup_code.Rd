@@ -29,3 +29,4 @@ lookup_code("A00", "ICD10CM")
 \seealso{
 \code{\link{load_medcode}}, \code{\link{supported_inner}}
 }
+\concept{MedCode}

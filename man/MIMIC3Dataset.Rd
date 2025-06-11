@@ -18,7 +18,7 @@ It ensures key tables like patients, admissions, and icustays are loaded,
 and allows appending additional tables. Also provides per-table preprocessing.
 }
 \section{Super class}{
-\code{\link[RHealth:BaseDataset]{RHealth::BaseDataset}} -> \code{MIMIC3Dataset}
+\code{RHealth::BaseDataset} -> \code{MIMIC3Dataset}
 }
 \section{Methods}{
 \subsection{Public methods}{

@@ -29,3 +29,4 @@ get_ancestors("401.9", "ICD9CM")
 \seealso{
 \code{\link{get_descendants}}, \code{\link{load_medcode}}
 }
+\concept{MedCode}

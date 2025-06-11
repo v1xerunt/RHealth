@@ -1,0 +1,246 @@
+---
+title: "DeepRHealth::medcode Module Demo"
+subtitle: "R/medicine 2025 Prototype Showcase" 
+author: "Zhixia Ren"
+date: 05/25/2025
+format: 
+  # revealjs:
+  #   theme: sky 
+  #   slide-number: true 
+  #   controls: true 
+  #   progress: true 
+  #   
+  html:
+    toc: true        
+    toc_float: true   
+    code-fold: false  
+    embed-resources: true
+lang: en
+editor: visual
+---
+
+# Introduction
+
+-   Goal: Showcase the core functionalities of the `DeepRHealth::medcode` module.
+
+-   Supports major medical coding systems (e.g., ICD, ATC) natively in R.
+
+-   Built with inspiration from the Python-based `PyHealth.medcode`.
+
+<!-- -->
+
+-   **Key Features to Demo:**
+    -   Code Lookup
+
+    -   Hierarchy Navigation (Ancestors/Descendants)
+
+    -   Cross-System Mapping
+
+    -   ATC Specific Utilities
+
+# Environment Setup
+
+**Loading Package & Dependencies**
+
+-   We'll load the package directly from source using `devtools::load_all()`.
+-   This requires running the presentation from the package's root directory.
+-   We also load other necessary packages like `knitr`.
+
+```{r setup-environment, echo=TRUE, message=FALSE, warning=FALSE}
+# Load required libraries for loading and display
+library(devtools)
+library(knitr)
+library(rappdirs) # Used by DeepRHealth internally for caching
+library(fs) # Used by DeepRHealth internally for caching
+
+# Load all functions, data, etc. from the DeepRHealth package source
+# IMPORTANT: Ensure R's working directory is the package root!
+load_all(".")
+
+# Optional: Display where medcode data would be cached
+# cache_dir <- user_cache_dir("DeepRHealth", "medcode")
+# print(paste("Data cache directory:", cache_dir))
+
+# NOTE: Assume necessary data (e.g., ICD9CM.csv) is pre-cached for demo speed.
+```
+
+# Data Handling
+
+## Download & Caching
+
+The package automatically downloads required medical code datasets (CSVs) and caches them locally for faster and offline use.
+
+-   Uses `rappdirs` to find a user-specific cache directory.
+-   The `download_medcode()` function checks the cache first; only downloads if the file is missing.
+
+**Let's see where the data is/will be cached:**
+
+```{r show_cache_path, echo=TRUE, message=FALSE, warning=FALSE}
+# Get the platform-specific cache directory path
+cache_dir <- rappdirs::user_cache_dir("DeepRHealth", "medcode")
+print(paste("Data cache directory:", cache_dir))
+```
+
+### **Demonstrating `download_medcode()`:**
+
+(This step ensures the data file exists locally, downloading only if necessary)
+
+```{r download_medcode, echo=TRUE, message=FALSE, warning=FALSE}
+# Specify the dataset name (e.g., "ICD9CM")
+dataset_name <- "ICD9CM"
+
+# Call the function - returns path. Downloads ONLY if not cached.
+# NOTE: For a live demo, ensure network access OR pre-cache the file!
+#       We assume it's pre-cached here.
+file_path <- download_medcode(name = dataset_name)
+
+print(paste("Path for", dataset_name, ":", file_path))
+print(paste("File exists:", fs::file_exists(file_path)))
+```
+
+## Loading Data (`load_medcode`)
+
+The `load_medcode()` function is used internally by most other functions (`lookup_code`, `get_ancestors`, etc.).
+
+1.  It first calls `download_medcode()` to ensure the data file is available locally.
+
+2.  Then, it reads the CSV file into an R data frame (tibble) using `readr::read_csv`.
+
+**Example: Loading the ICD9CM data**
+
+```{r load_medcode, echo=TRUE, message=FALSE, warning=FALSE}
+# Load the data using the function
+# This implicitly calls download_medcode first
+icd9_data_example <- load_medcode("ICD9CM")
+
+# Confirm data is loaded by checking dimensions and showing first few rows
+print(paste("Loaded ICD9CM - Dimensions:", paste(dim(icd9_data_example), collapse = " x ")))
+print("First few rows:")
+kable(head(icd9_data_example))
+```
+
+# Feature 1: Code Lookup (`lookup_code`)
+
+This function retrieves the description and potentially other details for a specific medical code within a given coding system.
+
+**Example: Look up ICD-9-CM code "428.0"**
+
+```{r lookup-demo, echo=TRUE, message=FALSE, warning=FALSE}
+# Input: code string and system name
+code_info <- lookup_code(code = "428.0", system = "ICD9CM")
+
+# Output: A tibble/data frame row with information
+# Using kable() for potentially nicer table output in the presentation
+kable(code_info)
+```
+
+# Feature 2: Hierarchy - Ancestors (`get_ancestors`)
+
+This function navigates the code hierarchy *upwards* to find all parent and ancestor codes.
+
+**Example: Find ancestors for ICD-9-CM code "428.22"** (Systolic heart failure, acute on chronic)
+
+```{r get_ancestors-demo, echo=TRUE, message=FALSE, warning=FALSE}
+# Input: code string and system name
+ancestors <- get_ancestors(code = "428.22", system = "ICD9CM")
+
+# Output: A character vector of ancestor codes
+print(ancestors)
+```
+
+# Feature 3: Hierarchy - Descendants (`get_descendants`)
+
+This function navigates the code hierarchy *downwards* to find all child and descendant codes.
+
+**Example: Find descendants for ICD-9-CM code "428"** (Heart failure)
+
+```{r get_descendants, echo=TRUE, message=FALSE, warning=FALSE}
+# Input: code string and system name
+descendants <- get_descendants(code = "428", system = "ICD9CM")
+
+# Output: A character vector of descendant codes (can be long!)
+print(head(descendants)) # Show only the first few for brevity
+print(paste("Total descendants found:", length(descendants)))
+```
+
+# Feature 4: Cross-System Mapping
+
+## Feature 4a: Supported Map
+
+let's see which mappings (crosswalks) are currently supported: The `supported_cross()` function returns a list of identifiers for all available code system mappings within the package.
+
+```{r supported-crosswalks-demo, echo=TRUE, message=FALSE, warning=FALSE}
+# Call the function to get the list of supported crosswalks
+available_crosswalks <- supported_cross()
+
+# Print the available mapping identifiers
+print(available_crosswalks)
+```
+
+## Feature 4b：Translate codes(`map_code`)
+
+This function translates codes from one coding system to another using pre-defined mapping tables.
+
+**Example: Map ICD-9-CM "428.0" to the CCSCM system** (Clinical Classifications Software)
+
+```{r map_code-demo, echo=TRUE, message=FALSE, warning=FALSE}
+# Input: code, source system (from), target system (to)
+mapped_code <- map_code(code = "428.0", from = "ICD9CM", to = "CCSCM")
+
+# Output: The corresponding code(s) in the target system
+print(mapped_code)
+```
+
+# Feature 5: ATC Specific Functions
+
+Now let's look at utilities specifically designed for the ATC (Anatomical Therapeutic Chemical) classification system for drugs.
+
+## Feature 5a: ATC Level Conversion (`atc_convert`)
+
+This utility function truncates an ATC code to get its representation at different classification levels (L1 to L5).
+
+**Example: Convert ATC code "L01BA01" (Methotrexate)**
+
+```{r atc_convert-demo, echo=TRUE, message=FALSE, warning=FALSE}
+atc_code <- "L01BA01"
+
+# Get code representations at different levels
+print(paste("L1 (Anatomical Main Group):", atc_convert(atc_code, level = 1))) # L
+print(paste("L3 (Therapeutic Subgroup):", atc_convert(atc_code, level = 3))) # L01
+print(paste("L4 (Chemical Subgroup):", atc_convert(atc_code, level = 4))) # L01B
+# Level 5 is usually the full substance code
+```
+
+## Feature 5b: ATC Drug-Drug Interactions (`get_ddi`)
+
+This function loads a predefined dataset of potential Drug-Drug Interactions (DDIs), typically represented by pairs of interacting ATC codes.
+
+**Example: Load and view the first few DDI pairs**
+
+```{r get_ddi-demo, echo=TRUE, message=FALSE, warning=FALSE}
+# Load the DDI dataset bundled with the package/data
+ddi_data <- get_ddi()
+
+# Display the structure (first few rows)
+# Assumes columns are ATC_i, ATC_j
+kable(head(ddi_data))
+
+# Optionally, show total number of interactions listed
+# print(paste("Total DDI records loaded:", nrow(ddi_data)))
+```
+
+# Summary & Future Work
+
+## Summary
+
+-   `medcode` enables standardized handling of clinical code vocabularies
+-   Unified functions for code lookup, hierarchy navigation, and cross-system mapping
+-   Easily extendable to support new coding systems or custom vocabularies
+-   Ready for integration into R-based medical informatics pipelines
+
+## Next step/Future work
+
+-   **Finalize Vignettes:** Complete detailed tutorials (vignettes) showcasing common use cases and workflows.
+-   **Complete `pkgdown` Website:** Finish the documentation website for easy access to all documentation (including existing help pages) and examples.
+-   **Expand Coverage:** Add support for more coding systems and mapping tables based on user needs.
+-   **Implement Testing:** Create comprehensive unit tests using `testthat` to ensure code quality and stability.

@@ -7,7 +7,7 @@
 Optional class for processing entire datasets in bulk (e.g., batch statistics).
 }
 \section{Super class}{
-\code{\link[RHealth:Processor]{RHealth::Processor}} -> \code{DatasetProcessor}
+\code{RHealth::Processor} -> \code{DatasetProcessor}
 }
 \section{Methods}{
 \subsection{Public methods}{

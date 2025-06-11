@@ -8,7 +8,7 @@ Feature processor for encoding categorical sequences (e.g., medical codes) into
 numerical indices. Supports dynamic vocabulary construction.
 }
 \section{Super classes}{
-\code{\link[RHealth:Processor]{RHealth::Processor}} -> \code{\link[RHealth:FeatureProcessor]{RHealth::FeatureProcessor}} -> \code{SequenceProcessor}
+\code{RHealth::Processor} -> \code{RHealth::FeatureProcessor} -> \code{SequenceProcessor}
 }
 \section{Public fields}{
 \if{html}{\out{<div class="r6-fields">}}

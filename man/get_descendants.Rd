@@ -30,3 +30,4 @@ get_descendants("A00", "ICD10CM")
 \seealso{
 \code{\link{get_ancestors}}, \code{\link{load_medcode}}
 }
+\concept{MedCode}

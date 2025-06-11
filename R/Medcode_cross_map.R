@@ -9,6 +9,8 @@
 #' \code{"<from>_to_<to>"}, for example
 #' \code{"ICD9CM_to_CCSCM"} or \code{"NDC_to_ATC"}.
 #'
+#' @concept MedCode
+#'
 #' @examples
 #' supported_cross()
 #'
@@ -44,6 +46,8 @@ supported_cross <- function() {
 #' # Map an ICD-10 code to its CCS category
 #' map_code("I10", from = "ICD10CM", to = "CCSCM")
 #' }
+#'
+#' @concept MedCode
 #'
 #' @seealso
 #' \code{\link{load_medcode}}, \code{\link{supported_cross}}

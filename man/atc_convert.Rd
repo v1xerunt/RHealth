@@ -28,3 +28,4 @@ atc_convert("A01AA01", level = 3)
 atc_convert(c("B02BA02", "C03CA01"), level = 5)
 
 }
+\concept{MedCode}

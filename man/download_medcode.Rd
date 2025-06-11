@@ -50,4 +50,5 @@ path2 <- download_medcode("CPT")
 \code{\link[rappdirs]{user_cache_dir}},
 \code{\link[httr]{GET}}, \code{\link[httr]{write_disk}}
 }
+\concept{MedCode}
 \keyword{internal}

@@ -18,7 +18,7 @@ It ensures key tables like patients, admissions, and icustays are included,
 and allows appending additional tables. It also logs memory usage if needed.
 }
 \section{Super class}{
-\code{\link[RHealth:BaseDataset]{RHealth::BaseDataset}} -> \code{MIMIC4EHRDataset}
+\code{RHealth::BaseDataset} -> \code{MIMIC4EHRDataset}
 }
 \section{Methods}{
 \subsection{Public methods}{

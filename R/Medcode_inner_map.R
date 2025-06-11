@@ -10,6 +10,8 @@
 #' @examples
 #' supported_inner()
 #'
+#' @concept MedCode
+#'
 #' @export
 supported_inner <- function() {
   c(
@@ -42,6 +44,8 @@ supported_inner <- function() {
 #' @seealso
 #' \code{\link{load_medcode}}, \code{\link{supported_inner}}
 #'
+#' @concept MedCode
+#'
 #' @export
 lookup_code <- function(code, system = "ICD9CM") {
   df <- load_medcode(system)
@@ -71,6 +75,8 @@ lookup_code <- function(code, system = "ICD9CM") {
 #'
 #' @seealso
 #' \code{\link{get_descendants}}, \code{\link{load_medcode}}
+#'
+#' @concept MedCode
 #'
 #' @export
 get_ancestors <- function(code, system = "ICD9CM") {
@@ -109,6 +115,8 @@ get_ancestors <- function(code, system = "ICD9CM") {
 #'
 #' @seealso
 #' \code{\link{get_ancestors}}, \code{\link{load_medcode}}
+#'
+#' @concept MedCode
 #'
 #' @export
 get_descendants <- function(code, system = "ICD9CM") {
