@@ -3,7 +3,7 @@
 
 # RHealth
 
-[![docs](https://github.com/v1xerunt/RHealth/actions/workflows/docs/badge.svg)](https://github.com/v1xerunt/RHealth/actions/workflows/docs)
+[![docs](https://github.com/v1xerunt/RHealth/actions/workflows/docs.yaml/badge.svg)](https://github.com/v1xerunt/RHealth/actions/workflows/docs.yaml)
 
 **RHealth** is an open-source R package designed to bring a
 comprehensive deep learning toolkit to the R community for healthcare
