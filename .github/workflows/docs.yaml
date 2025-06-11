@@ -9,7 +9,7 @@ on:
     types: [published]
   workflow_dispatch:
 
-name: docs.yaml
+name: docs
 
 permissions: read-all
 
