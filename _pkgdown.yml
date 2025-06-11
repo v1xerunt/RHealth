@@ -6,7 +6,6 @@ template:
 development:
   mode: auto # or 'release' or 'devel'
   destination: dev # Deploys dev version to a 'dev' subdirectory
-
 # articles: {}
 # reference:
 #   - title: "All functions"
@@ -17,7 +16,91 @@ development:
 #       - `starts_with("atc_")`
 #       - MedCode
 
-# navbar:
-#   structure:
-#     left: [intro, reference, articles, news]
-#     right: github
+
+articles:
+  - title: "Getting Started"
+    contents:
+      - quickstart
+
+reference:
+  - title: "Dataset"
+    desc: >
+      Classes for representing EHR datasets and configuration.
+    contents:
+      - BaseDataset
+      - SampleDataset
+      - MIMIC3Dataset
+      - MIMIC4EHRDataset
+      - MIMIC4NoteDataset
+      - Patient
+      - Event
+      - DatasetConfig
+      - load_yaml_config
+      - get_dataloader
+      - split_by_patient
+      - split_by_visit
+      - split_by_sample
+
+
+  - title: "Processors"
+    desc: >
+      Preprocessors for handling input/output features.
+    contents:
+      - Processor
+      - DatasetProcessor
+      - SampleProcessor
+      - FeatureProcessor
+      - TextProcessor
+      - SequenceProcessor
+      - TimeseriesProcessor
+      - BinaryLabelProcessor
+      - MultiClassLabelProcessor
+      - MultiLabelProcessor
+      - RegressionLabelProcessor
+      - RawProcessor
+      - get_processor
+
+  - title: "Tasks"
+    desc: >
+      Benchmark prediction tasks based on MIMIC-IV.
+    contents:
+      - Readmission30DaysMIMIC4
+      - InHospitalMortalityMIMIC4
+
+  - title: "Models"
+    desc: >
+      Neural network models and layers built on torch.
+    contents:
+      - BaseModel
+      - EmbeddingModel
+      - RNN
+      - RNNLayer
+
+  - title: "Training & Evaluation"
+    desc: >
+      Trainer class and supporting functions for training deep learning models.
+    contents:
+      - Trainer
+      - collate_fn_dict_with_padding
+      - get_metrics_fn
+      - binary_metrics_fn
+      - is_best
+      - set_logger
+      - ece_confidence_binary
+
+  - title: "Code Mapping & Utilities"
+    desc: >
+      Tools for code lookups, mapping, and data splits.
+    contents:
+      - atc_convert
+      - lookup_code
+      - map_code
+      - get_ancestors
+      - get_descendants
+      - supported_inner
+      - supported_cross
+
+navbar:
+  structure:
+    left: [intro, reference, articles, news]
+    right: github
