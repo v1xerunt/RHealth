@@ -46,23 +46,26 @@ Ji Song, Zhixia Ren, Zhenbang Wu, John Wu, Chaoqi Yang, Jimeng Sun, Liantao Ma, 
 
 You can install the development version of RHealth from [GitHub](https://github.com/) with:
 
-``` r
+``` {r, eval=FALSE}
 # install.packages("pak")
 pak::pak("RHealth")
 ```
 Alternatively, using devtools:
-``` r
+``` {r, eval=FALSE}
 # install.packages("devtools")
-devtools::install_github("RHealth")
+devtools::install_github("v1xerunt/RHealth")
 ```
 Once RHealth is installed, you can load the package to access medcode functionalities:
-``` r
+``` {r, eval=FALSE}
 library(RHealth)
 ```
 
 ## 1. Dataset Module
 The **dataset** module is the foundation of **RHealth**.  
 It converts raw, multi‑table Electronic‑Health‑Record (EHR) dumps into tidy, task‑ready tensors that every downstream deep‑learning model can consume.
+
+You can download a sample dataset (MIMIC-IV Demo, version 2.2) directly from PhysioNet using the following link:
+👉 https://physionet.org/content/mimic-iv-demo/2.2/#files-panel
 
 ---
 
@@ -83,12 +86,14 @@ It converts raw, multi‑table Electronic‑Health‑Record (EHR) dumps into tid
 
 ### 1.2 Quick‑Start Example
 
-```r
-ds <- BaseDataset$new(
-  root         = "mimic4",
-  tables       = c("patients", "admissions", "lab_events"),
+```{r, eval=FALSE}
+data_dir <- "/Users/yourname/datasets/mimiciv/"
+
+ds <- MIMIC4EHRDataset$new(
+  root = data_dir,
+  tables = c("patients", "admissions", "diagnoses_icd", "procedures_icd", "prescriptions"),
   dataset_name = "mimic4_ehr",
-  dev          = TRUE            # limit to 1 000 patients
+  dev = TRUE
 )
 
 ds$stats()
@@ -100,11 +105,9 @@ ds$stats()
 
 Convert the dataset into a model‑ready `SampleDataset`:
 
-```r
+```{r, eval=FALSE}
 task    <- Readmission30DaysMIMIC4$new()
 samples <- ds$set_task(task)
-
-loader  <- dataloader(samples, batch_size = 64, shuffle = TRUE)
 ```
 
 ---
@@ -139,7 +142,7 @@ tables:
 
 Load & validate from R:
 
-```r
+```{r, eval=FALSE}
 cfg <- load_yaml_config("configs/mimic4_ehr.yaml")
 print(cfg)
 ```
@@ -169,10 +172,10 @@ time‑series windows, … without touching any other patient’s data.*
 
 The resulting `SampleDataset` supports:
 
-```r
+
 .__getitem__(i)  # single sample
 .__len__()       # length
-```
+
 
 and plugs straight into `{torch}`’s `dataloader()`.
 
@@ -180,7 +183,7 @@ and plugs straight into `{torch}`’s `dataloader()`.
 
 ### 1.6 Debugging Tips
 
-```r
+```{r, eval=FALSE}
 # Inspect the first 20 events
 ds$unique_patient_ids()
 
@@ -224,7 +227,7 @@ data to use, and **how** to turn a patient’s raw events into
 | `pre_filter(df)` | **Optional**.  Receives the *global* event `LazyFrame`; return a pared‑down version to speed up sampling. |
 | `call(patient)` | **Must override**.  Converts one `Patient` to zero, one, or many **samples** *(named lists)*. |
 
-```r
+```{r, eval=FALSE}
 # Skeleton for your own task ----------------------------------------------
 MyCoolTask <- R6::R6Class(
   "MyCoolTask",
@@ -279,7 +282,7 @@ objects (`numeric`, `character`, `matrix`, `data.frame`, lists).
 | `InHospitalMortalityMIMIC4` | Mortality at discharge | Uses **lab time‑series** from the first 48 h; excludes minors; binary label `mortality`. |
 | `Readmission30DaysMIMIC4`  | 30‑day readmission | Sequences of **diagnoses / procedures / drugs**; ignores visits ≤ 12 h; smart exclusion of same‑day transfers. |
 
-```r
+```{r, eval=FALSE}
 ds      <- MIMIC4Dataset$new(root = "~/mimic4", tables = ...)
 mort30  <- InHospitalMortalityMIMIC4$new(input_window_hours = 48)
 samples <- ds$set_task(mort30, num_workers = 4)
@@ -287,22 +290,6 @@ samples <- ds$set_task(mort30, num_workers = 4)
 
 ---
 
-### 2.5 Typical Workflow
-
-```r
-task    <- MyCoolTask$new()
-samples <- ds$set_task(task)
-
-loader  <- dataloader(samples, batch_size = 64, shuffle = TRUE)
-
-for (batch in enumerate(loader)) {
-  output <- model(batch$inputs)
-  loss   <- nnf_binary_cross_entropy_with_logits(output, batch$targets)
-  # back‑prop …
-}
-```
-
----
 
 ## 3 Model Module 
 The **model** module delivers ready‑to‑train neural‑network
@@ -379,7 +366,7 @@ labels   ───────────────────────�
 
 Instantiation:
 
-```r
+```{r, eval=FALSE}
 model <- RNN(
   dataset       = samples,     # a SampleDataset from `set_task()`
   embedding_dim = 128,
@@ -387,28 +374,6 @@ model <- RNN(
 )
 ```
 
----
-
-### 3.5 Quick‑start training loop
-
-```r
-task    <- Readmission30DaysMIMIC4$new()
-samples <- ds$set_task(task)
-
-loader  <- dataloader(samples, batch_size = 32, shuffle = TRUE)
-model   <- RNN(samples, embedding_dim = 128, hidden_dim = 128)
-optim   <- optim_adam(model$parameters, lr = 1e-3)
-
-for (epoch in 1:5) {
-  coro::loop(for (batch in loader) {
-    optim$zero_grad()
-    out  <- model(batch)
-    out$loss$backward()
-    optim$step()
-  })
-  cat(sprintf("epoch %d | loss %.4f\n", epoch, as.numeric(out$loss$item())))
-}
-```
 
 ---
 
@@ -418,7 +383,7 @@ for (epoch in 1:5) {
 2. Add layers in `initialize()`, making sure to call `super$initialize(dataset)`.  
 3. Implement `forward(inputs)`.
 
-```r
+```{r, eval=FALSE}
 MyDense <- torch::nn_module(
   "MyDense",
   inherit = BaseModel,
@@ -512,7 +477,7 @@ trainer, bringing familiar conveniences to the R ecosystem:
 
 ### 4.3 Minimal working example
 
-```r
+```{r, eval=FALSE}
 library(RHealth)
 
 ## 1.  Build dataset & task -----------------------------------------------
@@ -522,11 +487,10 @@ ds      <- MIMIC4Dataset$new(root = "~/mimic4",
 task    <- InHospitalMortalityMIMIC4$new(input_window_hours = 48)
 samples <- ds$set_task(task)
 
-train_idx <- sample(seq_len(length(samples)), 0.8 * length(samples))
-val_idx   <- setdiff(seq_len(length(samples)), train_idx)
-
-train_loader <- dataloader(samples[train_idx], batch_size = 32, shuffle = TRUE)
-val_loader   <- dataloader(samples[val_idx],   batch_size = 64)
+splits <- split_by_patient(samples, c(0.8, 0.1, 0.1))
+train_dl <- get_dataloader(splits[[1]], batch_size = 32, shuffle = TRUE)
+val_dl <- get_dataloader(splits[[2]], batch_size = 32)
+test_dl <- get_dataloader(splits[[3]], batch_size = 32)
 
 ## 2.  Build model ---------------------------------------------------------
 model <- RNN(samples, embedding_dim = 128, hidden_dim = 128)
@@ -537,13 +501,12 @@ trainer <- Trainer$new(model,
                        output_path  = "experiments",
                        exp_name     = "mortality_rnn")
 
-trainer$train(train_loader,
-              val_dataloader  = val_loader,
-              epochs          = 10,
-              weight_decay    = 1e-4,
-              max_grad_norm   = 5,
-              monitor         = "auroc",
-              monitor_criterion = "max")
+trainer$train(
+              train_dataloader = train_dl,
+              val_dataloader = val_dl,
+              epochs = 10,
+              optimizer_params = list(lr = 1e-3),
+              monitor = "roc_auc")
 ```
 
 Logs & checkpoints:
@@ -560,16 +523,10 @@ experiments/
 
 ### 4.4 Inference & evaluation
 
-```r
-test_scores <- trainer$evaluate(test_loader)
+```{r, eval=FALSE}
+test_scores <- trainer$evaluate(test_dl)
 print(test_scores)
 
-preds <- trainer$inference(test_loader,
-                           additional_outputs = "embed",
-                           return_patient_ids = TRUE)
-
-head(preds$patient_id)
-dim(preds$additional$embed)  # (n_samples, feature_dim)
 ```
 
 ---
@@ -584,7 +541,7 @@ used independently.**
 
 Retrieve the description for a specific medical code.
 
-``` r
+```{r, eval=FALSE}
 # Example: Look up ICD-9-CM code "428.0"
 code_description <- lookup_code(code = "428.0", system = "ICD9CM")
 print(code_description)
@@ -595,7 +552,7 @@ print(code_description)
 Explore relationships within coding systems. \#### Get Ancestors with
 get_ancestors():
 
-``` r
+```{r, eval=FALSE}
 # Example: Find ancestors for ICD-9-CM code "428.22"
 ancestor_codes <- get_ancestors(code = "428.22", system = "ICD9CM")
 print(ancestor_codes)
@@ -603,7 +560,7 @@ print(ancestor_codes)
 
 #### Get Descendants with get_descendants():
 
-``` r
+```{r, eval=FALSE}
 # Example: Find descendants for ICD-9-CM code "428"
 descendant_codes <- get_descendants(code = "428", system = "ICD9CM")
 print(head(descendant_codes)) # Showing first few for brevity
@@ -615,13 +572,13 @@ print(paste("Total descendants for '428':", length(descendant_codes)))
 Translate codes from one system to another. First, see available
 mappings:
 
-``` r
+``` {r, eval=FALSE}
 supported_cross()
 ```
 
 Then, map a code:
 
-``` r
+```{r, eval=FALSE}
 # Example: Map ICD-9-CM "428.0" to CCSCM
 mapped_ccscm_code <- map_code(code = "428.0", from = "ICD9CM", to = "CCSCM")
 print(mapped_ccscm_code)
@@ -631,7 +588,7 @@ print(mapped_ccscm_code)
 
 #### ATC Level Conversion with atc_convert():
 
-``` r
+```{r, eval=FALSE}
 atc_code <- "L01BA01" # Methotrexate
 print(paste("L1 (Anatomical Main Group):", atc_convert(atc_code, level = 1)))
 print(paste("L3 (Therapeutic/Pharmacological Subgroup):", atc_convert(atc_code, level = 3)))
@@ -640,7 +597,7 @@ print(paste("L4 (Chemical/Therapeutic/Pharmacological Subgroup):", atc_convert(a
 
 #### Drug-Drug Interactions (DDI) with get_ddi():
 
-``` r
+```{r, eval=FALSE}
 ddi_data <- get_ddi()
 print("First few known Drug-Drug Interactions (ATC pairs):")
 print(head(ddi_data))

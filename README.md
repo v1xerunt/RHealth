@@ -120,6 +120,11 @@ tensors that any downstream model can consume.
 - **Dev Mode**: Allows for lightning-fast iteration by using a small
   subset of patients.
 
+You can download a sample dataset (MIMIC-IV Demo, version 2.2) directly
+from PhysioNet using the following link:
+
+👉 <https://physionet.org/content/mimic-iv-demo/2.2/#files-panel>
+
 **Quick Start:**
 
 Define a dataset from your source files using a YAML configuration.
@@ -129,11 +134,13 @@ Define a dataset from your source files using a YAML configuration.
 # See the full documentation for details on the YAML structure.
 
 # Load the dataset
-ds <- BaseDataset$new(
-  root         = "path/to/mimic4",
-  tables       = c("patients", "admissions", "labevents"),
+data_dir <- "/Users/yourname/datasets/mimiciv/"
+
+ds <- MIMIC4EHRDataset$new(
+  root = data_dir,
+  tables = c("patients", "admissions", "diagnoses_icd", "procedures_icd", "prescriptions"),
   dataset_name = "mimic4_ehr",
-  dev          = TRUE  # limit to 1,000 patients for speed
+  dev = TRUE
 )
 
 ds$stats()
@@ -190,7 +197,6 @@ Once a task is defined, use it with your dataset to create a
 ``` r
 task    <- Readmission30DaysMIMIC4$new() # A built-in task
 samples <- ds$set_task(task)
-loader  <- dataloader(samples, batch_size = 64, shuffle = TRUE)
 ```
 
 ### 🧠 4. Model Module
@@ -253,11 +259,13 @@ that handles logging, checkpointing, evaluation, and progress bars.
 
 ``` r
 # 1. Create data loaders
-train_loader <- dataloader(train_samples, batch_size = 32, shuffle = TRUE)
-val_loader   <- dataloader(val_samples,   batch_size = 64)
+splits <- split_by_patient(samples, c(0.8, 0.1, 0.1))
+train_dl <- get_dataloader(splits[[1]], batch_size = 32, shuffle = TRUE)
+val_dl <- get_dataloader(splits[[2]], batch_size = 32)
+test_dl <- get_dataloader(splits[[3]], batch_size = 32)
 
 # 2. Instantiate a model
-model <- RNN(train_samples, embedding_dim = 128, hidden_dim = 128)
+model <- RNN(train_dl, embedding_dim = 128, hidden_dim = 128)
 
 # 3. Set up the trainer
 trainer <- Trainer$new(
@@ -269,13 +277,11 @@ trainer <- Trainer$new(
 
 # 4. Start training
 trainer$train(
-    train_dataloader  = train_loader,
-    val_dataloader    = val_loader,
-    epochs            = 10,
-    learning_rate     = 1e-3,
-    weight_decay      = 1e-4,
-    max_grad_norm     = 5.0,
-    monitor           = "auroc" # Save the best model based on AUROC
+  train_dataloader = train_dl,
+  val_dataloader = val_dl,
+  epochs = 10,
+  optimizer_params = list(lr = 1e-3),
+  monitor = "roc_auc"
 )
 ```
 

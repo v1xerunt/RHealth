@@ -258,7 +258,10 @@ BaseDataset <- R6::R6Class(
     #' @return List of \code{Patient} objects.
     iter_patients = function(df = NULL) {
       ids <- self$unique_patient_ids()
-      ids <- head(ids, 100)
+      if (self$dev) {
+        message("[dev] Limiting to 100 patients for rapid prototyping")
+        ids <- head(ids, 100)
+      }
 
       progressr::handlers(global = TRUE)
       p <- progressr::progressor(steps = length(ids))
