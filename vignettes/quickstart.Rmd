@@ -14,20 +14,17 @@ knitr::opts_chunk$set(
 )
 ```
 
-# 📦 Load RHealth
 
-Before starting, make sure you have loaded the RHealth package:
-
-```r
-devtools::load_all()
-```
 
 # 📁 Step 1: Initialize MIMIC-IV Dataset
+You can download a sample dataset (MIMIC-IV Demo, version 2.2) directly from PhysioNet using the following link:
+
+👉 https://physionet.org/content/mimic-iv-demo/2.2/#files-panel
 
 You need to specify the root directory where your MIMIC-IV CSV files are stored:
 
-```r
-data_dir <- "F:/R-project/mimic-iv-ehr/physionet.org/files/mimiciv/3.1"
+```{r}
+data_dir <- "/Users/yourname/datasets/mimiciv/"
 
 ds <- MIMIC4EHRDataset$new(
   root = data_dir,
@@ -43,7 +40,7 @@ ds$stats()
 
 Here we choose **30-day readmission** as the prediction target:
 
-```r
+```{r}
 sd <- ds$set_task(task = Readmission30DaysMIMIC4$new())
 ```
 
@@ -53,7 +50,7 @@ This will process the raw tables and generate a task-specific sample dataset.
 
 Split the data by patient into train/val/test (80%/10%/10%):
 
-```r
+```{r}
 splits <- split_by_patient(sd, c(0.8, 0.1, 0.1))
 
 train_dl <- get_dataloader(splits[[1]], batch_size = 32, shuffle = TRUE)
@@ -65,8 +62,8 @@ test_dl <- get_dataloader(splits[[3]], batch_size = 32)
 
 We use a GRU-based recurrent neural network model:
 
-```r
-model <- RNN$new(
+```{r}
+model <- RNN(
   dataset = sd,
   embedding_dim = 128,
   rnn_type = "GRU",
@@ -78,7 +75,7 @@ model <- RNN$new(
 
 Create a `Trainer` object and start training:
 
-```r
+```{r}
 trainer <- Trainer$new(model = model)
 
 trainer$train(
@@ -94,7 +91,7 @@ trainer$train(
 
 Finally, evaluate on the test set:
 
-```r
+```{r}
 result <- trainer$evaluate(test_dl)
 print(result)
 ```
