@@ -120,6 +120,10 @@ tensors that any downstream model can consume.
 - **Dev Mode**: Allows for lightning-fast iteration by using a small
   subset of patients.
 
+You can download a sample dataset (MIMIC-IV Demo, version 2.2) directly from PhysioNet using the following link:
+
+👉 https://physionet.org/content/mimic-iv-demo/2.2/#files-panel
+
 **Quick Start:**
 
 Define a dataset from your source files using a YAML configuration.
