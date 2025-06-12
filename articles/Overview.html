@@ -59,7 +59,7 @@
       <h1>Descriptions</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/v1xerunt/RHealth/blob/main/vignettes/Overview.Rmd" class="external-link"><code>vignettes/Overview.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/v1xerunt/RHealth/blob/dev/vignettes/Overview.Rmd" class="external-link"><code>vignettes/Overview.Rmd</code></a></small>
       <div class="d-none name"><code>Overview.Rmd</code></div>
     </div>
 
@@ -102,7 +102,7 @@ Learning Toolkit for Healthcare Predictive Modeling”. GitHub.</p>
 <p>Alternatively, using devtools:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># install.packages("devtools")</span></span>
-<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"RHealth"</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"v1xerunt/RHealth"</span><span class="op">)</span></span></code></pre></div>
 <p>Once RHealth is installed, you can load the package to access medcode
 functionalities:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
@@ -116,6 +116,8 @@ functionalities:</p>
 It converts raw, multi‑table Electronic‑Health‑Record (EHR) dumps into
 tidy, task‑ready tensors that every downstream deep‑learning model can
 consume.</p>
+<p>You can download a sample dataset (MIMIC-IV Demo, version 2.2)
+directly from PhysioNet using the following link: 👉 <a href="https://physionet.org/content/mimic-iv-demo/2.2/#files-panel" class="external-link uri">https://physionet.org/content/mimic-iv-demo/2.2/#files-panel</a></p>
 <hr>
 <div class="section level4">
 <h4 id="key-features">1.1 Key Features<a class="anchor" aria-label="anchor" href="#key-features"></a>
@@ -187,11 +189,13 @@ patients</em> for lightning‑fast iteration.<br>
 <h4 id="quickstart-example">1.2 Quick‑Start Example<a class="anchor" aria-label="anchor" href="#quickstart-example"></a>
 </h4>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">ds</span> <span class="op">&lt;-</span> <span class="va"><a href="../reference/BaseDataset.html">BaseDataset</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span></span>
-<span>  root         <span class="op">=</span> <span class="st">"mimic4"</span>,</span>
-<span>  tables       <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"patients"</span>, <span class="st">"admissions"</span>, <span class="st">"lab_events"</span><span class="op">)</span>,</span>
+<code class="sourceCode R"><span><span class="va">data_dir</span> <span class="op">&lt;-</span> <span class="st">"/Users/yourname/datasets/mimiciv/"</span></span>
+<span></span>
+<span><span class="va">ds</span> <span class="op">&lt;-</span> <span class="va"><a href="../reference/MIMIC4EHRDataset.html">MIMIC4EHRDataset</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span></span>
+<span>  root <span class="op">=</span> <span class="va">data_dir</span>,</span>
+<span>  tables <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"patients"</span>, <span class="st">"admissions"</span>, <span class="st">"diagnoses_icd"</span>, <span class="st">"procedures_icd"</span>, <span class="st">"prescriptions"</span><span class="op">)</span>,</span>
 <span>  dataset_name <span class="op">=</span> <span class="st">"mimic4_ehr"</span>,</span>
-<span>  dev          <span class="op">=</span> <span class="cn">TRUE</span>            <span class="co"># limit to 1 000 patients</span></span>
+<span>  dev <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">ds</span><span class="op">$</span><span class="fu">stats</span><span class="op">(</span><span class="op">)</span></span>
@@ -203,9 +207,7 @@ patients</em> for lightning‑fast iteration.<br>
 <code>SampleDataset</code>:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">task</span>    <span class="op">&lt;-</span> <span class="va"><a href="../reference/Readmission30DaysMIMIC4.html">Readmission30DaysMIMIC4</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="va">samples</span> <span class="op">&lt;-</span> <span class="va">ds</span><span class="op">$</span><span class="fu">set_task</span><span class="op">(</span><span class="va">task</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">loader</span>  <span class="op">&lt;-</span> <span class="fu">dataloader</span><span class="op">(</span><span class="va">samples</span>, batch_size <span class="op">=</span> <span class="fl">64</span>, shuffle <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">samples</span> <span class="op">&lt;-</span> <span class="va">ds</span><span class="op">$</span><span class="fu">set_task</span><span class="op">(</span><span class="va">task</span><span class="op">)</span></span></code></pre></div>
 <hr>
 </div>
 <div class="section level4">
@@ -283,9 +285,7 @@ many <code>(input, target)</code> pairs.<br>
 into a <code>torch_tensor</code>.</li>
 </ol>
 <p>The resulting <code>SampleDataset</code> supports:</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">.__getitem__</span><span class="op">(</span><span class="va">i</span><span class="op">)</span>  <span class="co"># single sample</span></span>
-<span><span class="fu">.__len__</span><span class="op">(</span><span class="op">)</span>       <span class="co"># length</span></span></code></pre></div>
+<p>.__getitem__(i) # single sample .__len__() # length</p>
 <p>and plugs straight into <a href="https://torch.mlverse.org/docs" class="external-link">torch</a>’s
 <code>dataloader()</code>.</p>
 <hr>
@@ -293,7 +293,7 @@ into a <code>torch_tensor</code>.</li>
 <div class="section level4">
 <h4 id="debugging-tips">1.6 Debugging Tips<a class="anchor" aria-label="anchor" href="#debugging-tips"></a>
 </h4>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Inspect the first 20 events</span></span>
 <span><span class="va">ds</span><span class="op">$</span><span class="fu">unique_patient_ids</span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
@@ -385,7 +385,7 @@ zero, one, or many <strong>samples</strong> <em>(named lists)</em>.</td>
 </tr>
 </tbody>
 </table>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Skeleton for your own task ----------------------------------------------</span></span>
 <span><span class="va">MyCoolTask</span> <span class="op">&lt;-</span> <span class="fu">R6</span><span class="fu">::</span><span class="kw"><a href="https://r6.r-lib.org/reference/R6Class.html" class="external-link">R6Class</a></span><span class="op">(</span></span>
 <span>  <span class="st">"MyCoolTask"</span>,</span>
@@ -466,26 +466,10 @@ ignores visits ≤ 12 h; smart exclusion of same‑day transfers.</td>
 </tr>
 </tbody>
 </table>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">ds</span>      <span class="op">&lt;-</span> <span class="va">MIMIC4Dataset</span><span class="op">$</span><span class="fu">new</span><span class="op">(</span>root <span class="op">=</span> <span class="st">"~/mimic4"</span>, tables <span class="op">=</span> <span class="va">...</span><span class="op">)</span></span>
 <span><span class="va">mort30</span>  <span class="op">&lt;-</span> <span class="va"><a href="../reference/InHospitalMortalityMIMIC4.html">InHospitalMortalityMIMIC4</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span>input_window_hours <span class="op">=</span> <span class="fl">48</span><span class="op">)</span></span>
 <span><span class="va">samples</span> <span class="op">&lt;-</span> <span class="va">ds</span><span class="op">$</span><span class="fu">set_task</span><span class="op">(</span><span class="va">mort30</span>, num_workers <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span></code></pre></div>
-<hr>
-</div>
-<div class="section level4">
-<h4 id="typical-workflow">2.5 Typical Workflow<a class="anchor" aria-label="anchor" href="#typical-workflow"></a>
-</h4>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">task</span>    <span class="op">&lt;-</span> <span class="va">MyCoolTask</span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="va">samples</span> <span class="op">&lt;-</span> <span class="va">ds</span><span class="op">$</span><span class="fu">set_task</span><span class="op">(</span><span class="va">task</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">loader</span>  <span class="op">&lt;-</span> <span class="fu">dataloader</span><span class="op">(</span><span class="va">samples</span>, batch_size <span class="op">=</span> <span class="fl">64</span>, shuffle <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span></span>
-<span><span class="kw">for</span> <span class="op">(</span><span class="va">batch</span> <span class="kw">in</span> <span class="fu">enumerate</span><span class="op">(</span><span class="va">loader</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="va">output</span> <span class="op">&lt;-</span> <span class="fu">model</span><span class="op">(</span><span class="va">batch</span><span class="op">$</span><span class="va">inputs</span><span class="op">)</span></span>
-<span>  <span class="va">loss</span>   <span class="op">&lt;-</span> <span class="fu">nnf_binary_cross_entropy_with_logits</span><span class="op">(</span><span class="va">output</span>, <span class="va">batch</span><span class="op">$</span><span class="va">targets</span><span class="op">)</span></span>
-<span>  <span class="co"># back‑prop …</span></span>
-<span><span class="op">}</span></span></code></pre></div>
 <hr>
 </div>
 </div>
@@ -614,9 +598,9 @@ sequences</strong> (avoids NaNs).</li>
 <div class="section level4">
 <h4 id="reference-model-rnn">3.4 Reference model – <code>RNN</code><a class="anchor" aria-label="anchor" href="#reference-model-rnn"></a>
 </h4>
-<div class="sourceCode" id="cb15"><pre class="sourceCode txt"><code class="sourceCode default"><span id="cb15-1"><a href="#cb15-1" tabindex="-1"></a>inputs  ─▶  EmbeddingModel  ─▶  per‑feature RNNLayer  ─┐</span>
-<span id="cb15-2"><a href="#cb15-2" tabindex="-1"></a>                                                      ├─▶ concat ─▶ FC ─▶ logits</span>
-<span id="cb15-3"><a href="#cb15-3" tabindex="-1"></a>labels   ──────────────────────────────────────────────┘</span></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode txt"><code class="sourceCode default"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a>inputs  ─▶  EmbeddingModel  ─▶  per‑feature RNNLayer  ─┐</span>
+<span id="cb13-2"><a href="#cb13-2" tabindex="-1"></a>                                                      ├─▶ concat ─▶ FC ─▶ logits</span>
+<span id="cb13-3"><a href="#cb13-3" tabindex="-1"></a>labels   ──────────────────────────────────────────────┘</span></code></pre></div>
 <ul>
 <li>One <code>RNNLayer</code> <strong>per input feature</strong>
 (diagnoses, procedures, labs …).</li>
@@ -626,34 +610,12 @@ logits.</li>
 regression</strong> tasks.</li>
 </ul>
 <p>Instantiation:</p>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/RNN.html">RNN</a></span><span class="op">(</span></span>
 <span>  dataset       <span class="op">=</span> <span class="va">samples</span>,     <span class="co"># a SampleDataset from `set_task()`</span></span>
 <span>  embedding_dim <span class="op">=</span> <span class="fl">128</span>,</span>
 <span>  hidden_dim    <span class="op">=</span> <span class="fl">128</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<hr>
-</div>
-<div class="section level4">
-<h4 id="quickstart-training-loop">3.5 Quick‑start training loop<a class="anchor" aria-label="anchor" href="#quickstart-training-loop"></a>
-</h4>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">task</span>    <span class="op">&lt;-</span> <span class="va"><a href="../reference/Readmission30DaysMIMIC4.html">Readmission30DaysMIMIC4</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="va">samples</span> <span class="op">&lt;-</span> <span class="va">ds</span><span class="op">$</span><span class="fu">set_task</span><span class="op">(</span><span class="va">task</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">loader</span>  <span class="op">&lt;-</span> <span class="fu">dataloader</span><span class="op">(</span><span class="va">samples</span>, batch_size <span class="op">=</span> <span class="fl">32</span>, shuffle <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span><span class="va">model</span>   <span class="op">&lt;-</span> <span class="fu"><a href="../reference/RNN.html">RNN</a></span><span class="op">(</span><span class="va">samples</span>, embedding_dim <span class="op">=</span> <span class="fl">128</span>, hidden_dim <span class="op">=</span> <span class="fl">128</span><span class="op">)</span></span>
-<span><span class="va">optim</span>   <span class="op">&lt;-</span> <span class="fu">optim_adam</span><span class="op">(</span><span class="va">model</span><span class="op">$</span><span class="va">parameters</span>, lr <span class="op">=</span> <span class="fl">1e-3</span><span class="op">)</span></span>
-<span></span>
-<span><span class="kw">for</span> <span class="op">(</span><span class="va">epoch</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="fu">coro</span><span class="fu">::</span><span class="fu"><a href="https://coro.r-lib.org/reference/collect.html" class="external-link">loop</a></span><span class="op">(</span><span class="kw">for</span> <span class="op">(</span><span class="va">batch</span> <span class="kw">in</span> <span class="va">loader</span><span class="op">)</span> <span class="op">{</span></span>
-<span>    <span class="va">optim</span><span class="op">$</span><span class="fu">zero_grad</span><span class="op">(</span><span class="op">)</span></span>
-<span>    <span class="va">out</span>  <span class="op">&lt;-</span> <span class="fu">model</span><span class="op">(</span><span class="va">batch</span><span class="op">)</span></span>
-<span>    <span class="va">out</span><span class="op">$</span><span class="va">loss</span><span class="op">$</span><span class="fu">backward</span><span class="op">(</span><span class="op">)</span></span>
-<span>    <span class="va">optim</span><span class="op">$</span><span class="fu">step</span><span class="op">(</span><span class="op">)</span></span>
-<span>  <span class="op">}</span><span class="op">)</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"epoch %d | loss %.4f\n"</span>, <span class="va">epoch</span>, <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="va">out</span><span class="op">$</span><span class="va">loss</span><span class="op">$</span><span class="fu">item</span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="op">}</span></span></code></pre></div>
 <hr>
 </div>
 <div class="section level4">
@@ -669,7 +631,7 @@ concrete model).<br>
 </li>
 <li>Implement <code>forward(inputs)</code>.</li>
 </ol>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">MyDense</span> <span class="op">&lt;-</span> <span class="fu">torch</span><span class="fu">::</span><span class="fu"><a href="https://torch.mlverse.org/docs/reference/nn_module.html" class="external-link">nn_module</a></span><span class="op">(</span></span>
 <span>  <span class="st">"MyDense"</span>,</span>
 <span>  inherit <span class="op">=</span> <span class="va">BaseModel</span>,</span>
@@ -904,7 +866,7 @@ loops/restarts to hit the target count.</td>
 <div class="section level4">
 <h4 id="minimal-working-example">4.3 Minimal working example<a class="anchor" aria-label="anchor" href="#minimal-working-example"></a>
 </h4>
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://v1xerunt.github.io/dev/RHealth" class="external-link">RHealth</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">## 1.  Build dataset &amp; task -----------------------------------------------</span></span>
@@ -914,11 +876,10 @@ loops/restarts to hit the target count.</td>
 <span><span class="va">task</span>    <span class="op">&lt;-</span> <span class="va"><a href="../reference/InHospitalMortalityMIMIC4.html">InHospitalMortalityMIMIC4</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span>input_window_hours <span class="op">=</span> <span class="fl">48</span><span class="op">)</span></span>
 <span><span class="va">samples</span> <span class="op">&lt;-</span> <span class="va">ds</span><span class="op">$</span><span class="fu">set_task</span><span class="op">(</span><span class="va">task</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">train_idx</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_len</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">samples</span><span class="op">)</span><span class="op">)</span>, <span class="fl">0.8</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">samples</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="va">val_idx</span>   <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sets.html" class="external-link">setdiff</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_len</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">samples</span><span class="op">)</span><span class="op">)</span>, <span class="va">train_idx</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">train_loader</span> <span class="op">&lt;-</span> <span class="fu">dataloader</span><span class="op">(</span><span class="va">samples</span><span class="op">[</span><span class="va">train_idx</span><span class="op">]</span>, batch_size <span class="op">=</span> <span class="fl">32</span>, shuffle <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span><span class="va">val_loader</span>   <span class="op">&lt;-</span> <span class="fu">dataloader</span><span class="op">(</span><span class="va">samples</span><span class="op">[</span><span class="va">val_idx</span><span class="op">]</span>,   batch_size <span class="op">=</span> <span class="fl">64</span><span class="op">)</span></span>
+<span><span class="va">splits</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/split_by_patient.html">split_by_patient</a></span><span class="op">(</span><span class="va">samples</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.8</span>, <span class="fl">0.1</span>, <span class="fl">0.1</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">train_dl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_dataloader.html">get_dataloader</a></span><span class="op">(</span><span class="va">splits</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>, batch_size <span class="op">=</span> <span class="fl">32</span>, shuffle <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="va">val_dl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_dataloader.html">get_dataloader</a></span><span class="op">(</span><span class="va">splits</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span>, batch_size <span class="op">=</span> <span class="fl">32</span><span class="op">)</span></span>
+<span><span class="va">test_dl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_dataloader.html">get_dataloader</a></span><span class="op">(</span><span class="va">splits</span><span class="op">[[</span><span class="fl">3</span><span class="op">]</span><span class="op">]</span>, batch_size <span class="op">=</span> <span class="fl">32</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">## 2.  Build model ---------------------------------------------------------</span></span>
 <span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/RNN.html">RNN</a></span><span class="op">(</span><span class="va">samples</span>, embedding_dim <span class="op">=</span> <span class="fl">128</span>, hidden_dim <span class="op">=</span> <span class="fl">128</span><span class="op">)</span></span>
@@ -929,13 +890,12 @@ loops/restarts to hit the target count.</td>
 <span>                       output_path  <span class="op">=</span> <span class="st">"experiments"</span>,</span>
 <span>                       exp_name     <span class="op">=</span> <span class="st">"mortality_rnn"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">trainer</span><span class="op">$</span><span class="fu">train</span><span class="op">(</span><span class="va">train_loader</span>,</span>
-<span>              val_dataloader  <span class="op">=</span> <span class="va">val_loader</span>,</span>
-<span>              epochs          <span class="op">=</span> <span class="fl">10</span>,</span>
-<span>              weight_decay    <span class="op">=</span> <span class="fl">1e-4</span>,</span>
-<span>              max_grad_norm   <span class="op">=</span> <span class="fl">5</span>,</span>
-<span>              monitor         <span class="op">=</span> <span class="st">"auroc"</span>,</span>
-<span>              monitor_criterion <span class="op">=</span> <span class="st">"max"</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">trainer</span><span class="op">$</span><span class="fu">train</span><span class="op">(</span></span>
+<span>              train_dataloader <span class="op">=</span> <span class="va">train_dl</span>,</span>
+<span>              val_dataloader <span class="op">=</span> <span class="va">val_dl</span>,</span>
+<span>              epochs <span class="op">=</span> <span class="fl">10</span>,</span>
+<span>              optimizer_params <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>lr <span class="op">=</span> <span class="fl">1e-3</span><span class="op">)</span>,</span>
+<span>              monitor <span class="op">=</span> <span class="st">"roc_auc"</span><span class="op">)</span></span></code></pre></div>
 <p>Logs &amp; checkpoints:</p>
 <pre><code>experiments/
 └─ mortality_rnn/
@@ -947,16 +907,9 @@ loops/restarts to hit the target count.</td>
 <div class="section level4">
 <h4 id="inference-evaluation">4.4 Inference &amp; evaluation<a class="anchor" aria-label="anchor" href="#inference-evaluation"></a>
 </h4>
-<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">test_scores</span> <span class="op">&lt;-</span> <span class="va">trainer</span><span class="op">$</span><span class="fu">evaluate</span><span class="op">(</span><span class="va">test_loader</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">test_scores</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">preds</span> <span class="op">&lt;-</span> <span class="va">trainer</span><span class="op">$</span><span class="fu">inference</span><span class="op">(</span><span class="va">test_loader</span>,</span>
-<span>                           additional_outputs <span class="op">=</span> <span class="st">"embed"</span>,</span>
-<span>                           return_patient_ids <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">preds</span><span class="op">$</span><span class="va">patient_id</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/dim.html" class="external-link">dim</a></span><span class="op">(</span><span class="va">preds</span><span class="op">$</span><span class="va">additional</span><span class="op">$</span><span class="va">embed</span><span class="op">)</span>  <span class="co"># (n_samples, feature_dim)</span></span></code></pre></div>
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">test_scores</span> <span class="op">&lt;-</span> <span class="va">trainer</span><span class="op">$</span><span class="fu">evaluate</span><span class="op">(</span><span class="va">test_dl</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">test_scores</span><span class="op">)</span></span></code></pre></div>
 <hr>
 </div>
 </div>
@@ -970,7 +923,7 @@ can be used independently.</strong></p>
 <h4 id="code-lookup-with-lookup_code">5.1. Code Lookup with lookup_code()<a class="anchor" aria-label="anchor" href="#code-lookup-with-lookup_code"></a>
 </h4>
 <p>Retrieve the description for a specific medical code.</p>
-<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Example: Look up ICD-9-CM code "428.0"</span></span>
 <span><span class="va">code_description</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/lookup_code.html">lookup_code</a></span><span class="op">(</span>code <span class="op">=</span> <span class="st">"428.0"</span>, system <span class="op">=</span> <span class="st">"ICD9CM"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">code_description</span><span class="op">)</span></span></code></pre></div>
@@ -980,14 +933,14 @@ can be used independently.</strong></p>
 </h4>
 <p>Explore relationships within coding systems. #### Get Ancestors with
 get_ancestors():</p>
-<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Example: Find ancestors for ICD-9-CM code "428.22"</span></span>
 <span><span class="va">ancestor_codes</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_ancestors.html">get_ancestors</a></span><span class="op">(</span>code <span class="op">=</span> <span class="st">"428.22"</span>, system <span class="op">=</span> <span class="st">"ICD9CM"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">ancestor_codes</span><span class="op">)</span></span></code></pre></div>
 <div class="section level5">
 <h5 id="get-descendants-with-get_descendants">Get Descendants with get_descendants():<a class="anchor" aria-label="anchor" href="#get-descendants-with-get_descendants"></a>
 </h5>
-<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Example: Find descendants for ICD-9-CM code "428"</span></span>
 <span><span class="va">descendant_codes</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_descendants.html">get_descendants</a></span><span class="op">(</span>code <span class="op">=</span> <span class="st">"428"</span>, system <span class="op">=</span> <span class="st">"ICD9CM"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">descendant_codes</span><span class="op">)</span><span class="op">)</span> <span class="co"># Showing first few for brevity</span></span>
@@ -999,10 +952,10 @@ get_ancestors():</p>
 </h4>
 <p>Translate codes from one system to another. First, see available
 mappings:</p>
-<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/supported_cross.html">supported_cross</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p>Then, map a code:</p>
-<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Example: Map ICD-9-CM "428.0" to CCSCM</span></span>
 <span><span class="va">mapped_ccscm_code</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/map_code.html">map_code</a></span><span class="op">(</span>code <span class="op">=</span> <span class="st">"428.0"</span>, from <span class="op">=</span> <span class="st">"ICD9CM"</span>, to <span class="op">=</span> <span class="st">"CCSCM"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">mapped_ccscm_code</span><span class="op">)</span></span></code></pre></div>
@@ -1013,7 +966,7 @@ mappings:</p>
 <div class="section level5">
 <h5 id="atc-level-conversion-with-atc_convert">ATC Level Conversion with atc_convert():<a class="anchor" aria-label="anchor" href="#atc-level-conversion-with-atc_convert"></a>
 </h5>
-<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">atc_code</span> <span class="op">&lt;-</span> <span class="st">"L01BA01"</span> <span class="co"># Methotrexate</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"L1 (Anatomical Main Group):"</span>, <span class="fu"><a href="../reference/atc_convert.html">atc_convert</a></span><span class="op">(</span><span class="va">atc_code</span>, level <span class="op">=</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"L3 (Therapeutic/Pharmacological Subgroup):"</span>, <span class="fu"><a href="../reference/atc_convert.html">atc_convert</a></span><span class="op">(</span><span class="va">atc_code</span>, level <span class="op">=</span> <span class="fl">3</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
@@ -1022,7 +975,7 @@ mappings:</p>
 <div class="section level5">
 <h5 id="drug-drug-interactions-ddi-with-get_ddi">Drug-Drug Interactions (DDI) with get_ddi():<a class="anchor" aria-label="anchor" href="#drug-drug-interactions-ddi-with-get_ddi"></a>
 </h5>
-<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">ddi_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_ddi.html">get_ddi</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="st">"First few known Drug-Drug Interactions (ATC pairs):"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">ddi_data</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>

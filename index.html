@@ -143,6 +143,8 @@
 <li>
 <strong>Dev Mode</strong>: Allows for lightning-fast iteration by using a small subset of patients.</li>
 </ul>
+<p>You can download a sample dataset (MIMIC-IV Demo, version 2.2) directly from PhysioNet using the following link:</p>
+<p>👉 <a href="https://physionet.org/content/mimic-iv-demo/2.2/#files-panel" class="external-link uri">https://physionet.org/content/mimic-iv-demo/2.2/#files-panel</a></p>
 <p><strong>Quick Start:</strong></p>
 <p>Define a dataset from your source files using a YAML configuration.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
@@ -150,11 +152,13 @@
 <span><span class="co"># See the full documentation for details on the YAML structure.</span></span>
 <span></span>
 <span><span class="co"># Load the dataset</span></span>
-<span><span class="va">ds</span> <span class="op">&lt;-</span> <span class="va"><a href="reference/BaseDataset.html">BaseDataset</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span></span>
-<span>  root         <span class="op">=</span> <span class="st">"path/to/mimic4"</span>,</span>
-<span>  tables       <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"patients"</span>, <span class="st">"admissions"</span>, <span class="st">"labevents"</span><span class="op">)</span>,</span>
+<span><span class="va">data_dir</span> <span class="op">&lt;-</span> <span class="st">"/Users/yourname/datasets/mimiciv/"</span></span>
+<span></span>
+<span><span class="va">ds</span> <span class="op">&lt;-</span> <span class="va"><a href="reference/MIMIC4EHRDataset.html">MIMIC4EHRDataset</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span></span>
+<span>  root <span class="op">=</span> <span class="va">data_dir</span>,</span>
+<span>  tables <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"patients"</span>, <span class="st">"admissions"</span>, <span class="st">"diagnoses_icd"</span>, <span class="st">"procedures_icd"</span>, <span class="st">"prescriptions"</span><span class="op">)</span>,</span>
 <span>  dataset_name <span class="op">=</span> <span class="st">"mimic4_ehr"</span>,</span>
-<span>  dev          <span class="op">=</span> <span class="cn">TRUE</span>  <span class="co"># limit to 1,000 patients for speed</span></span>
+<span>  dev <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">ds</span><span class="op">$</span><span class="fu">stats</span><span class="op">(</span><span class="op">)</span></span>
@@ -199,8 +203,7 @@
 <p>Once a task is defined, use it with your dataset to create a <code>SampleDataset</code> compatible with <a href="https://torch.mlverse.org/docs" class="external-link">torch</a>.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">task</span>    <span class="op">&lt;-</span> <span class="va"><a href="reference/Readmission30DaysMIMIC4.html">Readmission30DaysMIMIC4</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="op">)</span> <span class="co"># A built-in task</span></span>
-<span><span class="va">samples</span> <span class="op">&lt;-</span> <span class="va">ds</span><span class="op">$</span><span class="fu">set_task</span><span class="op">(</span><span class="va">task</span><span class="op">)</span></span>
-<span><span class="va">loader</span>  <span class="op">&lt;-</span> <span class="fu">dataloader</span><span class="op">(</span><span class="va">samples</span>, batch_size <span class="op">=</span> <span class="fl">64</span>, shuffle <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">samples</span> <span class="op">&lt;-</span> <span class="va">ds</span><span class="op">$</span><span class="fu">set_task</span><span class="op">(</span><span class="va">task</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="id_-4-model-module">🧠 4. Model Module<a class="anchor" aria-label="anchor" href="#id_-4-model-module"></a>
@@ -250,11 +253,13 @@
 <p><strong>Example Training Workflow:</strong></p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># 1. Create data loaders</span></span>
-<span><span class="va">train_loader</span> <span class="op">&lt;-</span> <span class="fu">dataloader</span><span class="op">(</span><span class="va">train_samples</span>, batch_size <span class="op">=</span> <span class="fl">32</span>, shuffle <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span><span class="va">val_loader</span>   <span class="op">&lt;-</span> <span class="fu">dataloader</span><span class="op">(</span><span class="va">val_samples</span>,   batch_size <span class="op">=</span> <span class="fl">64</span><span class="op">)</span></span>
+<span><span class="va">splits</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/split_by_patient.html">split_by_patient</a></span><span class="op">(</span><span class="va">samples</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.8</span>, <span class="fl">0.1</span>, <span class="fl">0.1</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">train_dl</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/get_dataloader.html">get_dataloader</a></span><span class="op">(</span><span class="va">splits</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>, batch_size <span class="op">=</span> <span class="fl">32</span>, shuffle <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="va">val_dl</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/get_dataloader.html">get_dataloader</a></span><span class="op">(</span><span class="va">splits</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span>, batch_size <span class="op">=</span> <span class="fl">32</span><span class="op">)</span></span>
+<span><span class="va">test_dl</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/get_dataloader.html">get_dataloader</a></span><span class="op">(</span><span class="va">splits</span><span class="op">[[</span><span class="fl">3</span><span class="op">]</span><span class="op">]</span>, batch_size <span class="op">=</span> <span class="fl">32</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># 2. Instantiate a model</span></span>
-<span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/RNN.html">RNN</a></span><span class="op">(</span><span class="va">train_samples</span>, embedding_dim <span class="op">=</span> <span class="fl">128</span>, hidden_dim <span class="op">=</span> <span class="fl">128</span><span class="op">)</span></span>
+<span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/RNN.html">RNN</a></span><span class="op">(</span><span class="va">train_dl</span>, embedding_dim <span class="op">=</span> <span class="fl">128</span>, hidden_dim <span class="op">=</span> <span class="fl">128</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># 3. Set up the trainer</span></span>
 <span><span class="va">trainer</span> <span class="op">&lt;-</span> <span class="va"><a href="reference/Trainer.html">Trainer</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span></span>
@@ -266,13 +271,11 @@
 <span></span>
 <span><span class="co"># 4. Start training</span></span>
 <span><span class="va">trainer</span><span class="op">$</span><span class="fu">train</span><span class="op">(</span></span>
-<span>    train_dataloader  <span class="op">=</span> <span class="va">train_loader</span>,</span>
-<span>    val_dataloader    <span class="op">=</span> <span class="va">val_loader</span>,</span>
-<span>    epochs            <span class="op">=</span> <span class="fl">10</span>,</span>
-<span>    learning_rate     <span class="op">=</span> <span class="fl">1e-3</span>,</span>
-<span>    weight_decay      <span class="op">=</span> <span class="fl">1e-4</span>,</span>
-<span>    max_grad_norm     <span class="op">=</span> <span class="fl">5.0</span>,</span>
-<span>    monitor           <span class="op">=</span> <span class="st">"auroc"</span> <span class="co"># Save the best model based on AUROC</span></span>
+<span>  train_dataloader <span class="op">=</span> <span class="va">train_dl</span>,</span>
+<span>  val_dataloader <span class="op">=</span> <span class="va">val_dl</span>,</span>
+<span>  epochs <span class="op">=</span> <span class="fl">10</span>,</span>
+<span>  optimizer_params <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>lr <span class="op">=</span> <span class="fl">1e-3</span><span class="op">)</span>,</span>
+<span>  monitor <span class="op">=</span> <span class="st">"roc_auc"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <p>Logs and model checkpoints (<code>best.ckpt</code>, <code>last.ckpt</code>) are saved automatically to <code>experiments/mortality_rnn/</code>.</p>
 <hr>

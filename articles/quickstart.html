@@ -59,26 +59,22 @@
       <h1>Quickstart: In-Hospital Mortality Prediction with RHealth</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/v1xerunt/RHealth/blob/main/vignettes/quickstart.Rmd" class="external-link"><code>vignettes/quickstart.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/v1xerunt/RHealth/blob/dev/vignettes/quickstart.Rmd" class="external-link"><code>vignettes/quickstart.Rmd</code></a></small>
       <div class="d-none name"><code>quickstart.Rmd</code></div>
     </div>
 
     
     
 <div class="section level2">
-<h2 id="load-rhealth">📦 Load RHealth<a class="anchor" aria-label="anchor" href="#load-rhealth"></a>
-</h2>
-<p>Before starting, make sure you have loaded the RHealth package:</p>
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org/reference/load_all.html" class="external-link">load_all</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-</div>
-<div class="section level2">
 <h2 id="step-1-initialize-mimic-iv-dataset">📁 Step 1: Initialize MIMIC-IV Dataset<a class="anchor" aria-label="anchor" href="#step-1-initialize-mimic-iv-dataset"></a>
 </h2>
+<p>You can download a sample dataset (MIMIC-IV Demo, version 2.2)
+directly from PhysioNet using the following link:</p>
+<p>👉 <a href="https://physionet.org/content/mimic-iv-demo/2.2/#files-panel" class="external-link uri">https://physionet.org/content/mimic-iv-demo/2.2/#files-panel</a></p>
 <p>You need to specify the root directory where your MIMIC-IV CSV files
 are stored:</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">data_dir</span> <span class="op">&lt;-</span> <span class="st">"F:/R-project/mimic-iv-ehr/physionet.org/files/mimiciv/3.1"</span></span>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">data_dir</span> <span class="op">&lt;-</span> <span class="st">"/Users/yourname/datasets/mimiciv/"</span></span>
 <span></span>
 <span><span class="va">ds</span> <span class="op">&lt;-</span> <span class="va"><a href="../reference/MIMIC4EHRDataset.html">MIMIC4EHRDataset</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span></span>
 <span>  root <span class="op">=</span> <span class="va">data_dir</span>,</span>
@@ -94,7 +90,7 @@ are stored:</p>
 </h2>
 <p>Here we choose <strong>30-day readmission</strong> as the prediction
 target:</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">sd</span> <span class="op">&lt;-</span> <span class="va">ds</span><span class="op">$</span><span class="fu">set_task</span><span class="op">(</span>task <span class="op">=</span> <span class="va"><a href="../reference/Readmission30DaysMIMIC4.html">Readmission30DaysMIMIC4</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p>This will process the raw tables and generate a task-specific sample
 dataset.</p>
@@ -103,7 +99,7 @@ dataset.</p>
 <h2 id="step-3-split-dataset">🧪 Step 3: Split Dataset<a class="anchor" aria-label="anchor" href="#step-3-split-dataset"></a>
 </h2>
 <p>Split the data by patient into train/val/test (80%/10%/10%):</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">splits</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/split_by_patient.html">split_by_patient</a></span><span class="op">(</span><span class="va">sd</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.8</span>, <span class="fl">0.1</span>, <span class="fl">0.1</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">train_dl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_dataloader.html">get_dataloader</a></span><span class="op">(</span><span class="va">splits</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>, batch_size <span class="op">=</span> <span class="fl">32</span>, shuffle <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
@@ -114,8 +110,8 @@ dataset.</p>
 <h2 id="step-4-build-model">🔧 Step 4: Build Model<a class="anchor" aria-label="anchor" href="#step-4-build-model"></a>
 </h2>
 <p>We use a GRU-based recurrent neural network model:</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">model</span> <span class="op">&lt;-</span> <span class="va"><a href="../reference/RNN.html">RNN</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span></span>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/RNN.html">RNN</a></span><span class="op">(</span></span>
 <span>  dataset <span class="op">=</span> <span class="va">sd</span>,</span>
 <span>  embedding_dim <span class="op">=</span> <span class="fl">128</span>,</span>
 <span>  rnn_type <span class="op">=</span> <span class="st">"GRU"</span>,</span>
@@ -126,7 +122,7 @@ dataset.</p>
 <h2 id="step-5-train-model">🏋️‍♂️ Step 5: Train Model<a class="anchor" aria-label="anchor" href="#step-5-train-model"></a>
 </h2>
 <p>Create a <code>Trainer</code> object and start training:</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">trainer</span> <span class="op">&lt;-</span> <span class="va"><a href="../reference/Trainer.html">Trainer</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span>model <span class="op">=</span> <span class="va">model</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">trainer</span><span class="op">$</span><span class="fu">train</span><span class="op">(</span></span>
@@ -141,7 +137,7 @@ dataset.</p>
 <h2 id="step-6-evaluate-model">📈 Step 6: Evaluate Model<a class="anchor" aria-label="anchor" href="#step-6-evaluate-model"></a>
 </h2>
 <p>Finally, evaluate on the test set:</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">result</span> <span class="op">&lt;-</span> <span class="va">trainer</span><span class="op">$</span><span class="fu">evaluate</span><span class="op">(</span><span class="va">test_dl</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">result</span><span class="op">)</span></span></code></pre></div>
 </div>
