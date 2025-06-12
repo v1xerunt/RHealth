@@ -23,7 +23,7 @@ You can download a sample dataset (MIMIC-IV Demo, version 2.2) directly from Phy
 
 You need to specify the root directory where your MIMIC-IV CSV files are stored:
 
-```{r}
+```{r, eval=FALSE}
 data_dir <- "/Users/yourname/datasets/mimiciv/"
 
 ds <- MIMIC4EHRDataset$new(
@@ -40,7 +40,7 @@ ds$stats()
 
 Here we choose **30-day readmission** as the prediction target:
 
-```{r}
+```{r, eval=FALSE}
 sd <- ds$set_task(task = Readmission30DaysMIMIC4$new())
 ```
 
@@ -50,7 +50,7 @@ This will process the raw tables and generate a task-specific sample dataset.
 
 Split the data by patient into train/val/test (80%/10%/10%):
 
-```{r}
+```{r, eval=FALSE}
 splits <- split_by_patient(sd, c(0.8, 0.1, 0.1))
 
 train_dl <- get_dataloader(splits[[1]], batch_size = 32, shuffle = TRUE)
@@ -62,7 +62,7 @@ test_dl <- get_dataloader(splits[[3]], batch_size = 32)
 
 We use a GRU-based recurrent neural network model:
 
-```{r}
+```{r, eval=FALSE}
 model <- RNN(
   dataset = sd,
   embedding_dim = 128,
@@ -75,7 +75,7 @@ model <- RNN(
 
 Create a `Trainer` object and start training:
 
-```{r}
+```{r, eval=FALSE}
 trainer <- Trainer$new(model = model)
 
 trainer$train(
@@ -91,7 +91,7 @@ trainer$train(
 
 Finally, evaluate on the test set:
 
-```{r}
+```{r, eval=FALSE}
 result <- trainer$evaluate(test_dl)
 print(result)
 ```

@@ -42,6 +42,7 @@ vignettes/*.pdf
 .Renviron.local
 
 docs/
+output/
 
 # translation temp files
 po/*~
