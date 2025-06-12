@@ -8,6 +8,8 @@
 - **Sign up for our mailing list!** We’ll email any significant RHealth
   changes that are soon to come! [Subscribe to the RHealth mailing list
   here](https://docs.google.com/forms/d/e/1FAIpQLSdiKClW5bNcnXFvWG94xF1CZko029JhxSZi0UYgwVRdW8qb0w/viewform?usp=sharing&ouid=102638312788753756103)
+- **Link to our R/Medicine 2025 talk slides**
+  [slides](https://drive.google.com/file/d/1yXbkBtopfN4EKxQLOxr-O008tPvOkbbT/view?usp=sharing)
 
 **RHealth** is an open-source R package designed to bring a
 comprehensive deep learning toolkit to the R community for healthcare
