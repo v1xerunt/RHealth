@@ -4,9 +4,6 @@
 #' This class inherits from BaseDataset and is specialized for handling MIMIC-IV EHR data.
 #' It ensures key tables like patients, admissions, and icustays are included,
 #' and allows appending additional tables. It also logs memory usage if needed.
-#' @docType class
-#' @method initialize MMIMIC4EHRDataset
-#' @usage \method{MIMIC4EHRDataset}{initialize}(...)
 #' @export
 MIMIC4EHRDataset <- R6::R6Class(
   "MIMIC4EHRDataset",
@@ -19,7 +16,7 @@ MIMIC4EHRDataset <- R6::R6Class(
     #' @param dataset_name Optional dataset name. Default is "mimic4_ehr".
     #' @param config_path Optional path to YAML config file.
     #' @param dev Logical flag for dev mode.
-    #' @param ... Additional arguments passed to `BaseDataset`.
+    #' @param ... Additional arguments passed to `BaseDataset$initialize`.
     initialize = function(root,
                           tables = character(),
                           dataset_name = "mimic4_ehr",

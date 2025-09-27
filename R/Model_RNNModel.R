@@ -52,67 +52,58 @@ RNNLayer <- torch::nn_module(
     )
 
     self$num_directions <- if (bidirectional) 2 else 1
-    self$null_hidden <- nn_parameter(torch_randn(c(self$num_directions * self$num_layers, 1, hidden_size)))
+    if (bidirectional) {
+      self$down_projection <- nn_linear(hidden_size * 2, hidden_size)
+    }
 
   },
 
-  forward = function(x, mask = NULL) {
-    x <- x$to(dtype = torch_float())
+  forward = function(x, mask = NULL, lengths = NULL) {
     x <- self$dropout_layer(x)
 
     B <- x$size(1)
     T <- x$size(2)
 
-    lengths_cpu <- if (is.null(mask)) {
-      torch_full(size = B, fill_value = T, dtype = torch_long())
-    } else {
-      mask <- mask$to(dtype = torch_long())
-      torch_sum(mask, dim = -1)$cpu()
+    if (is.null(lengths)) {
+      lengths <- if (is.null(mask)) {
+        torch_full(size = B, fill_value = T, dtype = torch_long())
+      } else {
+        torch_sum(mask$to(dtype = torch_long()), dim = -1)$cpu()
+      }
     }
-    lengths_cpu <- torch_clamp(lengths_cpu, min = 1)
-    valid_idx <- lengths_cpu > 0
-    num_valid <- as.integer(torch_sum(valid_idx)$item())
-    if (num_valid < B) {
-      warning("Some sequences in the batch have zero length and are being skipped.")
-    }
-    if (num_valid == 0) {
-      stop("All sequences in this batch have zero length! Cannot proceed.")
-    }
-
-    x_v <- x[valid_idx$to(device = x$device), ]
-    len_v <- lengths_cpu[valid_idx]
-
+    
     packed <- nn_utils_rnn_pack_padded_sequence(
-      x_v, len_v$to(dtype = torch_int()), batch_first = TRUE, enforce_sorted = FALSE
+      x, lengths$to(dtype = torch_int()), batch_first = TRUE, enforce_sorted = FALSE
     )
 
     out_packed <- self$rnn(packed)
-    out <- nn_utils_rnn_pad_packed_sequence(out_packed[[1]], batch_first = TRUE, total_length = T)[[1]]
+    outputs <- nn_utils_rnn_pad_packed_sequence(out_packed[[1]], batch_first = TRUE, total_length = T)[[1]]
+    
 
-    z <- torch_zeros(c(B, T, self$hidden_size), device = x$device)
-
-    valid_idx_tensor <- torch_where(valid_idx)[[1]]
-    valid_indices <- valid_idx_tensor$to(dtype = torch_long())
-
-    # for (i in seq_len(num_valid)) {
-    #   z[as.integer(valid_indices[i]$item()), , ] <- out[i, , ]
-    # }
-    valid_indices <- torch_where(valid_idx)[[1]]$to(dtype = torch_long())
-
-    z <- torch_index_put_(
-      self = z,
-      indices = list(valid_indices),
-      values = out,
-      accumulate = FALSE
-    )
-
-    last_indices <- lengths_cpu$view(c(-1, 1, 1))$
-      expand(c(B, 1, self$hidden_size))$
-      to(dtype = torch_long(), device = out$device)
-
-    last_outputs <- out$gather(dim = 2, index = last_indices)$squeeze(2)
-
-    return(list(outputs = z, last_outputs = last_outputs))
+    if (!self$bidirectional) {
+      H <- outputs$shape[3]
+      index <- lengths$to(device = outputs$device, dtype = torch_long())$view(c(B, 1, 1))$expand(c(B, 1, H))
+      last_outputs <- outputs$gather(dim = 2, index = index)$squeeze(2)
+      # message(sprintf("RNNLayer: Sequence lengths are %s", paste(as.array(lengths$cpu()), collapse = ", ")))
+      # message(sprintf("RNNLayer: Shape of last_outputs is %s", paste(last_outputs$shape, collapse = " x ")))
+      return(list(outputs = outputs, last_outputs = last_outputs))
+    } else {
+      outputs_reshaped <- outputs$view(c(B, T, 2, -1))
+      H_half <- outputs_reshaped$shape[4]
+      
+      f_outputs <- outputs_reshaped[.., 1, ]
+      index <- lengths$to(device = outputs$device, dtype = torch_long())$view(c(B, 1, 1))$expand(c(B, 1, H_half))
+      f_last_outputs <- f_outputs$gather(dim = 2, index = index)$squeeze(2)
+      
+      b_last_outputs <- outputs_reshaped[, 1, 2, ]
+      
+      last_outputs <- torch_cat(list(f_last_outputs, b_last_outputs), dim = -1)
+      
+      last_outputs <- self$down_projection(last_outputs)
+      outputs <- self$down_projection(outputs)
+      
+      return(list(outputs = outputs, last_outputs = last_outputs))
+    }
   }
 
 )
@@ -185,20 +176,24 @@ RNN <- torch::nn_module(
   },
 
   forward = function(inputs) {
-    patient_emb <- list()
-
     y_true <- inputs[[self$label_key]]
     ay_true <- y_true$clone()
-    embedded <- self$embedding_model(inputs)  
+    feature_inputs <- inputs[self$feature_keys]
+    embedded <- self$embedding_model(feature_inputs)
 
-    for (feature_key in self$feature_keys) {
+    patient_emb <- lapply(self$feature_keys, function(feature_key) {
       x <- embedded[[feature_key]]
-      mask <- (x$sum(dim = -1) != 0)$to(dtype = torch_long())
-      lengths <- torch_sum(mask, dim = -1)
-      result <- self$rnn[[feature_key]](x, mask)
-      hidden <- result[[2]]
-      patient_emb[[feature_key]] <- result[[2]]   
-    }
+      len_key <- paste0(feature_key, "_len")
+      lengths <- if (len_key %in% names(inputs)) inputs[[len_key]] else NULL
+      
+      # The mask is now only needed if lengths are not provided.
+      # For backwards compatibility or other use cases.
+      mask <- if (is.null(lengths)) (x$sum(dim = -1)$abs() > 1e-6)$to(dtype = torch_long()) else NULL
+      
+      result <- self$rnn[[feature_key]](x = x, mask = mask, lengths = lengths)
+      result[[2]]
+    })
+
     patient_vec <- torch_cat(patient_emb, dim = 2)
     logits <- self$fc(patient_vec)
     device <- logits$device
@@ -213,13 +208,12 @@ RNN <- torch::nn_module(
     y_true <- y_true$to(device = device)
 
     loss   <- self$get_loss_function()(logits, y_true)
-    dtype = torch_long()
     y_prob <- self$prepare_y_prob(logits)
     ay_true <- ay_true$to(device = device)
     results <- list(
       loss  = loss,
       y_prob = y_prob,
-      y_true = ay_true,
+      y_true = y_true,
       logit = logits
     )
 

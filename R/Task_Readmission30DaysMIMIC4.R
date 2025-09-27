@@ -42,18 +42,19 @@
 #' }
 #'
 #' @import R6
-#' @import polars
 #' @export
 Readmission30DaysMIMIC4 <- R6::R6Class(
   classname = "Readmission30DaysMIMIC4",
   inherit = BaseTask,
   public = list(
+    #' @field label the name of the label column.
+    label = NULL,
     #' @description
     #' Initialize the Readmission30DaysMIMIC4 task.
     #' Sets the task name and defines the expected input/output schema.
      initialize = function() {
       self$task_name <- "Readmission30DaysMIMIC4"
-
+      self$label <- "readmission"
       self$input_schema <- list(
         conditions = "sequence",
         procedures = "sequence",
@@ -101,6 +102,9 @@ Readmission30DaysMIMIC4 <- R6::R6Class(
 
       # Extract admissions
       admissions <- patient$get_events(event_type = "admissions")
+      
+      # Sort admissions by timestamp to ensure chronological order
+      admissions <- admissions[order(sapply(admissions, function(x) x$timestamp))]
 
       for (i in seq_along(admissions)) {
         admission <- admissions[[i]]
@@ -139,7 +143,17 @@ Readmission30DaysMIMIC4 <- R6::R6Class(
           readmission <- 0L
         }
 
-        # Retrieve events during the admission period as Polars DataFrames
+        # Debug print for the first 5 patients
+        if (patient$patient_id <= 5) {
+          message(sprintf(
+            "Patient ID: %s, Admission: %d, Time Diff (h): %.2f, Readmission: %d",
+            patient$patient_id, i,
+            if (!is.null(next_admission)) time_diff_hour else -1,
+            readmission
+          ))
+        }
+
+        # Retrieve events during the admission period as DataFrames
         diagnoses_icd <- patient$get_events(
           event_type = "diagnoses_icd",
           start = admission_time,
@@ -159,18 +173,18 @@ Readmission30DaysMIMIC4 <- R6::R6Class(
           return_df = TRUE
         )
 
-        # Convert to lists of codes using Polars operations
-        conditions <- diagnoses_icd$select(
-          pl$concat_str(c("diagnoses_icd/icd_version", "diagnoses_icd/icd_code"), separator = "_")
-        )$to_series()$to_list()
+        # Convert to lists of codes using dplyr operations
+        conditions <- diagnoses_icd %>%
+          dplyr::mutate(code = paste(`diagnoses_icd/icd_version`, `diagnoses_icd/icd_code`, sep = "_")) %>%
+          dplyr::pull(code)
 
-        procedures <- procedures_icd$select(
-          pl$concat_str(c("procedures_icd/icd_version", "procedures_icd/icd_code"), separator = "_")
-        )$to_series()$to_list()
+        procedures <- procedures_icd %>%
+          dplyr::mutate(code = paste(`procedures_icd/icd_version`, `procedures_icd/icd_code`, sep = "_")) %>%
+          dplyr::pull(code)
 
-        drugs <- prescriptions$select(
-          pl$concat_str(c("prescriptions/drug"), separator = "_")
-        )$to_series()$to_list()
+        drugs <- prescriptions %>%
+          dplyr::mutate(code = paste(`prescriptions/drug`, sep = "_")) %>%
+          dplyr::pull(code)
 
         # Exclude visits without complete feature data
         if (length(conditions) * length(procedures) * length(drugs) == 0) {

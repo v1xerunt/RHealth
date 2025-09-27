@@ -1,17 +1,21 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
-^\.git$
-^\.gitignore$
-^\.gitattributes$
+^\.Rhistory$
+^\.RData$
+^\.RDataTmp$
+^output$
+^\.renv$
 ^renv$
 ^renv\.lock$
+# Ignore vignettes and tests for CRAN
+#^vignettes$
+#^tests$
 ^01dev_config.R$
 ^02document_genera.R$
 ^README\.Rmd$
 ^_pkgdown\.yml$
 ^docs$
 ^pkgdown$
-# 你特定的Demo文件
 ^RHealth---medcode Module Demo\.html$
 ^RHealth---medcode Module Demo\.qmd$
 ^LICENSE\.md$

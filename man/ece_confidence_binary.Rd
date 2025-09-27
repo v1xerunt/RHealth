@@ -12,12 +12,12 @@ containing predicted probabilities for the \emph{positive} class
 (only the first column is used if a matrix is supplied).}
 
 \item{label}{Numeric vector \strong{or} two-column matrix of true labels \
-encoded as 0/1 (only the first column is used if a matrix is supplied).}
+encoded as \code{0/1} (only the first column is used if a matrix is supplied).}
 
 \item{bins}{Integer. Number of bins (default 20).}
 
 \item{adaptive}{Logical. If \code{FALSE} (default) equal-width bins \
-spanning \\(\link{0,1}\\) are used; if \code{TRUE} each bin contains the \
+spanning \verb{0, 1} are used; if \code{TRUE} each bin contains the \
 same number of samples (equal-size bins).}
 }
 \value{

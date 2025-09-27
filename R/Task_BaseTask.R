@@ -32,7 +32,7 @@ BaseTask <- R6::R6Class(
 
     #' @description Main processing function. Must be overridden in subclasses.
     #' @param patient A list or structured object representing a single patient or record.
-    #' @return A list of named lists (equivalent to Python List[Dict]) representing the task result.
+    #' @return A list of named lists representing the task result.
     call = function(patient) {
       stop("`call()` is an abstract method and must be implemented by a subclass.")
     }

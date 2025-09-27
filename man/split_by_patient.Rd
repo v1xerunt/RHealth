@@ -4,7 +4,14 @@
 \alias{split_by_patient}
 \title{split_by_patient}
 \usage{
-split_by_patient(dataset, ratios, seed = NULL)
+split_by_patient(
+  dataset,
+  ratios,
+  seed = NULL,
+  stratify = FALSE,
+  stratify_by = NULL,
+  get_index = FALSE
+)
 }
 \arguments{
 \item{dataset}{A \code{SampleDataset} object.}
@@ -12,9 +19,15 @@ split_by_patient(dataset, ratios, seed = NULL)
 \item{ratios}{A numeric vector of length 3 indicating train/val/test split ratios. Must sum to 1.}
 
 \item{seed}{Optional integer for reproducibility.}
+
+\item{stratify}{Logical, whether to perform stratified sampling. Default: FALSE.}
+
+\item{stratify_by}{Character, the name of the field to stratify by (e.g., the label). Required if \code{stratify} is TRUE.}
+
+\item{get_index}{Logical, whether to return the indices instead of subsets. Default: FALSE.}
 }
 \value{
-A list of 3 torch::dataset_subset objects split by patient id.
+A list of 3 torch::dataset_subset objects or 3 tensors of indices if get_index = TRUE, split by patient id.
 }
 \description{
 split_by_patient

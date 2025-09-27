@@ -45,6 +45,7 @@ reference:
       - split_by_patient
       - split_by_visit
       - split_by_sample
+      - load_sample_dataset
 
 
   - title: "Processors"
@@ -70,8 +71,11 @@ reference:
       Benchmark prediction tasks based on MIMIC-IV.
     contents:
       - BaseTask
-      - Readmission30DaysMIMIC4
+      - InHospitalMortalityMIMIC3
       - InHospitalMortalityMIMIC4
+      - NextMortalityMIMIC3
+      - NextMortalityMIMIC4
+      - Readmission30DaysMIMIC4
 
   - title: "Models"
     desc: >

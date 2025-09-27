@@ -12,9 +12,8 @@
 BaseModel <- torch::nn_module(
   classname = "BaseModel",
 
+  #' @param dataset A dataset object (must have input_schema, output_schema, output_processors).
   initialize = function(dataset) {
-
-    #' @param dataset A dataset object (must have input_schema, output_schema, output_processors).
     self$dataset <- dataset
 
     self$feature_keys <- names(dataset$input_schema)
@@ -37,8 +36,8 @@ BaseModel <- torch::nn_module(
     #' @description Selects appropriate loss function based on task type in output schema.
     #' @return A function such as nnf_binary_cross_entropy_with_logits or nnf_cross_entropy.
     stopifnot(length(self$label_keys) == 1)
-    key <- self$label_keys[[1]]
-    mode <- self$dataset$output_schema[[key]]
+    label_key <- self$label_keys[[1]]
+    mode <- self$dataset$output_schema[[label_key]]
 
     if (mode == "binary") {
       return(torch::nnf_binary_cross_entropy_with_logits)
@@ -53,12 +52,12 @@ BaseModel <- torch::nn_module(
     }
   },
 
+  #' @title Prepare Predicted Probabilities
+  #' @description Converts logits into predicted probabilities for evaluation.
+  #' Format depends on task mode (sigmoid or softmax, or raw).
+  #' This method takes `logits` as input, which is a torch tensor with raw model outputs.
+  #' @return Torch tensor of probabilities.
   prepare_y_prob = function(logits) {
-    #' @title Prepare Predicted Probabilities
-    #' @description Converts logits into predicted probabilities for evaluation.
-    #' Format depends on task mode (sigmoid or softmax, or raw).
-    #' @param logits Torch tensor with raw model outputs.
-    #' @return Torch tensor of probabilities.
     stopifnot(length(self$label_keys) == 1)
     key <- self$label_keys[[1]]
     mode <- self$dataset$output_schema[[key]]
@@ -76,6 +75,5 @@ BaseModel <- torch::nn_module(
     }
 
     return(y_prob)
-  },
-
+  }
 )

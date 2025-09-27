@@ -40,12 +40,11 @@ EmbeddingModel <- torch::nn_module(
   classname = "EmbeddingModel",
   inherit   = BaseModel,
 
+  #' @param dataset A SampleDataset object containing input_processors.
+  #' @param embedding_dim Integer embedding dimension. Default is 128.
   initialize = function(dataset, embedding_dim = 128) {
     #' @description
     #' Initialize an EmbeddingModel by constructing embedding layers based on input processors.
-    #'
-    #' @param dataset A SampleDataset object containing input_processors.
-    #' @param embedding_dim Integer embedding dimension. Default is 128.
     #' @return None (initializes fields inside the object).
 
     # Call parent (BaseModel) initializer, which is assumed to set up `self$device` and other internals
@@ -70,7 +69,7 @@ EmbeddingModel <- torch::nn_module(
       } else if (inherits(processor, "TimeseriesProcessor")) {
         # TimeseriesProcessor: use feature size to build a Linear layer mapping to embedding_dim
         self$module_list[[field_name]] <- nn_linear(
-          in_features  = processor$size,
+          in_features  = processor$size(),
           out_features = embedding_dim
         )
       }
@@ -78,31 +77,38 @@ EmbeddingModel <- torch::nn_module(
       # in forward(), inputs for that field will be passed through unchanged.
     }
 
-        self$embedding_layers <- nn_module_dict(self$module_list)
+    self$embedding_layers <- nn_module_dict(self$module_list)
 
+    # Manually zero out the embedding for the padding index
+    for (field_name in names(dataset$input_processors)) {
+      processor <- dataset$input_processors[[field_name]]
+      if (inherits(processor, "SequenceProcessor")) {
+        with_no_grad({
+          self$embedding_layers[[field_name]]$weight[1, ] <- 0
+        })
+      }
+    }
   },
 
 
+  #' @description
+  #' Perform a forward pass by computing embeddings (or passing through) for each field.
+  #' This method takes `inputs`, a named list of `torch_tensor` objects, with names matching dataset$input_processors.
+  #' @return A named list of `torch_tensor` objects after embedding (or passthrough).
   forward = function(inputs) {
-    #' @description
-    #' Perform a forward pass by computing embeddings (or passing through) for each field.
-    #'
-    #' @param inputs A named list of `torch_tensor` objects, with names matching dataset$input_processors.
-    #' @return A named list of `torch_tensor` objects after embedding (or passthrough).
-
     embedded <- list()
 
     for (field_name in names(inputs)) {
       tensor <- inputs[[field_name]]
 
-      # 修正非法索引 0（确保 padding_idx = 0 不被作为有效 ID 使用）
+      # Correct illegal index 0 (ensure padding_idx = 0 is not used as a valid ID)
       tensor[tensor == 0] <- 1
 
-      # 将输入张量移到 embedding 层的同一设备上
+      # Move the input tensor to the same device as the embedding layer
       embed_device <- self$embedding_layers[[field_name]]$weight$device
       tensor <- tensor$to(device = embed_device)
 
-      # 如果有 embedding 层，则嵌入；否则 passthrough
+      # If an embedding layer exists, embed; otherwise passthrough
       if (field_name %in% names(self$module_list)) {
         embedded[[field_name]] <- self$embedding_layers[[field_name]](tensor)
       } else {
@@ -113,12 +119,10 @@ EmbeddingModel <- torch::nn_module(
   },
 
 
+  #' @description
+  #' Return a concise string representation of the EmbeddingModel, listing its embedding layers.
+  #' @return A character string representation.
   .repr = function() {
-    #' @description
-    #' Return a concise string representation of the EmbeddingModel, listing its embedding layers.
-    #'
-    #' @return A character string representation.
-
     paste0(
       "EmbeddingModel(embedding_layers = {",
       paste(names(self$embedding_layers), collapse = ", "),

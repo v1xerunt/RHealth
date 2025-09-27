@@ -49,6 +49,10 @@ create_directory <- function(directory) {
   }
 }
 
+multiclass_metrics_fn <- NULL
+multilabel_metrics_fn <- NULL
+regression_metrics_fn <- NULL
+
 #' @title Get Metrics Function
 #' @description Returns appropriate metric function according to task mode.
 #'
@@ -74,7 +78,7 @@ get_metrics_fn <- function(mode) {
 #' * **Dynamic `steps_per_epoch`**: can iterate indefinitely over a dataloader to reach a target number of steps, just like Python.
 #' * **Parameter‑group–wise weight decay**: bias and *LayerNorm* parameters are excluded from L2 regularisation.
 #' * **Gradient clipping**.
-#' * **Optional progress bar** using `cli::cli_progress_bar()` (falls back to simple logging).
+#' * **Optional progress bar** using `progressr::progressor()` (falls back to simple logging).
 #' * **Correctly named `additional_outputs`** collection.
 #'
 #' @export
@@ -123,6 +127,8 @@ Trainer <- R6::R6Class(
         set_logger(file.path(self$exp_path, "train.log"))
       }
       flog.info("Initialised model on %s", self$device)
+      flog.info(paste(capture.output(self$model), collapse = "\n"))
+      flog.info("Metrics: %s", paste(self$metrics, collapse = ", "))
 
       # Checkpoint --------------------------------------------------------------
       if (!is.null(checkpoint_path)) {
@@ -162,13 +168,24 @@ Trainer <- R6::R6Class(
                      load_best_model_at_last = TRUE,
                      use_progress_bar = TRUE) {
 
+      flog.info("Training:")
+      flog.info("Batch size: %d", train_dataloader$batch_size)
+      flog.info("Optimizer: %s", deparse(substitute(optimizer_class)))
+      flog.info("Optimizer params: %s", paste(names(optimizer_params), optimizer_params, sep = "=", collapse = ", "))
+      flog.info("Weight decay: %f", weight_decay)
+      flog.info("Max grad norm: %s", if (is.null(max_grad_norm)) "NULL" else max_grad_norm)
+      flog.info("Val dataloader: %s", if (is.null(val_dataloader)) "NULL" else "provided")
+      flog.info("Monitor: %s", if (is.null(monitor)) "NULL" else monitor)
+      flog.info("Monitor criterion: %s", monitor_criterion)
+      flog.info("Epochs: %d", epochs)
+
       # ---------- parameter grouping (bias / LayerNorm excluded) ---------------
       all_named <- self$model$named_parameters()
       no_decay_keys <- c("bias", "LayerNorm.weight", "LayerNorm.bias")
       params_wd  <- list()
       params_nowd <- list()
       for (nm in names(all_named)) {
-        if (any(startsWith(nm, no_decay_keys))) {
+        if (any(vapply(no_decay_keys, function(key) grepl(key, nm, fixed = TRUE), logical(1)))) {
           params_nowd[[length(params_nowd)+1]] <- all_named[[nm]]
         } else {
           params_wd[[length(params_wd)+1]] <- all_named[[nm]]
@@ -191,9 +208,8 @@ Trainer <- R6::R6Class(
         # Create iterator that can restart ------------------------------------
         iter <- torch::dataloader_make_iter(train_dataloader)
         # Progress bar ---------------------------------------------------------
-        if (use_progress_bar && requireNamespace("cli", quietly = TRUE)) {
-          pb <- cli::cli_progress_bar(total = steps_per_epoch,
-                                      format = "Epoch {epoch}/{epochs} :current/:total :elapsed")
+        if (use_progress_bar) {
+            p <- progressr::progressor(steps = steps_per_epoch)
         }
 
         for (step in seq_len(steps_per_epoch)) {
@@ -216,23 +232,36 @@ Trainer <- R6::R6Class(
           epoch_losses <- c(epoch_losses, loss$item())
           global_step  <- global_step + 1L
 
-          if (use_progress_bar && exists("pb")) cli::cli_progress_update()
+          if (use_progress_bar) p(message = sprintf("Epoch %d", epoch))
         }
-        if (use_progress_bar && exists("pb")) cli::cli_progress_done()
-        flog.info("Epoch %d/%d | train loss %.4f", epoch, epochs, mean(epoch_losses))
+        train_header <- sprintf("--- Train epoch-%d, step-%d ---", epoch, global_step)
+        flog.info(train_header)
+        message(train_header)
+        train_loss <- paste(sprintf("loss: %.4f", mean(epoch_losses)), collapse = "\n")
+        flog.info(train_loss)
+        message(train_loss)
+        flog.info("loss: %.4f", mean(epoch_losses))
 
         # Save last ckpt --------------------------------------------------------
         if (!is.null(self$exp_path)) self$save_ckpt(file.path(self$exp_path, "last.ckpt"))
 
         # Validation ------------------------------------------------------------
         if (!is.null(val_dataloader)) {
-          scores <- self$evaluate(val_dataloader)
-          flog.info("Val scores: %s", paste(sprintf("%s=%.4f", names(scores), scores), collapse = ", "))
+          scores <- self$evaluate(val_dataloader, use_progress_bar)
+          eval_header <- sprintf("--- Eval epoch-%d, step-%d ---", epoch, global_step)
+          flog.info(eval_header)
+          message(eval_header)
+          scores_log <- paste(sprintf("%s: %.4f", names(scores), scores), collapse = "\n")
+          flog.info(scores_log)
+          message(scores_log)
           if (!is.null(monitor)) {
             current <- scores[[monitor]]
             if (is_best(best_score, current, monitor_criterion)) {
               best_score <- current
-              flog.info("New best %s: %.4f", monitor, current)
+              flog.info("New best %s score (%.4f) at epoch-%d, step-%d",
+                        monitor, current, epoch, global_step)
+              message(sprintf("New best %s score (%.4f) at epoch-%d, step-%d",
+                              monitor, current, epoch, global_step))
               if (!is.null(self$exp_path)) self$save_ckpt(file.path(self$exp_path, "best.ckpt"))
             }
           }
@@ -241,12 +270,20 @@ Trainer <- R6::R6Class(
 
       # Reload best -------------------------------------------------------------
       best_path <- file.path(self$exp_path, "best.ckpt")
-      if (load_best_model_at_last && file.exists(best_path)) self$load_ckpt(best_path)
+      if (load_best_model_at_last && file.exists(best_path)) {
+        flog.info("Loaded best model")
+        message("Loaded best model")
+        self$load_ckpt(best_path)
+      }
 
       # Test -------------------------------------------------------------------
       if (!is.null(test_dataloader)) {
-        scores <- self$evaluate(test_dataloader)
-        flog.info("Test scores: %s", paste(sprintf("%s=%.4f", names(scores), scores), collapse = ", "))
+        scores <- self$evaluate(test_dataloader, use_progress_bar)
+        flog.info("--- Test ---")
+        message("--- Test ---")
+        scores_log <- paste(sprintf("%s: %.4f", names(scores), scores), collapse = "\n")
+        flog.info(scores_log)
+        message(scores_log)
       }
     },
 
@@ -255,43 +292,55 @@ Trainer <- R6::R6Class(
     #' @param dataloader A dataloader.
     #' @param additional_outputs Vector of additional outputs to capture.
     #' @param return_patient_ids Whether to return patient IDs.
-    inference = function(dataloader, additional_outputs = NULL, return_patient_ids = FALSE) {
-      losses <- c(); y_true <- list(); y_prob <- list()
+    #' @param use_progress_bar Whether to show a progress bar.
+    inference = function(dataloader,
+                         additional_outputs = NULL,
+                         return_patient_ids = FALSE,
+                         use_progress_bar = FALSE) {
+      losses <- c()
+      y_true_batches <- list()
+      y_prob_batches <- list()
+      
       if (!is.null(additional_outputs)) {
         add_outputs <- setNames(lapply(additional_outputs, function(x) list()), additional_outputs)
       }
       pids <- c()
-
+      
       self$model$eval()
-
+      
+      if (use_progress_bar) {
+        p <- progressr::progressor(steps = length(dataloader))
+      }
+      
       torch::with_no_grad({
-
+        
         coro::loop(for (batch in dataloader) {
-
+          
           out <- self$model(batch)
-
+          
           losses <- c(losses, out$loss$item())
-
-          y_true[[length(y_true) + 1]] <- as_array(out$y_true$cpu())
-          y_prob[[length(y_prob) + 1]] <- as_array(out$y_prob$cpu())
-
+          
+          y_true_batches[[length(y_true_batches) + 1]] <- out$y_true$cpu()
+          y_prob_batches[[length(y_prob_batches) + 1]] <- out$y_prob$cpu()
+          
           if (!is.null(additional_outputs)) {
             for (nm in additional_outputs) {
               add_outputs[[nm]][[length(add_outputs[[nm]]) + 1]] <-
                 as_array(out[[nm]]$cpu())
             }
           }
-
+          
           if (return_patient_ids && "patient_id" %in% names(batch)) {
             pids <- c(pids, batch$patient_id)
           }
+          if (use_progress_bar) p()
         })
       })
-
-
+      
+      
       res <- list(
-        y_true = do.call(rbind, y_true),
-        y_prob = do.call(rbind, y_prob),
+        y_true = torch::torch_cat(y_true_batches, dim = 1),
+        y_prob = torch::torch_cat(y_prob_batches, dim = 1),
         loss   = mean(losses)
       )
       if (!is.null(additional_outputs)) res$additional <- lapply(add_outputs, function(x) do.call(rbind, x))
@@ -302,8 +351,9 @@ Trainer <- R6::R6Class(
     #' @description
     #' Evaluate the model using a dataloader.
     #' @param dataloader A dataloader to evaluate on.
-    evaluate = function(dataloader) {
-      inf <- self$inference(dataloader)
+    #' @param use_progress_bar Whether to show a progress bar.
+    evaluate = function(dataloader, use_progress_bar = FALSE) {
+      inf <- self$inference(dataloader, use_progress_bar = use_progress_bar)
       if (!is.null(self$model$mode)) {
         fn <- get_metrics_fn(self$model$mode)
         scores <- fn(inf$y_true, inf$y_prob, metrics = self$metrics)

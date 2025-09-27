@@ -1,6 +1,10 @@
 ---
 title: "Descriptions"
 output: html_document
+vignette: >
+  %\VignetteIndexEntry{Overview: RHealth}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
 ---
 
 ---

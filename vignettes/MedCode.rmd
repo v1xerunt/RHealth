@@ -1,6 +1,10 @@
 ---
 title: "DeepRHealth::medcode Module Demo"
 subtitle: "R/medicine 2025 Prototype Showcase" 
+vignette: >
+  %\VignetteIndexEntry{DeepRHealth::medcode Module Demo}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
 author: "Zhixia Ren"
 date: 05/25/2025
 format: 

@@ -8,7 +8,7 @@ Processor for binary classification labels. Supports numeric (0/1),
 logical (TRUE/FALSE), or categorical binary labels.
 }
 \section{Super classes}{
-\code{RHealth::Processor} -> \code{RHealth::FeatureProcessor} -> \code{BinaryLabelProcessor}
+\code{\link[RHealth:Processor]{RHealth::Processor}} -> \code{\link[RHealth:FeatureProcessor]{RHealth::FeatureProcessor}} -> \code{BinaryLabelProcessor}
 }
 \section{Public fields}{
 \if{html}{\out{<div class="r6-fields">}}
@@ -69,7 +69,7 @@ Fit the processor by analyzing all unique labels in the dataset.
 \if{html}{\out{<a id="method-BinaryLabelProcessor-process"></a>}}
 \if{latex}{\out{\hypertarget{method-BinaryLabelProcessor-process}{}}}
 \subsection{Method \code{process()}}{
-Process a label into a torch tensor \link{0} or \link{1}.
+Process a label into a torch tensor \verb{[0]} or \verb{[1]}.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{BinaryLabelProcessor$process(value)}\if{html}{\out{</div>}}
 }
@@ -82,7 +82,7 @@ Process a label into a torch tensor \link{0} or \link{1}.
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-A float32 torch tensor of shape \link{1}.
+A float32 torch tensor of shape \code{1}.
 }
 }
 \if{html}{\out{<hr>}}
@@ -102,9 +102,6 @@ Integer 1
 \if{html}{\out{<a id="method-BinaryLabelProcessor-print"></a>}}
 \if{latex}{\out{\hypertarget{method-BinaryLabelProcessor-print}{}}}
 \subsection{Method \code{print()}}{
-Print a summary of the processor.
-
-
 Print a summary of the processor.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{BinaryLabelProcessor$print(...)}\if{html}{\out{</div>}}

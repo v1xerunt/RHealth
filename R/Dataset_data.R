@@ -65,10 +65,10 @@ Event <- R6::R6Class(
 #'
 #' @description
 #' The `Patient` class manages all clinical events for a single patient.
-#' It supports efficient event-type partitioning, fast time-range slicing, and flexible multi-condition filtering using rpolars.
+#' It supports efficient event-type partitioning, fast time-range slicing, and flexible multi-condition filtering.
 #'
 #' @details
-#' - Data is held as a polars DataFrame.
+#' - Data is held as a data.frame.
 #' - Events can be retrieved as either raw data frames or Event object lists.
 #'
 #' @export
@@ -78,89 +78,83 @@ Patient <- R6::R6Class(
     #' @field patient_id Character. Unique identifier for the patient.
     patient_id = NULL,
 
-    #' @field data_source Polars DataFrame. All events for this patient, sorted by timestamp.
+    #' @field data_source data.frame. All events for this patient, sorted by timestamp.
     data_source = NULL,
 
-    #' @field event_type_partitions List. Mapping event type to corresponding polars DataFrames.
+    #' @field event_type_partitions List. Mapping event type to corresponding data.frames.
     event_type_partitions = NULL,
 
     #' @description
     #' Create a Patient object.
     #' @param patient_id Character. Unique patient identifier.
-    #' @param data_source Polars DataFrame. All events (must include event_type, timestamp columns).
+    #' @param data_source data.frame. All events (must include event_type, timestamp columns).
     #' @return A `Patient` object.
     initialize = function(patient_id, data_source) {
       self$patient_id <- patient_id
-      self$data_source <- data_source$sort("timestamp")
-      self$event_type_partitions <- self$data_source$partition_by("event_type", maintain_order = TRUE, include_key    = TRUE, as_nested_list = TRUE)
+      self$data_source <- data_source %>% dplyr::arrange(timestamp)
+      self$event_type_partitions <- split(self$data_source, self$data_source$event_type)
     },
 
     #' @description
     #' Filter events by time range (O(n), regular scan).
-    #' @param df Polars DataFrame. Source event data.
+    #' @param df data.frame. Source event data.
     #' @param start Character/POSIXct. (Optional) Start time.
     #' @param end Character/POSIXct. (Optional) End time.
-    #' @return Polars DataFrame. Events in specified range.
+    #' @return data.frame. Events in specified range.
     filter_by_time_range_regular = function(df, start = NULL, end = NULL) {
-      if (!is.null(start)) df <- df$filter(pl$col("timestamp") >= as.character(start))
-      if (!is.null(end)) df <- df$filter(pl$col("timestamp") <= as.character(end))
+      if (!is.null(start)) df <- df %>% dplyr::filter(timestamp >= as.POSIXct(start))
+      if (!is.null(end)) df <- df %>% dplyr::filter(timestamp <= as.POSIXct(end))
       df
     },
 
     #' @description
     #' Efficient time range filter via binary search (O(log n)), requires sorted data.
-    #' @param df Polars DataFrame. Source event data.
+    #' @param df data.frame. Source event data.
     #' @param start Character/POSIXct. (Optional) Start time.
     #' @param end Character/POSIXct. (Optional) End time.
-    #' @return Polars DataFrame. Filtered events.
+    #' @return data.frame. Filtered events.
     filter_by_time_range_fast = function(df, start = NULL, end = NULL) {
       if (is.null(start) && is.null(end)) return(df)
-      df <- df$filter(pl$col("timestamp")$is_not_null())
-      ts_col <- df$to_data_frame()[["timestamp"]]
+      df <- df %>% dplyr::filter(!is.na(timestamp))
+      ts_col <- df[["timestamp"]]
       ts_col <- as.POSIXct(ts_col, tz = "UTC")
-      start_idx <- 0
+      start_idx <- 1
       end_idx <- length(ts_col)
       if (!is.null(start)) {
-        start <- as.POSIXct(start, tz = "UTC") -1
-        start_idx <- as.integer(findInterval(start, ts_col, left.open = FALSE))
-      }else {
-        start_idx <- 0
+        start <- as.POSIXct(start, tz = "UTC") - 1
+        start_idx <- as.integer(findInterval(start, ts_col, left.open = FALSE)) + 1
       }
       if (!is.null(end)) {
         end <- as.POSIXct(end, tz = "UTC") + 1
         end_idx <- as.integer(findInterval(end, ts_col, left.open = TRUE))
-      }else {
-        end_idx <- length(ts_col)
       }
-      return(df$slice(start_idx, end_idx - start_idx))
+      if (start_idx > end_idx) return(df[0,])
+      return(df[start_idx:end_idx, ])
     },
 
     #' @description
     #' Regular event type filter (O(n)).
-    #' @param df Polars DataFrame.
+    #' @param df data.frame.
     #' @param event_type Character. Type of event.
-    #' @return Polars DataFrame.
+    #' @return data.frame.
     filter_by_event_type_regular = function(df, event_type) {
       if (!is.null(event_type)) {
-        df <- df$filter(pl$col("event_type") == event_type)
+        df <- df %>% dplyr::filter(event_type == !!event_type)
       }
       df
     },
 
     #' @description
     #' Fast event type filter (O(1)) using partitioned lookup.
-    #' @param df Polars DataFrame.
+    #' @param df data.frame.
     #' @param event_type Character. Type of event.
-    #' @return Polars DataFrame. Only the given event type.
+    #' @return data.frame. Only the given event type.
     filter_by_event_type_fast = function(df, event_type) {
       if (!is.null(event_type)) {
-        keystr <- event_type
-        match_idx <- which(sapply(self$event_type_partitions, \(x) x$key$event_type == keystr))
-
-        if (length(match_idx) > 0) {
-          return(self$event_type_partitions[[match_idx]]$data)
+        if (event_type %in% names(self$event_type_partitions)) {
+          return(self$event_type_partitions[[event_type]])
         } else {
-          return(df$slice(0,0))
+          return(df[0,])
         }
       } else {
         return(df)
@@ -183,32 +177,25 @@ Patient <- R6::R6Class(
       df <- self$filter_by_time_range_fast(df, start, end)
       if (is.null(filters)) filters <- list()
       if (length(filters) > 0 && is.null(event_type)) stop("event_type must be provided if filters are used")
-      exprs <- list()
       for (filt in filters) {
         if (!(is.list(filt) && length(filt) == 3)) stop("Each filter must be a 3-element list: (attr, op, value)")
         attr <- filt[[1]]; op <- filt[[2]]; val <- filt[[3]]
-        col_expr <- pl$col(sprintf("%s/%s", event_type, attr))
-        exprs <- append(exprs, switch(
-          op,
-          "==" = col_expr == val,
-          "!=" = col_expr != val,
-          "<"  = col_expr < val,
-          "<=" = col_expr <= val,
-          ">"  = col_expr > val,
-          ">=" = col_expr >= val,
-          stop(sprintf("Unsupported operator: %s", op))
-        ))
+        
+        # Build a filter condition for dplyr
+        # The column name is constructed, and then we build the expression
+        col_name <- sprintf("%s/%s", event_type, attr)
+        
+        # This is a bit of metaprogramming to build the filter expression
+        # It's safer than paste() to avoid SQL injection-like issues, though not a DB here.
+        filter_expr <- rlang::call2(op, rlang::sym(col_name), val)
+        df <- df %>% dplyr::filter(!!filter_expr)
       }
-      if (length(exprs) > 0) {
-        filter_expr <- purrr::reduce(`&`, exprs)
-        df <- df$filter(filter_expr)
-      }
-
+      
       if (return_df) {
         return(df)
       } else {
-
-        datalist <- df$to_data_frame()
+        
+        datalist <- df
         if (nrow(datalist) == 0) {
           return(list())
         }

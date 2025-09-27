@@ -8,10 +8,7 @@
 #' @keywords internal
 #' @noRd
 .onLoad <- function(libname, pkgname) {
-  if (is.null(getOption("RHealth.medcode_base"))) {
-    options(
-      RHealth.medcode_base =
-        "https://storage.googleapis.com/pyhealth/resource/"
-    )
+  if (interactive()) {
+    progressr::handlers("progress")
   }
 }

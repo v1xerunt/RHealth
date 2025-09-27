@@ -7,7 +7,7 @@
 Processor for scalar regression labels. Converts values to a 1D float tensor.
 }
 \section{Super classes}{
-\code{RHealth::Processor} -> \code{RHealth::FeatureProcessor} -> \code{RegressionLabelProcessor}
+\code{\link[RHealth:Processor]{RHealth::Processor}} -> \code{\link[RHealth:FeatureProcessor]{RHealth::FeatureProcessor}} -> \code{RegressionLabelProcessor}
 }
 \section{Methods}{
 \subsection{Public methods}{
@@ -44,7 +44,7 @@ Process a numeric label into a single-element float tensor.
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-A torch tensor of shape \link{1}.
+A torch tensor of shape \verb{[1]}.
 }
 }
 \if{html}{\out{<hr>}}
@@ -57,7 +57,7 @@ Return the size of the processed label (always 1).
 }
 
 \subsection{Returns}{
-Integer 1
+Integer \code{1}
 }
 }
 \if{html}{\out{<hr>}}

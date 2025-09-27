@@ -10,20 +10,20 @@ BaseDataset — R6 infrastructure for clinical event datasets
 }
 \details{
 The \strong{BaseDataset} class mirrors rhealth's \code{BaseDataset}, providing a
-fully‑featured, YAML driven loader that converts multi‑table electronic
+fully-featured, YAML driven loader that converts multi-table electronic
 health records into a single \emph{event} table.  It supports:
 \itemize{
-\item URL or local‐file ingestion (with automatic \code{.csv} / \code{.csv.gz}
+\item URL or local-file ingestion (with automatic \code{.csv} / \code{.csv.gz}
 fallback).
-\item Per‑table joins as declared in the config.
-\item Flexible timestamp parsing (single or multi‑column).
+\item Per-table joins as declared in the config.
+\item Flexible timestamp parsing (single or multi-column).
 \item A \code{dev} mode that caps the number of patients for rapid
 prototyping.
-\item Multi‑threaded sample generation with progress bars.
+\item Multi-threaded sample generation with progress bars.
 }
 
-Down‑stream, it cooperates with \code{BaseTask} (task definition),
-\code{Patient} (per‑subject wrapper), and \code{SampleDataset} (collection of
+Down-stream, it cooperates with \code{BaseTask} (task definition),
+\code{Patient} (per-subject wrapper), and \code{SampleDataset} (collection of
 input/output pairs).
 }
 \section{Dependencies}{
@@ -39,13 +39,15 @@ reporting require \code{future}, \code{future.apply}, and \code{progressr}.
 
 \item{\code{tables}}{Character vector of table names to ingest.}
 
-\item{\code{dataset_name}}{Human‑readable dataset label.}
+\item{\code{dataset_name}}{Human-readable dataset label.}
 
 \item{\code{config}}{Parsed YAML configuration list.}
 
-\item{\code{dev}}{Logical flag — when TRUE limits to 1 000 patients.}
+\item{\code{dev}}{Logical flag — when TRUE limits to 1000 patients.}
 
-\item{\code{global_event_df}}{A polars LazyFrame with all events combined.}
+\item{\code{con}}{a duckdb connection}
+
+\item{\code{global_event_df}}{A duckdb lazy query with all events combined.}
 
 \item{\code{.collected_global_event_df}}{Polars dataframe storing all global events.}
 
@@ -104,14 +106,14 @@ Instantiate a \code{BaseDataset}.
 \if{html}{\out{<a id="method-BaseDataset-collected_global_event_df"></a>}}
 \if{latex}{\out{\hypertarget{method-BaseDataset-collected_global_event_df}{}}}
 \subsection{Method \code{collected_global_event_df()}}{
-Materialise (collect) the lazy event dataframe.  In dev‑mode only the
+Materialise (collect) the lazy event dataframe.  In dev-mode only the
 first 1000 patients are kept.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{BaseDataset$collected_global_event_df()}\if{html}{\out{</div>}}
 }
 
 \subsection{Returns}{
-A polars DataFrame containing all selected events.
+A dataframe containing all selected events.
 }
 }
 \if{html}{\out{<hr>}}
@@ -132,7 +134,7 @@ event schema.
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-A polars LazyFrame in event format.
+A dplyr lazy query in event format.
 }
 }
 \if{html}{\out{<hr>}}
@@ -145,7 +147,7 @@ Load every configured table, returning a single \emph{lazy} frame.
 }
 
 \subsection{Returns}{
-A polars LazyFrame.
+A duckdb lazy query.
 }
 }
 \if{html}{\out{<hr>}}
@@ -193,7 +195,7 @@ Iterate over all patients (optionally a filtered dataframe).
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{df}}{Optional polars DataFrame (already collected).}
+\item{\code{df}}{Optional dataframe (already collected).}
 }
 \if{html}{\out{</div>}}
 }
@@ -205,13 +207,13 @@ List of \code{Patient} objects.
 \if{html}{\out{<a id="method-BaseDataset-stats"></a>}}
 \if{latex}{\out{\hypertarget{method-BaseDataset-stats}{}}}
 \subsection{Method \code{stats()}}{
-Print dataset‑level statistics.
+Print dataset-level statistics.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{BaseDataset$stats()}\if{html}{\out{</div>}}
 }
 
 \subsection{Returns}{
-Invisible NULL (called for side‑effects).
+Invisible NULL (called for side-effects).
 }
 }
 \if{html}{\out{<hr>}}
@@ -233,7 +235,12 @@ NULL
 \subsection{Method \code{set_task()}}{
 Apply a \code{BaseTask} to build a \code{SampleDataset}.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{BaseDataset$set_task(task = NULL, num_workers = 1)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{BaseDataset$set_task(
+  task = NULL,
+  num_workers = 1,
+  chunk_size = 1000,
+  cache_dir = NULL
+)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -243,6 +250,12 @@ Apply a \code{BaseTask} to build a \code{SampleDataset}.
 used.}
 
 \item{\code{num_workers}}{Integer ≥1.  Number of parallel workers.}
+
+\item{\code{chunk_size}}{Integer. Number of patients to process in each chunk.}
+
+\item{\code{cache_dir}}{Optional path to a directory for caching samples. If set,
+processed samples will be saved to an \code{.rds} file and reloaded on
+subsequent runs, skipping the generation step.}
 }
 \if{html}{\out{</div>}}
 }

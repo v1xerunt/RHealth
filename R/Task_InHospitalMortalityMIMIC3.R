@@ -1,5 +1,5 @@
-#' @title InHospitalMortalityMIMIC4 Task
-#' @description Task for predicting in-hospital mortality using MIMIC-IV dataset.
+#' @title InHospitalMortalityMIMIC3 Task
+#' @description Task for predicting in-hospital mortality using MIMIC-III dataset.
 #' This task leverages lab results from the first 48 hours of an admission to
 #' predict the likelihood of in-hospital mortality.
 #' @import R6
@@ -7,19 +7,19 @@
 #' @import tidyr
 #' @import lubridate
 #' @export
-InHospitalMortalityMIMIC4 <- R6::R6Class(
-  classname = "InHospitalMortalityMIMIC4",
+InHospitalMortalityMIMIC3 <- R6::R6Class(
+  classname = "InHospitalMortalityMIMIC3",
   inherit = BaseTask,
   public = list(
     #' @field task_name The name of the task.
-    task_name = "InHospitalMortalityMIMIC4",
+    task_name = "InHospitalMortalityMIMIC3",
     #' @field input_schema The schema for input data.
     input_schema = list(labs = "timeseries"),
     #' @field output_schema The schema for output data.
     output_schema = list(mortality = "binary"),
     #' @field label The name of the label column.
     label = "mortality",
-    #' @field LABITEMS A list of lab item IDs used in this task.
+    #' @field LABITEMS A list of lab item IDs used in this task for MIMIC-III.
     LABITEMS = c(
       # Electrolytes & Metabolic
       "50824", "52455", "50983", "52623", # Sodium
@@ -34,7 +34,7 @@ InHospitalMortalityMIMIC4 <- R6::R6Class(
       "50970"                            # Phosphate
     ),
 
-    #' @description Initialize a new InHospitalMortalityMIMIC4 instance.
+    #' @description Initialize a new InHospitalMortalityMIMIC3 instance.
     initialize = function() {
       super$initialize(
         task_name = self$task_name,
@@ -49,9 +49,9 @@ InHospitalMortalityMIMIC4 <- R6::R6Class(
     pre_filter = function(df) {
       required_cols <- c(
         "patient_id", "event_type", "timestamp",
-        "patients/anchor_age",
+        "patients/dob",
         "admissions/dischtime", "admissions/hospital_expire_flag", "admissions/hadm_id",
-        "labevents/itemid", "labevents/storetime", "labevents/valuenum"
+        "labevents/itemid", "labevents/charttime", "labevents/valuenum"
       )
       existing_cols <- colnames(df)
       keep_cols <- intersect(required_cols, existing_cols)
@@ -69,14 +69,20 @@ InHospitalMortalityMIMIC4 <- R6::R6Class(
       if (length(demographics) == 0) {
         return(samples)
       }
-      anchor_age <- as.integer(demographics[[1]]$get("anchor_age"))
-      if (length(anchor_age) != 1 || is.na(anchor_age) || anchor_age < 18) {
+      dob <- tryCatch(as.POSIXct(demographics[[1]]$get("dob")), error = function(e) NULL)
+      if (is.null(dob)) {
         return(samples)
       }
 
       admissions <- patient$get_events(event_type = "admissions")
       for (admission in admissions) {
         admission_timestamp <- admission$timestamp
+        age <- as.numeric(difftime(admission_timestamp, dob, units = "days") / 365.25)
+
+        if (is.na(age) || age < 18) {
+          next
+        }
+
         admission_dischtime <- tryCatch(
           as.POSIXct(admission$get("dischtime")),
           error = function(e) NULL
@@ -104,10 +110,13 @@ InHospitalMortalityMIMIC4 <- R6::R6Class(
         labevents_df_list <- purrr::map(labevents, ~{
           itemid <- .x$get("itemid")
           if (!is.null(itemid) && itemid %in% self$LABITEMS) {
-            storetime_str <- .x$get("storetime")
-            if (!is.null(storetime_str)) {
-                storetime <- tryCatch(as.POSIXct(storetime_str), error = function(e) NULL)
-                if (!is.null(storetime) && storetime <= predict_time) {
+            charttime_str <- tryCatch(.x$get("charttime"), error = function(e) NULL)
+            if (is.null(charttime_str)) {
+              charttime_str <- .x$timestamp
+            }
+            if (!is.null(charttime_str)) {
+                charttime <- tryCatch(as.POSIXct(charttime_str), error = function(e) NULL)
+                if (!is.null(charttime) && charttime <= predict_time) {
                     valuenum <- .x$get("valuenum")
                     if (!is.null(valuenum) && !is.na(valuenum)) {
                         return(
@@ -127,7 +136,7 @@ InHospitalMortalityMIMIC4 <- R6::R6Class(
         labevents_df <- dplyr::bind_rows(labevents_df_list)
 
         if (nrow(labevents_df) == 0) next
-
+        
         labevents_df <- labevents_df %>%
           dplyr::filter(!is.na(.data$valuenum)) %>%
           dplyr::group_by(.data$timestamp, .data$itemid) %>%
@@ -153,15 +162,8 @@ InHospitalMortalityMIMIC4 <- R6::R6Class(
         timestamps <- labevents_df$timestamp
         lab_values <- as.matrix(labevents_df[, -1])
 
-        mortality_label_raw <- admission$get("hospital_expire_flag")
-
-        mortality_label <- mortality_label_raw
-        if (is.factor(mortality_label)) {
-          mortality_label <- as.character(mortality_label)
-        }
-        mortality_label <- as.integer(mortality_label)
-
-        if (is.na(mortality_label) || !mortality_label %in% c(0, 1)) {
+        mortality_label <- as.integer(admission$get("hospital_expire_flag"))
+        if (is.na(mortality_label) || !mortality_label %in% c(0, 1, "0", "1")) {
           mortality_label <- 0
         }
 
