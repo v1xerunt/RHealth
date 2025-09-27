@@ -21,6 +21,9 @@ collate_fn_dict_with_padding <- function(batch) {
         if (values[[1]]$dim() == 0) {
           collated[[key]] <- torch_stack(values)
         } else if (values[[1]]$dim() >= 1) {
+          # Store original lengths before padding
+          lengths <- torch_tensor(sapply(values, function(v) v$shape[1]), dtype = torch_long())
+          collated[[paste0(key, "_len")]] <- lengths
           collated[[key]] <- nn_utils_rnn_pad_sequence(values, batch_first = TRUE, padding_value = 0)
         } else {
           stop(sprintf("Unsupported tensor shape: %s", paste0(values[[1]]$shape, collapse = ",")))

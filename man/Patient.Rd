@@ -5,11 +5,11 @@
 \title{Patient: R6 Class for a Sequence of Events}
 \description{
 The \code{Patient} class manages all clinical events for a single patient.
-It supports efficient event-type partitioning, fast time-range slicing, and flexible multi-condition filtering using rpolars.
+It supports efficient event-type partitioning, fast time-range slicing, and flexible multi-condition filtering.
 }
 \details{
 \itemize{
-\item Data is held as a polars DataFrame.
+\item Data is held as a data.frame.
 \item Events can be retrieved as either raw data frames or Event object lists.
 }
 }
@@ -18,9 +18,9 @@ It supports efficient event-type partitioning, fast time-range slicing, and flex
 \describe{
 \item{\code{patient_id}}{Character. Unique identifier for the patient.}
 
-\item{\code{data_source}}{Polars DataFrame. All events for this patient, sorted by timestamp.}
+\item{\code{data_source}}{data.frame. All events for this patient, sorted by timestamp.}
 
-\item{\code{event_type_partitions}}{List. Mapping event type to corresponding polars DataFrames.}
+\item{\code{event_type_partitions}}{List. Mapping event type to corresponding data.frames.}
 }
 \if{html}{\out{</div>}}
 }
@@ -50,7 +50,7 @@ Create a Patient object.
 \describe{
 \item{\code{patient_id}}{Character. Unique patient identifier.}
 
-\item{\code{data_source}}{Polars DataFrame. All events (must include event_type, timestamp columns).}
+\item{\code{data_source}}{data.frame. All events (must include event_type, timestamp columns).}
 }
 \if{html}{\out{</div>}}
 }
@@ -70,7 +70,7 @@ Filter events by time range (O(n), regular scan).
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{df}}{Polars DataFrame. Source event data.}
+\item{\code{df}}{data.frame. Source event data.}
 
 \item{\code{start}}{Character/POSIXct. (Optional) Start time.}
 
@@ -79,7 +79,7 @@ Filter events by time range (O(n), regular scan).
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-Polars DataFrame. Events in specified range.
+data.frame. Events in specified range.
 }
 }
 \if{html}{\out{<hr>}}
@@ -94,7 +94,7 @@ Efficient time range filter via binary search (O(log n)), requires sorted data.
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{df}}{Polars DataFrame. Source event data.}
+\item{\code{df}}{data.frame. Source event data.}
 
 \item{\code{start}}{Character/POSIXct. (Optional) Start time.}
 
@@ -103,7 +103,7 @@ Efficient time range filter via binary search (O(log n)), requires sorted data.
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-Polars DataFrame. Filtered events.
+data.frame. Filtered events.
 }
 }
 \if{html}{\out{<hr>}}
@@ -118,14 +118,14 @@ Regular event type filter (O(n)).
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{df}}{Polars DataFrame.}
+\item{\code{df}}{data.frame.}
 
 \item{\code{event_type}}{Character. Type of event.}
 }
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-Polars DataFrame.
+data.frame.
 }
 }
 \if{html}{\out{<hr>}}
@@ -140,14 +140,14 @@ Fast event type filter (O(1)) using partitioned lookup.
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{df}}{Polars DataFrame.}
+\item{\code{df}}{data.frame.}
 
 \item{\code{event_type}}{Character. Type of event.}
 }
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-Polars DataFrame. Only the given event type.
+data.frame. Only the given event type.
 }
 }
 \if{html}{\out{<hr>}}

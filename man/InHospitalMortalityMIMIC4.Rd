@@ -5,19 +5,24 @@
 \title{InHospitalMortalityMIMIC4 Task}
 \description{
 Task for predicting in-hospital mortality using MIMIC-IV dataset.
-Uses lab results from the first 48 hours after admission as input features.
+This task leverages lab results from the first 48 hours of an admission to
+predict the likelihood of in-hospital mortality.
 }
 \section{Super class}{
-\code{RHealth::BaseTask} -> \code{InHospitalMortalityMIMIC4}
+\code{\link[RHealth:BaseTask]{RHealth::BaseTask}} -> \code{InHospitalMortalityMIMIC4}
 }
 \section{Public fields}{
 \if{html}{\out{<div class="r6-fields">}}
 \describe{
-\item{\code{input_window_hours}}{Numeric, number of hours to look back for lab data.}
+\item{\code{task_name}}{The name of the task.}
 
-\item{\code{LAB_CATEGORIES}}{Named list mapping lab category to subcategory itemids.}
+\item{\code{input_schema}}{The schema for input data.}
 
-\item{\code{LABITEMS}}{Character vector of all lab itemids (flattened).}
+\item{\code{output_schema}}{The schema for output data.}
+
+\item{\code{label}}{The name of the label column.}
+
+\item{\code{LABITEMS}}{A list of lab item IDs used in this task.}
 }
 \if{html}{\out{</div>}}
 }
@@ -36,16 +41,9 @@ Uses lab results from the first 48 hours after admission as input features.
 \subsection{Method \code{new()}}{
 Initialize a new InHospitalMortalityMIMIC4 instance.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{InHospitalMortalityMIMIC4$new(input_window_hours = 48)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{InHospitalMortalityMIMIC4$new()}\if{html}{\out{</div>}}
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{input_window_hours}}{Numeric, number of hours to look back (default: 48).}
-}
-\if{html}{\out{</div>}}
-}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-InHospitalMortalityMIMIC4-pre_filter"></a>}}
@@ -59,7 +57,7 @@ Pre-filter hook to retain only necessary columns for this task.
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{df}}{A polars LazyFrame containing all events.}
+\item{\code{df}}{A lazy query containing all events.}
 }
 \if{html}{\out{</div>}}
 }
@@ -84,13 +82,7 @@ Main processing method to generate samples.
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-A list of samples. Each sample is a named list containing:
-\itemize{
-\item patient_id: character
-\item admission_id: character or integer
-\item labs: a list of \link{timestamps, lab_values_matrix}
-\item mortality: binary indicator (0/1)
-}
+A list of samples.
 }
 }
 \if{html}{\out{<hr>}}

@@ -8,7 +8,7 @@ Processor for irregular time series data with missing values.
 Supports uniform resampling and two imputation strategies: forward-fill and zero-fill.
 }
 \section{Super classes}{
-\code{RHealth::Processor} -> \code{RHealth::FeatureProcessor} -> \code{TimeseriesProcessor}
+\code{\link[RHealth:Processor]{RHealth::Processor}} -> \code{\link[RHealth:FeatureProcessor]{RHealth::FeatureProcessor}} -> \code{TimeseriesProcessor}
 }
 \section{Public fields}{
 \if{html}{\out{<div class="r6-fields">}}
@@ -81,7 +81,7 @@ Step 2: impute missing entries using selected strategy.
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-A torch tensor of shape \link{T, F}.
+A torch tensor of shape \verb{[T, F]}.
 }
 }
 \if{html}{\out{<hr>}}

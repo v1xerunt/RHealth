@@ -17,7 +17,7 @@ model-ready tensors.
 }
 
 \section{Super class}{
-\code{RHealth::Processor} -> \code{FeatureProcessor}
+\code{\link[RHealth:Processor]{RHealth::Processor}} -> \code{FeatureProcessor}
 }
 \section{Methods}{
 \subsection{Public methods}{

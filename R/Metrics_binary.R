@@ -30,8 +30,6 @@
 #' y_prob <- runif(100)
 #' binary_metrics_fn(y_true, y_prob, metrics = c("accuracy", "ECE"))
 #'
-#' @importFrom PRROC pr.curve
-#' @importFrom pROC auc
 #' @importFrom MLmetrics Accuracy F1_Score Precision Recall
 #' @importFrom metrica balacc jaccardindex
 #' @importFrom psych cohen.kappa
@@ -40,6 +38,10 @@ binary_metrics_fn <- function(y_true,
                               y_prob,
                               metrics    = NULL,
                               threshold  = 0.5) {
+  
+  y_true <- to_numeric_vector(y_true)
+  y_prob <- to_numeric_vector(y_prob)
+  
   stopifnot(length(y_true) == length(y_prob),
             all(y_true %in% c(0, 1)),
             is.numeric(y_prob),
@@ -60,48 +62,35 @@ binary_metrics_fn <- function(y_true,
     out[m] <- switch(
       m,
       pr_auc = {
-        y_true_vec <- to_numeric_vector(y_true)
-        y_prob_vec <- to_numeric_vector(y_prob)
-        has_pos <- any(y_true_vec == 1)
-        has_neg <- any(y_true_vec == 0)
+        has_pos <- any(y_true == 1)
+        has_neg <- any(y_true == 0)
 
         if (!(has_pos && has_neg)) {
           warning("PR AUC undefined: only one class present."); 0
         } else {
-          PRROC::pr.curve(
-            scores.class0 = y_prob_vec[y_true_vec == 1],
-            scores.class1 = y_prob_vec[y_true_vec == 0]
-          )$auc.integral
+          MLmetrics::PRAUC(y_prob, y_true)
         }
       },
 
       roc_auc = {
-        y_true_vec <- to_numeric_vector(y_true)
-        y_prob_vec <- to_numeric_vector(y_prob)
-        has_pos <- any(y_true_vec == 1)
-        has_neg <- any(y_true_vec == 0)
+        has_pos <- any(y_true == 1)
+        has_neg <- any(y_true == 0)
 
         if (!(has_pos && has_neg)) {
           warning("ROC AUC undefined: only one class present."); 0
         } else {
-          as.numeric(pROC::auc(y_true_vec, y_prob_vec))
+          MLmetrics::AUC(y_prob, y_true)
         }
       },
 
-      accuracy = {
-        y_true_vec <- to_numeric_vector(y_true)
-        y_pred_vec <- to_numeric_vector(ifelse(y_prob >= threshold, 1, 0))
-        mean(y_true_vec == y_pred_vec)
-        Accuracy(y_pred_vec, y_true_vec)
-      },
-
+      accuracy          = Accuracy(y_pred, y_true),
       balanced_accuracy = as.numeric(balacc(data = data.frame(pred = y_pred, obs = y_true),
                                             pred = "pred",
                                             obs  = "obs",
                                             tidy = FALSE)),
-      f1                = F1_Score(y_pred, y_true),
-      precision         = Precision(y_pred, y_true),
-      recall            = Recall(y_pred, y_true),
+      f1                = F1_Score(y_pred, y_true, positive = 1),
+      precision         = Precision(y_pred, y_true, positive = 1),
+      recall            = Recall(y_pred, y_true, positive = 1),
       cohen_kappa       = cohen.kappa(table(y_pred, y_true))$kappa,
       jaccard           = as.numeric(jaccardindex(data = data.frame(pred = y_pred, obs = y_true),
                                                   pred = "pred",

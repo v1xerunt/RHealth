@@ -1,3 +1,25 @@
+.medcode_gdrive_links <- c(
+  "ATC" = "1LOAf-AheiZ28vkTcAn6K2X89-jpxU-ok",
+  "CCSCM" = "1FpsaT1EPaeJ2vw9WxCi0fTt3kr1jjmyi",
+  "CCSPROC" = "1dd6MNzENb9utr_F-YPwoNFV6wheHwBi8",
+  "DDI" = "15DKDEcENncyeAVieHV_kP8iCZl8hMpRP",
+  "ICD9CM_to_CCSCM" = "1Yruhix5yEH15C898p0VL_40G9K0dn-cR",
+  "ICD9CM" = "1UMF66hl5vxZ9SXIAJLCSC8ugxeYwkFV9",
+  "ICD9PROC_to_CCSPROC" = "16oFsOpgmtlDmMHAr5pW6KUCks1-ir5k6",
+  "ICD9PROC" = "1Sez38YseXaifokM2frRvZ8chNI8NhvB0",
+  "ICD10CM_to_CCSCM" = "1utcHE81_mbjqDuEbPvZ9uto9f_yGqr9n",
+  "ICD10CM" = "1Oe9A6x58O2ZaXhtfqnK5vqjbXMVIAH0W",
+  "ICD10PROC_to_CCSPROC" = "1gG44ALc8DVGT6Yg9HRUlwgLv9iuJ-6Ql",
+  "ICD10PROC" = "1ThPq6D16QXnK21fV_kl5JqD5A-rDVHQQ",
+  "NDC_to_ATC" = "11IQSkVaGjTc6kZ0XFUd_FgQa3uRrvihP",
+  "NDC" = "11mCQ3AJTkZvkC0WWfxLhaxU5Mg-a3S9L",
+  "ICD10CM_to_ICD9CM" = "1Ioo_Aq-sXmiO8FKmsupE8EidiWpm8Q_6",
+  "ICD9CM_to_ICD10CM" = "1_EUiJ8AINq4ktZcbuVGoxXDj8Ddy8QrQ",
+  "ICD10PCS_to_ICD9PCS" = "1ZQOw2ww73uqJBGHNfJDRpYVzHAXeXWz7",
+  "ICD9PCS_to_ICD10PCS" = "1pYsgXndNTaRvWieEBw4FQu8AvM25-Qh2",
+  "ICD10CMPCS_to_ICD9CM" = "12GlFYTmdxOVGjxSLQKR-qMv9q4rOka8e"
+)
+
 #' Download and Cache Medical Code CSV
 #'
 #' @description
@@ -53,7 +75,12 @@ download_medcode <- function(name) {
   fs::dir_create(cache_dir, recurse = TRUE)
   dest <- fs::path(cache_dir, paste0(name, ".csv"))
   if (!fs::file_exists(dest)) {
-    url <- paste0(getOption("RHealth.medcode_base"), name, ".csv")
+    if (name %in% names(.medcode_gdrive_links)) {
+      file_id <- .medcode_gdrive_links[[name]]
+      url <- paste0("https://drive.google.com/uc?export=download&id=", file_id)
+    } else {
+      stop(paste("Medical code", name, "is not supported."))
+    }
     httr::GET(url, httr::write_disk(dest, overwrite = TRUE))
   }
   dest

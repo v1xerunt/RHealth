@@ -4,10 +4,6 @@
 #' It ensures key tables like patients, admissions, and icustays are loaded,
 #' and allows appending additional tables. Also provides per-table preprocessing.
 #'
-#'
-#' @docType class
-#' @method initialize MIMIC3Dataset
-#' @usage \method{MIMIC3Dataset}{initialize}(...)
 #' @export
 MIMIC3Dataset <- R6::R6Class(
   "MIMIC3Dataset",
@@ -19,7 +15,7 @@ MIMIC3Dataset <- R6::R6Class(
     #' @param dataset_name Optional dataset name.
     #' @param config_path Optional path to YAML config file.
     #' @param dev Logical flag for dev mode.
-    #' @param ... Additional arguments passed to `BaseDataset`.
+    #' @param ... Additional arguments passed to `BaseDataset$initialize`.
     initialize = function(root,
                           tables = character(),
                           dataset_name = NULL,
@@ -50,20 +46,6 @@ MIMIC3Dataset <- R6::R6Class(
        if ("prescriptions" %in% tables) {
     warning("Timestamp granularity of prescriptions is not enough.")
      }
-    },
-
-    #' @description
-    #' Table-specific preprocessing for noteevents.
-    #' If `charttime` is missing, fills it with `chartdate` + " 00:00:00".
-    #' @param df A polars LazyFrame.
-    #' @return A modified LazyFrame.
-    preprocess_noteevents = function(df) {
-      df$with_columns(
-        pl$when(pl$col("charttime")$is_null())$
-          then(pl$col("chartdate") + pl$lit(" 00:00:00"))$
-          otherwise(pl$col("charttime"))$
-          alias("charttime")
-      )
     }
   )
 )

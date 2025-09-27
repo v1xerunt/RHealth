@@ -84,7 +84,7 @@ Main processing function. Must be overridden in subclasses.
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-A list of named lists (equivalent to Python List\link{Dict}) representing the task result.
+A list of named lists representing the task result.
 }
 }
 \if{html}{\out{<hr>}}

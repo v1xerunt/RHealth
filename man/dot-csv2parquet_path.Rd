@@ -6,6 +6,13 @@
 \usage{
 .csv2parquet_path(csv_path)
 }
+\arguments{
+\item{csv_path}{Path to the csv file.}
+}
+\value{
+A character string.
+}
 \description{
 Given a *.csv(.gz) path, return *.parquet path in a /subset folder
 }
+\keyword{internal}

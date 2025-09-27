@@ -32,7 +32,7 @@ TimeseriesProcessor <- R6::R6Class("TimeseriesProcessor",
     #' Step 2: impute missing entries using selected strategy.
     #'
     #' @param value A list: list(timestamps = POSIXct vector, values = matrix).
-    #' @return A torch tensor of shape [T, F].
+    #' @return A torch tensor of shape `[T, F]`.
     process = function(value) {
       timestamps <- value[[1]]
       values <- value[[2]]

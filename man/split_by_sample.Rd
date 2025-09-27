@@ -4,7 +4,14 @@
 \alias{split_by_sample}
 \title{Dataset Split Functions}
 \usage{
-split_by_sample(dataset, ratios, seed = NULL, get_index = FALSE)
+split_by_sample(
+  dataset,
+  ratios,
+  seed = NULL,
+  stratify = FALSE,
+  stratify_by = NULL,
+  get_index = FALSE
+)
 }
 \arguments{
 \item{dataset}{A \code{SampleDataset} object.}
@@ -12,6 +19,10 @@ split_by_sample(dataset, ratios, seed = NULL, get_index = FALSE)
 \item{ratios}{A numeric vector of length 3 indicating train/val/test split ratios. Must sum to 1.}
 
 \item{seed}{Optional integer for reproducibility.}
+
+\item{stratify}{Logical, whether to perform stratified sampling. Default: FALSE.}
+
+\item{stratify_by}{Character, the name of the field to stratify by (e.g., the label). Required if \code{stratify} is TRUE.}
 
 \item{get_index}{Logical, whether to return the indices instead of subsets. Default: FALSE.}
 }

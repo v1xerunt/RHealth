@@ -43,9 +43,9 @@ BinaryLabelProcessor <- R6::R6Class("BinaryLabelProcessor",
       message(sprintf("Label '%s' vocab: %s", field, paste(names(self$label_vocab), collapse = ", ")))
     },
 
-    #' @description Process a label into a torch tensor [0] or [1].
+    #' @description Process a label into a torch tensor `[0]` or `[1]`.
     #' @param value A single label value.
-    #' @return A float32 torch tensor of shape [1].
+    #' @return A float32 torch tensor of shape `1`.
     process = function(value) {
       index <- self$label_vocab[[as.character(value)]]
       torch::torch_tensor(index, dtype = torch::torch_float())
@@ -57,7 +57,6 @@ BinaryLabelProcessor <- R6::R6Class("BinaryLabelProcessor",
       return(1)
     },
 
-    #' @description Print a summary of the processor.
     #' @description Print a summary of the processor.
     #' @param ... Ignored.
     print = function(...) {

@@ -4,9 +4,6 @@
 #' This class inherits from BaseDataset and is specialized for handling MIMIC-IV Clinical Notes data.
 #' It includes tables such as discharge, discharge_detail, and radiology.
 #'
-#' @docType class
-#' @method initialize MIMIC4NoteDataset
-#' @usage \method{MIMIC4NoteDataset}{initialize}(...)
 #' @export
 MIMIC4NoteDataset <- R6::R6Class(
   "MIMIC4NoteDataset",
@@ -19,7 +16,7 @@ MIMIC4NoteDataset <- R6::R6Class(
     #' @param dataset_name Optional dataset name. Default is "mimic4_note".
     #' @param config_path Optional path to YAML config file.
     #' @param dev Logical flag for dev mode.
-    #' @param ... Additional arguments passed to `BaseDataset`.
+    #' @param ... Additional arguments passed to `BaseDataset$initialize`.
     initialize = function(root,
                           tables = character(),
                           dataset_name = "mimic4_note",

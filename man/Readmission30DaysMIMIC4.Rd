@@ -51,7 +51,14 @@ samples <- task$call(patient)
 
 }
 \section{Super class}{
-\code{RHealth::BaseTask} -> \code{Readmission30DaysMIMIC4}
+\code{\link[RHealth:BaseTask]{RHealth::BaseTask}} -> \code{Readmission30DaysMIMIC4}
+}
+\section{Public fields}{
+\if{html}{\out{<div class="r6-fields">}}
+\describe{
+\item{\code{label}}{the name of the label column.}
+}
+\if{html}{\out{</div>}}
 }
 \section{Methods}{
 \subsection{Public methods}{

@@ -8,7 +8,7 @@ Processor for multi-label classification. Converts a list of active labels into 
 one-hot tensor with multiple 1s. Inherits from FeatureProcessor.
 }
 \section{Super classes}{
-\code{RHealth::Processor} -> \code{RHealth::FeatureProcessor} -> \code{MultiLabelProcessor}
+\code{\link[RHealth:Processor]{RHealth::Processor}} -> \code{\link[RHealth:FeatureProcessor]{RHealth::FeatureProcessor}} -> \code{MultiLabelProcessor}
 }
 \section{Public fields}{
 \if{html}{\out{<div class="r6-fields">}}
@@ -82,7 +82,7 @@ Process a list of active labels into a one-hot float tensor.
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-A torch tensor of shape \link{num_classes} with 0s and 1s.
+A torch tensor of shape \code{num_classes} with 0s and 1s.
 }
 }
 \if{html}{\out{<hr>}}

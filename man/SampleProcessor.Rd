@@ -8,7 +8,7 @@ Optional processor for transformations applied at the whole-sample level
 (e.g., normalizing an image+label pair).
 }
 \section{Super class}{
-\code{RHealth::Processor} -> \code{SampleProcessor}
+\code{\link[RHealth:Processor]{RHealth::Processor}} -> \code{SampleProcessor}
 }
 \section{Methods}{
 \subsection{Public methods}{

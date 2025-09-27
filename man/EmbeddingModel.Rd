@@ -10,8 +10,6 @@ EmbeddingModel(dataset, embedding_dim = 128)
 \item{dataset}{A SampleDataset object containing input_processors.}
 
 \item{embedding_dim}{Integer embedding dimension. Default is 128.}
-
-\item{inputs}{A named list of \code{torch_tensor} objects, with names matching dataset$input_processors.}
 }
 \value{
 An \code{EmbeddingModel} object that inherits from \code{BaseModel}.
@@ -28,6 +26,7 @@ EmbeddingModel is responsible for creating embedding layers for different types 
 Initialize an EmbeddingModel by constructing embedding layers based on input processors.
 
 Perform a forward pass by computing embeddings (or passing through) for each field.
+This method takes \code{inputs}, a named list of \code{torch_tensor} objects, with names matching dataset$input_processors.
 
 Return a concise string representation of the EmbeddingModel, listing its embedding layers.
 }

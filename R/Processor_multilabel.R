@@ -35,7 +35,7 @@ MultiLabelProcessor <- R6::R6Class("MultiLabelProcessor",
 
     #' @description Process a list of active labels into a one-hot float tensor.
     #' @param value A character or numeric vector of active labels.
-    #' @return A torch tensor of shape [num_classes] with 0s and 1s.
+    #' @return A torch tensor of shape `num_classes` with 0s and 1s.
     process = function(value) {
       if (!is.vector(value)) {
         stop("Expected a vector (label list) for multilabel task.", call. = FALSE)

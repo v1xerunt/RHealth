@@ -8,8 +8,6 @@ BaseModel(dataset)
 }
 \arguments{
 \item{dataset}{A dataset object (must have input_schema, output_schema, output_processors).}
-
-\item{logits}{Torch tensor with raw model outputs.}
 }
 \value{
 Integer scalar representing the output dimension.
@@ -29,6 +27,7 @@ Selects appropriate loss function based on task type in output schema.
 
 Converts logits into predicted probabilities for evaluation.
 Format depends on task mode (sigmoid or softmax, or raw).
+This method takes \code{logits} as input, which is a torch tensor with raw model outputs.
 }
 \section{Fields}{
 

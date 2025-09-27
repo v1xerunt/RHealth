@@ -9,7 +9,8 @@ SampleDataset(
   input_schema,
   output_schema,
   dataset_name = "",
-  task_name = ""
+  task_name = "",
+  save_path = NULL
 )
 }
 \arguments{
@@ -23,9 +24,7 @@ SampleDataset(
 
 \item{task_name}{Optional task name}
 
-\item{index}{Integer index}
-
-\item{...}{Ignored}
+\item{save_path}{Optional path to save the processed dataset.}
 }
 \value{
 Named list representing the sample

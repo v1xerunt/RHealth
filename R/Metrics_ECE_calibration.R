@@ -8,10 +8,10 @@
 #'   containing predicted probabilities for the *positive* class
 #'   (only the first column is used if a matrix is supplied).
 #' @param label Numeric vector **or** two-column matrix of true labels \
-#'   encoded as 0/1 (only the first column is used if a matrix is supplied).
+#'   encoded as `0/1` (only the first column is used if a matrix is supplied).
 #' @param bins Integer. Number of bins (default 20).
 #' @param adaptive Logical. If `FALSE` (default) equal-width bins \
-#'   spanning \\([0,1]\\) are used; if `TRUE` each bin contains the \
+#'   spanning `0, 1` are used; if `TRUE` each bin contains the \
 #'   same number of samples (equal-size bins).
 #'
 #' @return A single numeric value – the (adaptive) ECE.

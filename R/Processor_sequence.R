@@ -28,22 +28,34 @@ SequenceProcessor <- R6::R6Class("SequenceProcessor",
         stop("Input to SequenceProcessor must be a vector (sequence of tokens).", call. = FALSE)
       }
 
-      indices <- integer(length(value))
-      for (i in seq_along(value)) {
-        token <- value[[i]]
-        if (is.null(token)) {
-          indices[i] <- self$code_vocab[["<unk>"]]
-        } else {
-          key <- as.character(token)
-          if (!(key %in% names(self$code_vocab))) {
-            self$code_vocab[[key]] <- self$.next_index
-            self$.next_index <- self$.next_index + 1
-          }
-          indices[i] <- self$code_vocab[[key]]
-        }
+      # Vectorized handling of NULLs and conversion to character
+      if (is.list(value)) {
+        is_null_mask <- vapply(value, is.null, FUN.VALUE = logical(1))
+        tokens <- as.character(value)
+        tokens[is_null_mask] <- "<unk>"
+      } else {
+        tokens <- as.character(value)
+        tokens[is.na(tokens)] <- "<unk>"
       }
 
-      torch::torch_tensor(indices, dtype = torch::torch_long())
+      # Find unique tokens that are not yet in the vocabulary
+      unique_tokens <- unique(tokens)
+      existing_indices <- match(unique_tokens, names(self$code_vocab))
+      new_token_mask <- is.na(existing_indices)
+      new_tokens <- unique_tokens[new_token_mask]
+
+      # Add new tokens to the vocabulary in one go
+      if (length(new_tokens) > 0) {
+        new_indices_start <- self$.next_index
+        new_indices <- seq.int(from = new_indices_start, length.out = length(new_tokens))
+        names(new_indices) <- new_tokens
+        self$code_vocab <- c(self$code_vocab, new_indices)
+        self$.next_index <- new_indices_start + length(new_tokens)
+      }
+
+      # Get indices for all tokens in the original sequence using a single lookup
+      indices <- self$code_vocab[tokens]
+      torch::torch_tensor(unname(indices), dtype = torch::torch_long())
     },
 
     #' @description Return size of vocabulary.

@@ -4,7 +4,13 @@
 \alias{split_by_visit}
 \title{split_by_visit}
 \usage{
-split_by_visit(dataset, ratios, seed = NULL)
+split_by_visit(
+  dataset,
+  ratios,
+  seed = NULL,
+  stratify = FALSE,
+  stratify_by = NULL
+)
 }
 \arguments{
 \item{dataset}{A \code{SampleDataset} object.}
@@ -12,6 +18,10 @@ split_by_visit(dataset, ratios, seed = NULL)
 \item{ratios}{A numeric vector of length 3 indicating train/val/test split ratios. Must sum to 1.}
 
 \item{seed}{Optional integer for reproducibility.}
+
+\item{stratify}{Logical, whether to perform stratified sampling. Default: FALSE.}
+
+\item{stratify_by}{Character, the name of the field to stratify by (e.g., the label). Required if \code{stratify} is TRUE.}
 }
 \value{
 A list of 3 torch::dataset_subset objects.

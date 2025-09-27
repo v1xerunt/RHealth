@@ -107,6 +107,8 @@ get_descendants(code = "428", system = "ICD9CM")
 ``` r
 # Map from ICD-9 to CCS
 map_code(code = "428.0", from = "ICD9CM", to = "CCSCM")
+# Map from ICD-9 to ICD-10
+map_code(code = "589", from = "ICD9CM", to = "ICD10CM")
 ```
 
 ### 🛢️ 2. Dataset Module
@@ -117,8 +119,6 @@ tensors that any downstream model can consume.
 
 **Key Features:**
 
-- **Efficient Ingestion**: Streams large CSVs using Polars `LazyFrame`
-  to avoid loading massive files into RAM.
 - **Data Harmonisation**: Merges heterogeneous tables into a single,
   canonical event table.
 - **Built-in Caching**: Uses DuckDB for CSV → Parquet caching, enabling
@@ -201,7 +201,7 @@ Once a task is defined, use it with your dataset to create a
 `SampleDataset` compatible with `{torch}`.
 
 ``` r
-task    <- Readmission30DaysMIMIC4$new() # A built-in task
+task    <- InHospitalMortalityMIMIC4$new() # A built-in task
 samples <- ds$set_task(task)
 ```
 
@@ -265,7 +265,7 @@ that handles logging, checkpointing, evaluation, and progress bars.
 
 ``` r
 # 1. Create data loaders
-splits <- split_by_patient(samples, c(0.8, 0.1, 0.1))
+splits <- split_by_patient(samples, c(0.8, 0.1, 0.1), stratify = TRUE, stratify_by = 'mortality')
 train_dl <- get_dataloader(splits[[1]], batch_size = 32, shuffle = TRUE)
 val_dl <- get_dataloader(splits[[2]], batch_size = 32)
 test_dl <- get_dataloader(splits[[3]], batch_size = 32)

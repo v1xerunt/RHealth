@@ -9,7 +9,7 @@ An enhanced R6 trainer mirroring PyHealth's Python version. It supports:
 \item \strong{Dynamic \code{steps_per_epoch}}: can iterate indefinitely over a dataloader to reach a target number of steps, just like Python.
 \item \strong{Parameter‑group–wise weight decay}: bias and \emph{LayerNorm} parameters are excluded from L2 regularisation.
 \item \strong{Gradient clipping}.
-\item \strong{Optional progress bar} using \code{cli::cli_progress_bar()} (falls back to simple logging).
+\item \strong{Optional progress bar} using \code{progressr::progressor()} (falls back to simple logging).
 \item \strong{Correctly named \code{additional_outputs}} collection.
 }
 }
@@ -142,7 +142,8 @@ Perform inference on a dataloader.
 \if{html}{\out{<div class="r">}}\preformatted{Trainer$inference(
   dataloader,
   additional_outputs = NULL,
-  return_patient_ids = FALSE
+  return_patient_ids = FALSE,
+  use_progress_bar = FALSE
 )}\if{html}{\out{</div>}}
 }
 
@@ -154,6 +155,8 @@ Perform inference on a dataloader.
 \item{\code{additional_outputs}}{Vector of additional outputs to capture.}
 
 \item{\code{return_patient_ids}}{Whether to return patient IDs.}
+
+\item{\code{use_progress_bar}}{Whether to show a progress bar.}
 }
 \if{html}{\out{</div>}}
 }
@@ -164,13 +167,15 @@ Perform inference on a dataloader.
 \subsection{Method \code{evaluate()}}{
 Evaluate the model using a dataloader.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Trainer$evaluate(dataloader)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Trainer$evaluate(dataloader, use_progress_bar = FALSE)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{dataloader}}{A dataloader to evaluate on.}
+
+\item{\code{use_progress_bar}}{Whether to show a progress bar.}
 }
 \if{html}{\out{</div>}}
 }
