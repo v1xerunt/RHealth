@@ -9,7 +9,7 @@ BaseDataset — R6 infrastructure for clinical event datasets"></head><body>
 
     <a class="navbar-brand me-2" href="../index.html">RHealth</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.2.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -36,7 +36,7 @@ BaseDataset — R6 infrastructure for clinical event datasets"></head><body>
   <main id="main" class="col-md-9"><div class="page-header">
 
       <h1>BaseDataset — R6 infrastructure for clinical event datasets</h1>
-      <small class="dont-index">Source: <a href="https://github.com/v1xerunt/RHealth/blob/main/R/Dataset_BaseDataset.R" class="external-link"><code>R/Dataset_BaseDataset.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/v1xerunt/RHealth/blob/dev/R/Dataset_BaseDataset.R" class="external-link"><code>R/Dataset_BaseDataset.R</code></a></small>
       <div class="d-none name"><code>BaseDataset.Rd</code></div>
     </div>
 
@@ -49,16 +49,16 @@ BaseDataset — R6 infrastructure for clinical event datasets"></head><body>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>The <strong>BaseDataset</strong> class mirrors rhealth's <code>BaseDataset</code>, providing a
-fully‑featured, YAML driven loader that converts multi‑table electronic
-health records into a single <em>event</em> table.  It supports:</p><ul><li><p>URL or local‐file ingestion (with automatic <code>.csv</code> / <code>.csv.gz</code>
+fully-featured, YAML driven loader that converts multi-table electronic
+health records into a single <em>event</em> table.  It supports:</p><ul><li><p>URL or local-file ingestion (with automatic <code>.csv</code> / <code>.csv.gz</code>
 fallback).</p></li>
-<li><p>Per‑table joins as declared in the config.</p></li>
-<li><p>Flexible timestamp parsing (single or multi‑column).</p></li>
+<li><p>Per-table joins as declared in the config.</p></li>
+<li><p>Flexible timestamp parsing (single or multi-column).</p></li>
 <li><p>A <code>dev</code> mode that caps the number of patients for rapid
 prototyping.</p></li>
-<li><p>Multi‑threaded sample generation with progress bars.</p></li>
-</ul><p>Down‑stream, it cooperates with <code>BaseTask</code> (task definition),
-<code>Patient</code> (per‑subject wrapper), and <code>SampleDataset</code> (collection of
+<li><p>Multi-threaded sample generation with progress bars.</p></li>
+</ul><p>Down-stream, it cooperates with <code>BaseTask</code> (task definition),
+<code>Patient</code> (per-subject wrapper), and <code>SampleDataset</code> (collection of
 input/output pairs).</p>
     </div>
     <div class="section level2">
@@ -79,7 +79,7 @@ reporting require <code>future</code>, <code>future.apply</code>, and <code>prog
 
 
 <dt><code>dataset_name</code></dt>
-<dd><p>Human‑readable dataset label.</p></dd>
+<dd><p>Human-readable dataset label.</p></dd>
 
 
 <dt><code>config</code></dt>
@@ -87,11 +87,15 @@ reporting require <code>future</code>, <code>future.apply</code>, and <code>prog
 
 
 <dt><code>dev</code></dt>
-<dd><p>Logical flag — when TRUE limits to 1 000 patients.</p></dd>
+<dd><p>Logical flag — when TRUE limits to 1000 patients.</p></dd>
+
+
+<dt><code>con</code></dt>
+<dd><p>a duckdb connection</p></dd>
 
 
 <dt><code>global_event_df</code></dt>
-<dd><p>A polars LazyFrame with all events combined.</p></dd>
+<dd><p>A duckdb lazy query with all events combined.</p></dd>
 
 
 <dt><code>.collected_global_event_df</code></dt>
@@ -161,7 +165,7 @@ reporting require <code>future</code>, <code>future.apply</code>, and <code>prog
 
 </div><p></p><hr><a id="method-BaseDataset-collected_global_event_df"></a><div class="section">
 <h3 id="method-collected-global-event-df-">Method <code>collected_global_event_df()</code><a class="anchor" aria-label="anchor" href="#method-collected-global-event-df-"></a></h3>
-<p>Materialise (collect) the lazy event dataframe.  In dev‑mode only the
+<p>Materialise (collect) the lazy event dataframe.  In dev-mode only the
 first 1000 patients are kept.</p><div class="section">
 <h4 id="usage-1">Usage<a class="anchor" aria-label="anchor" href="#usage-1"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">BaseDataset</span><span class="op">$</span><span class="fu">collected_global_event_df</span><span class="op">(</span><span class="op">)</span></span></code></pre></div><p></p></div>
@@ -169,7 +173,7 @@ first 1000 patients are kept.</p><div class="section">
 
 <div class="section">
 <h4 id="returns">Returns<a class="anchor" aria-label="anchor" href="#returns"></a></h4>
-<p>A polars DataFrame containing all selected events.</p>
+<p>A dataframe containing all selected events.</p>
 </div>
 
 </div><p></p><hr><a id="method-BaseDataset-load_table"></a><div class="section">
@@ -190,7 +194,7 @@ event schema.</p><div class="section">
 </div>
 <div class="section">
 <h4 id="returns-1">Returns<a class="anchor" aria-label="anchor" href="#returns-1"></a></h4>
-<p>A polars LazyFrame in event format.</p>
+<p>A dplyr lazy query in event format.</p>
 </div>
 
 </div><p></p><hr><a id="method-BaseDataset-load_data"></a><div class="section">
@@ -202,7 +206,7 @@ event schema.</p><div class="section">
 
 <div class="section">
 <h4 id="returns-2">Returns<a class="anchor" aria-label="anchor" href="#returns-2"></a></h4>
-<p>A polars LazyFrame.</p>
+<p>A duckdb lazy query.</p>
 </div>
 
 </div><p></p><hr><a id="method-BaseDataset-unique_patient_ids"></a><div class="section">
@@ -247,7 +251,7 @@ event schema.</p><div class="section">
 <div class="section">
 <h4 id="arguments-3">Arguments<a class="anchor" aria-label="anchor" href="#arguments-3"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>df</code></dt>
-<dd><p>Optional polars DataFrame (already collected).</p></dd>
+<dd><p>Optional dataframe (already collected).</p></dd>
 
 
 </dl><p></p></div>
@@ -259,14 +263,14 @@ event schema.</p><div class="section">
 
 </div><p></p><hr><a id="method-BaseDataset-stats"></a><div class="section">
 <h3 id="method-stats-">Method <code>stats()</code><a class="anchor" aria-label="anchor" href="#method-stats-"></a></h3>
-<p>Print dataset‑level statistics.</p><div class="section">
+<p>Print dataset-level statistics.</p><div class="section">
 <h4 id="usage-7">Usage<a class="anchor" aria-label="anchor" href="#usage-7"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">BaseDataset</span><span class="op">$</span><span class="fu">stats</span><span class="op">(</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
 <h4 id="returns-6">Returns<a class="anchor" aria-label="anchor" href="#returns-6"></a></h4>
-<p>Invisible NULL (called for side‑effects).</p>
+<p>Invisible NULL (called for side-effects).</p>
 </div>
 
 </div><p></p><hr><a id="method-BaseDataset-default_task"></a><div class="section">
@@ -285,7 +289,12 @@ event schema.</p><div class="section">
 <h3 id="method-set-task-">Method <code>set_task()</code><a class="anchor" aria-label="anchor" href="#method-set-task-"></a></h3>
 <p>Apply a <code>BaseTask</code> to build a <code>SampleDataset</code>.</p><div class="section">
 <h4 id="usage-9">Usage<a class="anchor" aria-label="anchor" href="#usage-9"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">BaseDataset</span><span class="op">$</span><span class="fu">set_task</span><span class="op">(</span>task <span class="op">=</span> <span class="cn">NULL</span>, num_workers <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></code></pre></div><p></p></div>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">BaseDataset</span><span class="op">$</span><span class="fu">set_task</span><span class="op">(</span></span>
+<span>  task <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  num_workers <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  chunk_size <span class="op">=</span> <span class="fl">1000</span>,</span>
+<span>  cache_dir <span class="op">=</span> <span class="cn">NULL</span></span>
+<span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
@@ -297,6 +306,16 @@ used.</p></dd>
 
 <dt><code>num_workers</code></dt>
 <dd><p>Integer ≥1.  Number of parallel workers.</p></dd>
+
+
+<dt><code>chunk_size</code></dt>
+<dd><p>Integer. Number of patients to process in each chunk.</p></dd>
+
+
+<dt><code>cache_dir</code></dt>
+<dd><p>Optional path to a directory for caching samples. If set,
+processed samples will be saved to an <code>.rds</code> file and reloaded on
+subsequent runs, skipping the generation step.</p></dd>
 
 
 </dl><p></p></div>
@@ -331,7 +350,7 @@ used.</p></dd>
 
 
     <footer><div class="pkgdown-footer-left">
-  <p>Developed by Ji Song, Zhixia Ren, Zhenbang Wu, John Wu, Chaoqi Yang, Jimeng Sun, Liantao Ma, Ewen Harrison, Junyi Gao.</p>
+  <p>Developed by Junyi Gao, Ji Song, Zhixia Ren, Zhenbang Wu, John Wu, Chaoqi Yang, Jimeng Sun, Liantao Ma, Ewen Harrison.</p>
 </div>
 
 <div class="pkgdown-footer-right">

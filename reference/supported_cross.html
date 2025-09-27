@@ -9,7 +9,7 @@ provided by the package."></head><body>
 
     <a class="navbar-brand me-2" href="../index.html">RHealth</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.2.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -36,7 +36,7 @@ provided by the package."></head><body>
   <main id="main" class="col-md-9"><div class="page-header">
 
       <h1>List Supported Crosswalk Code Systems</h1>
-      <small class="dont-index">Source: <a href="https://github.com/v1xerunt/RHealth/blob/main/R/Medcode_cross_map.R" class="external-link"><code>R/Medcode_cross_map.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/v1xerunt/RHealth/blob/dev/R/Medcode_cross_map.R" class="external-link"><code>R/Medcode_cross_map.R</code></a></small>
       <div class="d-none name"><code>supported_cross.Rd</code></div>
     </div>
 
@@ -60,8 +60,10 @@ provided by the package.</p>
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">supported_cross</span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "ICD9CM_to_CCSCM"      "ICD9PROC_to_CCSPROC"  "ICD10CM_to_CCSCM"    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [4] "ICD10PROC_to_CCSPROC" "NDC_to_ATC"          </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] "ICD9CM_to_CCSCM"      "ICD9PROC_to_CCSPROC"  "ICD10CM_to_CCSCM"    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [4] "ICD10PROC_to_CCSPROC" "NDC_to_ATC"           "ICD10CM_to_ICD9CM"   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [7] "ICD9CM_to_ICD10CM"    "ICD10PCS_to_ICD9PCS"  "ICD9PCS_to_ICD10PCS" </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [10] "ICD10CMPCS_to_ICD9CM"</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
@@ -70,7 +72,7 @@ provided by the package.</p>
 
 
     <footer><div class="pkgdown-footer-left">
-  <p>Developed by Ji Song, Zhixia Ren, Zhenbang Wu, John Wu, Chaoqi Yang, Jimeng Sun, Liantao Ma, Ewen Harrison, Junyi Gao.</p>
+  <p>Developed by Junyi Gao, Ji Song, Zhixia Ren, Zhenbang Wu, John Wu, Chaoqi Yang, Jimeng Sun, Liantao Ma, Ewen Harrison.</p>
 </div>
 
 <div class="pkgdown-footer-right">

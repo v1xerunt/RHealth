@@ -9,7 +9,7 @@ logical (TRUE/FALSE), or categorical binary labels."></head><body>
 
     <a class="navbar-brand me-2" href="../index.html">RHealth</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.2.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -36,7 +36,7 @@ logical (TRUE/FALSE), or categorical binary labels."></head><body>
   <main id="main" class="col-md-9"><div class="page-header">
 
       <h1>Binary Label Processor</h1>
-      <small class="dont-index">Source: <a href="https://github.com/v1xerunt/RHealth/blob/main/R/Processor_binary.R" class="external-link"><code>R/Processor_binary.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/v1xerunt/RHealth/blob/dev/R/Processor_binary.R" class="external-link"><code>R/Processor_binary.R</code></a></small>
       <div class="d-none name"><code>BinaryLabelProcessor.Rd</code></div>
     </div>
 
@@ -102,7 +102,7 @@ logical (TRUE/FALSE), or categorical binary labels.</p>
 
 </div><p></p><hr><a id="method-BinaryLabelProcessor-process"></a><div class="section">
 <h3 id="method-process-">Method <code>process()</code><a class="anchor" aria-label="anchor" href="#method-process-"></a></h3>
-<p>Process a label into a torch tensor 0 or 1.</p><div class="section">
+<p>Process a label into a torch tensor <code>[0]</code> or <code>[1]</code>.</p><div class="section">
 <h4 id="usage-2">Usage<a class="anchor" aria-label="anchor" href="#usage-2"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">BinaryLabelProcessor</span><span class="op">$</span><span class="fu">process</span><span class="op">(</span><span class="va">value</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
@@ -117,7 +117,7 @@ logical (TRUE/FALSE), or categorical binary labels.</p>
 </div>
 <div class="section">
 <h4 id="returns">Returns<a class="anchor" aria-label="anchor" href="#returns"></a></h4>
-<p>A float32 torch tensor of shape 1.</p>
+<p>A float32 torch tensor of shape <code>1</code>.</p>
 </div>
 
 </div><p></p><hr><a id="method-BinaryLabelProcessor-size"></a><div class="section">
@@ -134,8 +134,6 @@ logical (TRUE/FALSE), or categorical binary labels.</p>
 
 </div><p></p><hr><a id="method-BinaryLabelProcessor-print"></a><div class="section">
 <h3 id="method-print-">Method <code><a href="https://rdrr.io/r/base/print.html" class="external-link">print()</a></code><a class="anchor" aria-label="anchor" href="#method-print-"></a></h3>
-<p>Print a summary of the processor.</p>
-
 <p>Print a summary of the processor.</p><div class="section">
 <h4 id="usage-4">Usage<a class="anchor" aria-label="anchor" href="#usage-4"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">BinaryLabelProcessor</span><span class="op">$</span><span class="fu">print</span><span class="op">(</span><span class="va">...</span><span class="op">)</span></span></code></pre></div><p></p></div>
@@ -175,7 +173,7 @@ logical (TRUE/FALSE), or categorical binary labels.</p>
 
 
     <footer><div class="pkgdown-footer-left">
-  <p>Developed by Ji Song, Zhixia Ren, Zhenbang Wu, John Wu, Chaoqi Yang, Jimeng Sun, Liantao Ma, Ewen Harrison, Junyi Gao.</p>
+  <p>Developed by Junyi Gao, Ji Song, Zhixia Ren, Zhenbang Wu, John Wu, Chaoqi Yang, Jimeng Sun, Liantao Ma, Ewen Harrison.</p>
 </div>
 
 <div class="pkgdown-footer-right">

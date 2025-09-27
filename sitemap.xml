@@ -18,6 +18,7 @@
 <url><loc>https://v1xerunt.github.io/RHealth/reference/Event-from_list.html</loc></url>
 <url><loc>https://v1xerunt.github.io/RHealth/reference/Event.html</loc></url>
 <url><loc>https://v1xerunt.github.io/RHealth/reference/FeatureProcessor.html</loc></url>
+<url><loc>https://v1xerunt.github.io/RHealth/reference/InHospitalMortalityMIMIC3.html</loc></url>
 <url><loc>https://v1xerunt.github.io/RHealth/reference/InHospitalMortalityMIMIC4.html</loc></url>
 <url><loc>https://v1xerunt.github.io/RHealth/reference/JoinConfig.html</loc></url>
 <url><loc>https://v1xerunt.github.io/RHealth/reference/MIMIC3Dataset.html</loc></url>
@@ -25,8 +26,11 @@
 <url><loc>https://v1xerunt.github.io/RHealth/reference/MIMIC4NoteDataset.html</loc></url>
 <url><loc>https://v1xerunt.github.io/RHealth/reference/MultiClassLabelProcessor.html</loc></url>
 <url><loc>https://v1xerunt.github.io/RHealth/reference/MultiLabelProcessor.html</loc></url>
+<url><loc>https://v1xerunt.github.io/RHealth/reference/NextMortalityMIMIC3.html</loc></url>
+<url><loc>https://v1xerunt.github.io/RHealth/reference/NextMortalityMIMIC4.html</loc></url>
 <url><loc>https://v1xerunt.github.io/RHealth/reference/Patient.html</loc></url>
 <url><loc>https://v1xerunt.github.io/RHealth/reference/Processor.html</loc></url>
+<url><loc>https://v1xerunt.github.io/RHealth/reference/RHealth-package.html</loc></url>
 <url><loc>https://v1xerunt.github.io/RHealth/reference/RNN.html</loc></url>
 <url><loc>https://v1xerunt.github.io/RHealth/reference/RNNLayer.html</loc></url>
 <url><loc>https://v1xerunt.github.io/RHealth/reference/RawProcessor.html</loc></url>
@@ -44,10 +48,11 @@
 <url><loc>https://v1xerunt.github.io/RHealth/reference/collate_fn_dict_with_padding.html</loc></url>
 <url><loc>https://v1xerunt.github.io/RHealth/reference/create_directory.html</loc></url>
 <url><loc>https://v1xerunt.github.io/RHealth/reference/dot-clean_path.html</loc></url>
+<url><loc>https://v1xerunt.github.io/RHealth/reference/dot-create_task_runner.html</loc></url>
 <url><loc>https://v1xerunt.github.io/RHealth/reference/dot-csv2parquet_path.html</loc></url>
+<url><loc>https://v1xerunt.github.io/RHealth/reference/dot-find_path_with_fallback.html</loc></url>
 <url><loc>https://v1xerunt.github.io/RHealth/reference/dot-is_url.html</loc></url>
 <url><loc>https://v1xerunt.github.io/RHealth/reference/dot-path_exists.html</loc></url>
-<url><loc>https://v1xerunt.github.io/RHealth/reference/dot-scan_csv_gz_or_csv.html</loc></url>
 <url><loc>https://v1xerunt.github.io/RHealth/reference/download_medcode.html</loc></url>
 <url><loc>https://v1xerunt.github.io/RHealth/reference/ece_confidence_binary.html</loc></url>
 <url><loc>https://v1xerunt.github.io/RHealth/reference/get_ancestors.html</loc></url>
@@ -59,6 +64,7 @@
 <url><loc>https://v1xerunt.github.io/RHealth/reference/index.html</loc></url>
 <url><loc>https://v1xerunt.github.io/RHealth/reference/is_best.html</loc></url>
 <url><loc>https://v1xerunt.github.io/RHealth/reference/load_medcode.html</loc></url>
+<url><loc>https://v1xerunt.github.io/RHealth/reference/load_sample_dataset.html</loc></url>
 <url><loc>https://v1xerunt.github.io/RHealth/reference/load_yaml_config.html</loc></url>
 <url><loc>https://v1xerunt.github.io/RHealth/reference/log_memory_usage.html</loc></url>
 <url><loc>https://v1xerunt.github.io/RHealth/reference/lookup_code.html</loc></url>

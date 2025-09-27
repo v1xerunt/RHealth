@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">RHealth</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.2.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -34,7 +34,7 @@
   <main id="main" class="col-md-9"><div class="page-header">
 
       <h1>split_by_patient</h1>
-      <small class="dont-index">Source: <a href="https://github.com/v1xerunt/RHealth/blob/main/R/Dataset_splitter.R" class="external-link"><code>R/Dataset_splitter.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/v1xerunt/RHealth/blob/dev/R/Dataset_splitter.R" class="external-link"><code>R/Dataset_splitter.R</code></a></small>
       <div class="d-none name"><code>split_by_patient.Rd</code></div>
     </div>
 
@@ -44,7 +44,14 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">split_by_patient</span><span class="op">(</span><span class="va">dataset</span>, <span class="va">ratios</span>, seed <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">split_by_patient</span><span class="op">(</span></span>
+<span>  <span class="va">dataset</span>,</span>
+<span>  <span class="va">ratios</span>,</span>
+<span>  seed <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  stratify <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  stratify_by <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  get_index <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -62,10 +69,22 @@
 <dt id="arg-seed">seed<a class="anchor" aria-label="anchor" href="#arg-seed"></a></dt>
 <dd><p>Optional integer for reproducibility.</p></dd>
 
+
+<dt id="arg-stratify">stratify<a class="anchor" aria-label="anchor" href="#arg-stratify"></a></dt>
+<dd><p>Logical, whether to perform stratified sampling. Default: FALSE.</p></dd>
+
+
+<dt id="arg-stratify-by">stratify_by<a class="anchor" aria-label="anchor" href="#arg-stratify-by"></a></dt>
+<dd><p>Character, the name of the field to stratify by (e.g., the label). Required if <code>stratify</code> is TRUE.</p></dd>
+
+
+<dt id="arg-get-index">get_index<a class="anchor" aria-label="anchor" href="#arg-get-index"></a></dt>
+<dd><p>Logical, whether to return the indices instead of subsets. Default: FALSE.</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>A list of 3 torch::dataset_subset objects split by patient id.</p>
+    <p>A list of 3 torch::dataset_subset objects or 3 tensors of indices if get_index = TRUE, split by patient id.</p>
     </div>
 
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
@@ -73,7 +92,7 @@
 
 
     <footer><div class="pkgdown-footer-left">
-  <p>Developed by Ji Song, Zhixia Ren, Zhenbang Wu, John Wu, Chaoqi Yang, Jimeng Sun, Liantao Ma, Ewen Harrison, Junyi Gao.</p>
+  <p>Developed by Junyi Gao, Ji Song, Zhixia Ren, Zhenbang Wu, John Wu, Chaoqi Yang, Jimeng Sun, Liantao Ma, Ewen Harrison.</p>
 </div>
 
 <div class="pkgdown-footer-right">

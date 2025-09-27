@@ -9,7 +9,7 @@ Supports uniform resampling and two imputation strategies: forward-fill and zero
 
     <a class="navbar-brand me-2" href="../index.html">RHealth</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.2.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -36,7 +36,7 @@ Supports uniform resampling and two imputation strategies: forward-fill and zero
   <main id="main" class="col-md-9"><div class="page-header">
 
       <h1>Time Series Processor</h1>
-      <small class="dont-index">Source: <a href="https://github.com/v1xerunt/RHealth/blob/main/R/Processor_timeseries.R" class="external-link"><code>R/Processor_timeseries.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/v1xerunt/RHealth/blob/dev/R/Processor_timeseries.R" class="external-link"><code>R/Processor_timeseries.R</code></a></small>
       <div class="d-none name"><code>TimeseriesProcessor.Rd</code></div>
     </div>
 
@@ -122,7 +122,7 @@ Step 2: impute missing entries using selected strategy.</p><div class="section">
 </div>
 <div class="section">
 <h4 id="returns">Returns<a class="anchor" aria-label="anchor" href="#returns"></a></h4>
-<p>A torch tensor of shape T, F.</p>
+<p>A torch tensor of shape <code>[T, F]</code>.</p>
 </div>
 
 </div><p></p><hr><a id="method-TimeseriesProcessor-size"></a><div class="section">
@@ -178,7 +178,7 @@ Step 2: impute missing entries using selected strategy.</p><div class="section">
 
 
     <footer><div class="pkgdown-footer-left">
-  <p>Developed by Ji Song, Zhixia Ren, Zhenbang Wu, John Wu, Chaoqi Yang, Jimeng Sun, Liantao Ma, Ewen Harrison, Junyi Gao.</p>
+  <p>Developed by Junyi Gao, Ji Song, Zhixia Ren, Zhenbang Wu, John Wu, Chaoqi Yang, Jimeng Sun, Liantao Ma, Ewen Harrison.</p>
 </div>
 
 <div class="pkgdown-footer-right">

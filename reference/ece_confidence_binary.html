@@ -11,7 +11,7 @@ pyhealth.metrics.calibration.ece_confidence_binary."></head><body>
 
     <a class="navbar-brand me-2" href="../index.html">RHealth</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.2.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -38,7 +38,7 @@ pyhealth.metrics.calibration.ece_confidence_binary."></head><body>
   <main id="main" class="col-md-9"><div class="page-header">
 
       <h1>Expected Calibration Error for Binary Classification</h1>
-      <small class="dont-index">Source: <a href="https://github.com/v1xerunt/RHealth/blob/main/R/Metrics_ECE_calibration.R" class="external-link"><code>R/Metrics_ECE_calibration.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/v1xerunt/RHealth/blob/dev/R/Metrics_ECE_calibration.R" class="external-link"><code>R/Metrics_ECE_calibration.R</code></a></small>
       <div class="d-none name"><code>ece_confidence_binary.Rd</code></div>
     </div>
 
@@ -65,7 +65,7 @@ containing predicted probabilities for the <em>positive</em> class
 
 <dt id="arg-label">label<a class="anchor" aria-label="anchor" href="#arg-label"></a></dt>
 <dd><p>Numeric vector <strong>or</strong> two-column matrix of true labels \
-encoded as 0/1 (only the first column is used if a matrix is supplied).</p></dd>
+encoded as <code>0/1</code> (only the first column is used if a matrix is supplied).</p></dd>
 
 
 <dt id="arg-bins">bins<a class="anchor" aria-label="anchor" href="#arg-bins"></a></dt>
@@ -74,7 +74,7 @@ encoded as 0/1 (only the first column is used if a matrix is supplied).</p></dd>
 
 <dt id="arg-adaptive">adaptive<a class="anchor" aria-label="anchor" href="#arg-adaptive"></a></dt>
 <dd><p>Logical. If <code>FALSE</code> (default) equal-width bins \
-spanning \(0,1\) are used; if <code>TRUE</code> each bin contains the \
+spanning <code>0, 1</code> are used; if <code>TRUE</code> each bin contains the \
 same number of samples (equal-size bins).</p></dd>
 
 </dl></div>
@@ -100,7 +100,7 @@ same number of samples (equal-size bins).</p></dd>
 
 
     <footer><div class="pkgdown-footer-left">
-  <p>Developed by Ji Song, Zhixia Ren, Zhenbang Wu, John Wu, Chaoqi Yang, Jimeng Sun, Liantao Ma, Ewen Harrison, Junyi Gao.</p>
+  <p>Developed by Junyi Gao, Ji Song, Zhixia Ren, Zhenbang Wu, John Wu, Chaoqi Yang, Jimeng Sun, Liantao Ma, Ewen Harrison.</p>
 </div>
 
 <div class="pkgdown-footer-right">

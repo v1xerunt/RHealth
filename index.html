@@ -22,7 +22,7 @@
 
     <a class="navbar-brand me-2" href="index.html">RHealth</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.2.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -110,7 +110,7 @@
 <span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"v1xerunt/RHealth"</span><span class="op">)</span></span></code></pre></div>
 <p>Once installed, load the package to access its functionalities:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://v1xerunt.github.io/dev/RHealth" class="external-link">RHealth</a></span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://v1xerunt.github.io/RHealth/dev">RHealth</a></span><span class="op">)</span></span></code></pre></div>
 <hr>
 </div>
 <div class="section level2">
@@ -134,7 +134,9 @@
 <p><strong>Cross-System Mapping:</strong></p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Map from ICD-9 to CCS</span></span>
-<span><span class="fu"><a href="reference/map_code.html">map_code</a></span><span class="op">(</span>code <span class="op">=</span> <span class="st">"428.0"</span>, from <span class="op">=</span> <span class="st">"ICD9CM"</span>, to <span class="op">=</span> <span class="st">"CCSCM"</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="reference/map_code.html">map_code</a></span><span class="op">(</span>code <span class="op">=</span> <span class="st">"428.0"</span>, from <span class="op">=</span> <span class="st">"ICD9CM"</span>, to <span class="op">=</span> <span class="st">"CCSCM"</span><span class="op">)</span></span>
+<span><span class="co"># Map from ICD-9 to ICD-10</span></span>
+<span><span class="fu"><a href="reference/map_code.html">map_code</a></span><span class="op">(</span>code <span class="op">=</span> <span class="st">"589"</span>, from <span class="op">=</span> <span class="st">"ICD9CM"</span>, to <span class="op">=</span> <span class="st">"ICD10CM"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="id_️-2-dataset-module">🛢️ 2. Dataset Module<a class="anchor" aria-label="anchor" href="#id_%EF%B8%8F-2-dataset-module"></a>
@@ -142,8 +144,6 @@
 <p>The <strong>Dataset</strong> module is the foundation of RHealth. It transforms raw, multi-table Electronic Health Record (EHR) dumps into tidy, task-ready tensors that any downstream model can consume.</p>
 <p><strong>Key Features:</strong></p>
 <ul>
-<li>
-<strong>Efficient Ingestion</strong>: Streams large CSVs using Polars <code>LazyFrame</code> to avoid loading massive files into RAM.</li>
 <li>
 <strong>Data Harmonisation</strong>: Merges heterogeneous tables into a single, canonical event table.</li>
 <li>
@@ -210,7 +210,7 @@
 <p><strong>Generating Samples:</strong></p>
 <p>Once a task is defined, use it with your dataset to create a <code>SampleDataset</code> compatible with <a href="https://torch.mlverse.org/docs" class="external-link">torch</a>.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">task</span>    <span class="op">&lt;-</span> <span class="va"><a href="reference/Readmission30DaysMIMIC4.html">Readmission30DaysMIMIC4</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="op">)</span> <span class="co"># A built-in task</span></span>
+<code class="sourceCode R"><span><span class="va">task</span>    <span class="op">&lt;-</span> <span class="va"><a href="reference/InHospitalMortalityMIMIC4.html">InHospitalMortalityMIMIC4</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="op">)</span> <span class="co"># A built-in task</span></span>
 <span><span class="va">samples</span> <span class="op">&lt;-</span> <span class="va">ds</span><span class="op">$</span><span class="fu">set_task</span><span class="op">(</span><span class="va">task</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
@@ -261,7 +261,7 @@
 <p><strong>Example Training Workflow:</strong></p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># 1. Create data loaders</span></span>
-<span><span class="va">splits</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/split_by_patient.html">split_by_patient</a></span><span class="op">(</span><span class="va">samples</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.8</span>, <span class="fl">0.1</span>, <span class="fl">0.1</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">splits</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/split_by_patient.html">split_by_patient</a></span><span class="op">(</span><span class="va">samples</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.8</span>, <span class="fl">0.1</span>, <span class="fl">0.1</span><span class="op">)</span>, stratify <span class="op">=</span> <span class="cn">TRUE</span>, stratify_by <span class="op">=</span> <span class="st">'mortality'</span><span class="op">)</span></span>
 <span><span class="va">train_dl</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/get_dataloader.html">get_dataloader</a></span><span class="op">(</span><span class="va">splits</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>, batch_size <span class="op">=</span> <span class="fl">32</span>, shuffle <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="va">val_dl</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/get_dataloader.html">get_dataloader</a></span><span class="op">(</span><span class="va">splits</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span>, batch_size <span class="op">=</span> <span class="fl">32</span><span class="op">)</span></span>
 <span><span class="va">test_dl</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/get_dataloader.html">get_dataloader</a></span><span class="op">(</span><span class="va">splits</span><span class="op">[[</span><span class="fl">3</span><span class="op">]</span><span class="op">]</span>, batch_size <span class="op">=</span> <span class="fl">32</span><span class="op">)</span></span>
@@ -333,6 +333,7 @@
 <div class="developers">
 <h2 data-toc-skip>Developers</h2>
 <ul class="list-unstyled">
+<li>Junyi Gao <br><small class="roles"> Author, maintainer </small>   </li>
 <li>Ji Song <br><small class="roles"> Author </small>   </li>
 <li>Zhixia Ren <br><small class="roles"> Author </small>   </li>
 <li>Zhenbang Wu <br><small class="roles"> Author </small>   </li>
@@ -341,7 +342,6 @@
 <li>Jimeng Sun <br><small class="roles"> Author </small>   </li>
 <li>Liantao Ma <br><small class="roles"> Author </small>   </li>
 <li>Ewen Harrison <br><small class="roles"> Author </small>   </li>
-<li>Junyi Gao <br><small class="roles"> Author, maintainer </small>   </li>
 </ul>
 </div>
 
@@ -352,7 +352,7 @@
 
 
     <footer><div class="pkgdown-footer-left">
-  <p>Developed by Ji Song, Zhixia Ren, Zhenbang Wu, John Wu, Chaoqi Yang, Jimeng Sun, Liantao Ma, Ewen Harrison, Junyi Gao.</p>
+  <p>Developed by Junyi Gao, Ji Song, Zhixia Ren, Zhenbang Wu, John Wu, Chaoqi Yang, Jimeng Sun, Liantao Ma, Ewen Harrison.</p>
 </div>
 
 <div class="pkgdown-footer-right">

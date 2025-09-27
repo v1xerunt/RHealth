@@ -9,7 +9,7 @@ MIMIC3Dataset: Dataset class for MIMIC-III"></head><body>
 
     <a class="navbar-brand me-2" href="../index.html">RHealth</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.2.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -36,7 +36,7 @@ MIMIC3Dataset: Dataset class for MIMIC-III"></head><body>
   <main id="main" class="col-md-9"><div class="page-header">
 
       <h1>MIMIC3Dataset: Dataset class for MIMIC-III</h1>
-      <small class="dont-index">Source: <a href="https://github.com/v1xerunt/RHealth/blob/main/R/Dataset_MIMIC3Dataset.R" class="external-link"><code>R/Dataset_MIMIC3Dataset.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/v1xerunt/RHealth/blob/dev/R/Dataset_MIMIC3Dataset.R" class="external-link"><code>R/Dataset_MIMIC3Dataset.R</code></a></small>
       <div class="d-none name"><code>MIMIC3Dataset.Rd</code></div>
     </div>
 
@@ -45,11 +45,6 @@ MIMIC3Dataset: Dataset class for MIMIC-III"></head><body>
 <p>MIMIC3Dataset: Dataset class for MIMIC-III</p>
     </div>
 
-    <div class="section level2">
-    <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="co"># S3 method for class 'initialize'</span></span>
-<span><span class="fu">MIMIC3Dataset</span><span class="op">(</span><span class="va">...</span><span class="op">)</span></span></code></pre></div>
-    </div>
 
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
@@ -68,7 +63,6 @@ and allows appending additional tables. Also provides per-table preprocessing.</
 <h3 id="public-methods">Public methods<a class="anchor" aria-label="anchor" href="#public-methods"></a></h3>
 
 <ul><li><p><a href="#method-MIMIC3Dataset-new"><code>MIMIC3Dataset$new()</code></a></p></li>
-<li><p><a href="#method-MIMIC3Dataset-preprocess_noteevents"><code>MIMIC3Dataset$preprocess_noteevents()</code></a></p></li>
 <li><p><a href="#method-MIMIC3Dataset-clone"><code>MIMIC3Dataset$clone()</code></a></p></li>
 </ul></div><p><details><summary>Inherited methods</summary><ul><li><span class="pkg-link" data-pkg="RHealth" data-topic="BaseDataset" data-id="collected_global_event_df"><a href="BaseDataset.html#method-collected_global_event_df"><code>RHealth::BaseDataset$collected_global_event_df()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="RHealth" data-topic="BaseDataset" data-id="default_task"><a href="BaseDataset.html#method-default_task"><code>RHealth::BaseDataset$default_task()</code></a></span></li>
@@ -116,42 +110,21 @@ and allows appending additional tables. Also provides per-table preprocessing.</
 
 
 <dt><code>...</code></dt>
-<dd><p>Additional arguments passed to <code>BaseDataset</code>.</p></dd>
+<dd><p>Additional arguments passed to <code>BaseDataset$initialize</code>.</p></dd>
 
 
 </dl><p></p></div>
-</div>
-
-</div><p></p><hr><a id="method-MIMIC3Dataset-preprocess_noteevents"></a><div class="section">
-<h3 id="method-preprocess-noteevents-">Method <code>preprocess_noteevents()</code><a class="anchor" aria-label="anchor" href="#method-preprocess-noteevents-"></a></h3>
-<p>Table-specific preprocessing for noteevents.
-If <code>charttime</code> is missing, fills it with <code>chartdate</code> + " 00:00:00".</p><div class="section">
-<h4 id="usage-1">Usage<a class="anchor" aria-label="anchor" href="#usage-1"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">MIMIC3Dataset</span><span class="op">$</span><span class="fu">preprocess_noteevents</span><span class="op">(</span><span class="va">df</span><span class="op">)</span></span></code></pre></div><p></p></div>
-</div>
-
-<div class="section">
-<h4 id="arguments-1">Arguments<a class="anchor" aria-label="anchor" href="#arguments-1"></a></h4>
-<p></p><div class="arguments"><dl><dt><code>df</code></dt>
-<dd><p>A polars LazyFrame.</p></dd>
-
-
-</dl><p></p></div>
-</div>
-<div class="section">
-<h4 id="returns">Returns<a class="anchor" aria-label="anchor" href="#returns"></a></h4>
-<p>A modified LazyFrame.</p>
 </div>
 
 </div><p></p><hr><a id="method-MIMIC3Dataset-clone"></a><div class="section">
 <h3 id="method-clone-">Method <code>clone()</code><a class="anchor" aria-label="anchor" href="#method-clone-"></a></h3>
 <p>The objects of this class are cloneable with this method.</p><div class="section">
-<h4 id="usage-2">Usage<a class="anchor" aria-label="anchor" href="#usage-2"></a></h4>
+<h4 id="usage-1">Usage<a class="anchor" aria-label="anchor" href="#usage-1"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">MIMIC3Dataset</span><span class="op">$</span><span class="fu">clone</span><span class="op">(</span>deep <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
-<h4 id="arguments-2">Arguments<a class="anchor" aria-label="anchor" href="#arguments-2"></a></h4>
+<h4 id="arguments-1">Arguments<a class="anchor" aria-label="anchor" href="#arguments-1"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>deep</code></dt>
 <dd><p>Whether to make a deep clone.</p></dd>
 
@@ -168,7 +141,7 @@ If <code>charttime</code> is missing, fills it with <code>chartdate</code> + " 0
 
 
     <footer><div class="pkgdown-footer-left">
-  <p>Developed by Ji Song, Zhixia Ren, Zhenbang Wu, John Wu, Chaoqi Yang, Jimeng Sun, Liantao Ma, Ewen Harrison, Junyi Gao.</p>
+  <p>Developed by Junyi Gao, Ji Song, Zhixia Ren, Zhenbang Wu, John Wu, Chaoqi Yang, Jimeng Sun, Liantao Ma, Ewen Harrison.</p>
 </div>
 
 <div class="pkgdown-footer-right">

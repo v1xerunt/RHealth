@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">RHealth</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.2.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -63,7 +63,7 @@ Showcase</h3>
             
             <h4 data-toc-skip class="date">05/25/2025</h4>
       
-      <small class="dont-index">Source: <a href="https://github.com/v1xerunt/RHealth/blob/main/vignettes/MedCode.rmd" class="external-link"><code>vignettes/MedCode.rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/v1xerunt/RHealth/blob/dev/vignettes/MedCode.rmd" class="external-link"><code>vignettes/MedCode.rmd</code></a></small>
       <div class="d-none name"><code>MedCode.rmd</code></div>
     </div>
 
@@ -315,8 +315,10 @@ for all available code system mappings within the package.</p>
 <span></span>
 <span><span class="co"># Print the available mapping identifiers</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">available_crosswalks</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## [1] "ICD9CM_to_CCSCM"      "ICD9PROC_to_CCSPROC"  "ICD10CM_to_CCSCM"    </span></span>
-<span><span class="co">## [4] "ICD10PROC_to_CCSPROC" "NDC_to_ATC"</span></span></code></pre>
+<pre><code><span><span class="co">##  [1] "ICD9CM_to_CCSCM"      "ICD9PROC_to_CCSPROC"  "ICD10CM_to_CCSCM"    </span></span>
+<span><span class="co">##  [4] "ICD10PROC_to_CCSPROC" "NDC_to_ATC"           "ICD10CM_to_ICD9CM"   </span></span>
+<span><span class="co">##  [7] "ICD9CM_to_ICD10CM"    "ICD10PCS_to_ICD9PCS"  "ICD9PCS_to_ICD10PCS" </span></span>
+<span><span class="co">## [10] "ICD10CMPCS_to_ICD9CM"</span></span></code></pre>
 </div>
 <div class="section level3">
 <h3 id="feature-4btranslate-codesmap_code">Feature 4b：Translate codes(<code>map_code</code>)<a class="anchor" aria-label="anchor" href="#feature-4btranslate-codesmap_code"></a>
@@ -331,7 +333,7 @@ using pre-defined mapping tables.</p>
 <span></span>
 <span><span class="co"># Output: The corresponding code(s) in the target system</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">mapped_code</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## [1] "108"</span></span></code></pre>
+<pre><code><span><span class="co">## character(0)</span></span></code></pre>
 </div>
 </div>
 <div class="section level2">
@@ -457,7 +459,7 @@ using <code>testthat</code> to ensure code quality and stability.</li>
 
 
     <footer><div class="pkgdown-footer-left">
-  <p>Developed by Ji Song, Zhixia Ren, Zhenbang Wu, John Wu, Chaoqi Yang, Jimeng Sun, Liantao Ma, Ewen Harrison, Junyi Gao.</p>
+  <p>Developed by Junyi Gao, Ji Song, Zhixia Ren, Zhenbang Wu, John Wu, Chaoqi Yang, Jimeng Sun, Liantao Ma, Ewen Harrison.</p>
 </div>
 
 <div class="pkgdown-footer-right">
