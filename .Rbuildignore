@@ -21,3 +21,6 @@
 ^LICENSE\.md$
 ^\.github$
 ^\.lintr$
+^\.claude$
+^doc$
+^Meta$

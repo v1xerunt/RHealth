@@ -53,7 +53,7 @@ Description: RHealth is an open-source R package specifically designed to bring 
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
-URL: https://v1xerunt.github.io/RHealth/dev, https://github.com/v1xerunt/RHealth
+URL: https://v1xerunt.github.io/RHealth, https://github.com/v1xerunt/RHealth
 BugReports: https://github.com/v1xerunt/RHealth/issues
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.2
@@ -92,7 +92,61 @@ Suggests:
     roxygen2 (>= 7.3.2),
     knitr,
     rmarkdown,
-    ps
+    ps,
+    dbplyr
 VignetteBuilder: knitr
 Additional_repositories: https://community.r-multiverse.org
 Config/testthat/edition: 3
+Collate: 
+    'Dataset_BaseDataset.R'
+    'Dataset_EHRShotDataset.R'
+    'Dataset_MIMIC3Dataset.R'
+    'Dataset_MIMIC4EHRDataset.R'
+    'Dataset_MIMIC4NoteDataset.R'
+    'Dataset_OMOPDataset.R'
+    'Dataset_SampleDataset.R'
+    'Dataset_config.R'
+    'Dataset_data.R'
+    'Dataset_eICUDataset.R'
+    'Dataset_splitter.R'
+    'Dataset_utils.R'
+    'Medcode_atc_utils.R'
+    'Medcode_cross_map.R'
+    'Medcode_download.R'
+    'Medcode_inner_map.R'
+    'Medcode_load.R'
+    'Metrics_ECE_calibration.R'
+    'Metrics_binary.R'
+    'Metrics_multiclass.R'
+    'Metrics_multilabel.R'
+    'Metrics_regression.R'
+    'Model_BaseModel.R'
+    'Model_AdaCareModel.R'
+    'Model_EmbeddingModel.R'
+    'Model_CNNModel.R'
+    'Model_ConCareModel.R'
+    'Model_RNNModel.R'
+    'Model_TransformerModel.R'
+    'Processor_BaseProcessor.R'
+    'Processor_binary.R'
+    'Processor_multiclass.R'
+    'Processor_multilabel.R'
+    'Processor_raw.R'
+    'Processor_regression.R'
+    'Processor_sequence.R'
+    'Processor_text.R'
+    'Processor_timeseries.R'
+    'Processor_utils.R'
+    'RHealth-package.R'
+    'Task_BaseTask.R'
+    'Task_BenchmarkEHRShot.R'
+    'Task_InHospitalMortalityMIMIC3.R'
+    'Task_InHospitalMortalityMIMIC4.R'
+    'Task_MortalityPredictionEICU.R'
+    'Task_MortalityPredictionOMOP.R'
+    'Task_NextMortalityMIMIC3.R'
+    'Task_NextMortalityMIMIC4.R'
+    'Task_Readmission30DaysMIMIC4.R'
+    'Task_ReadmissionPredictionOMOP.R'
+    'Trainer.R'
+    'zzz.R'

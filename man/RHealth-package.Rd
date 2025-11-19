@@ -11,7 +11,7 @@ RHealth is an open-source R package specifically designed to bring comprehensive
 \seealso{
 Useful links:
 \itemize{
-  \item \url{https://v1xerunt.github.io/dev/RHealth}
+  \item \url{https://v1xerunt.github.io/RHealth}
   \item \url{https://github.com/v1xerunt/RHealth}
   \item Report bugs at \url{https://github.com/v1xerunt/RHealth/issues}
 }

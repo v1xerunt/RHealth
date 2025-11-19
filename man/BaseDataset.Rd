@@ -28,7 +28,7 @@ input/output pairs).
 }
 \section{Dependencies}{
 
-Polars is used via the \code{polars} R package.  Parallelism and progress
+Parallelism and progress
 reporting require \code{future}, \code{future.apply}, and \code{progressr}.
 }
 
@@ -49,7 +49,7 @@ reporting require \code{future}, \code{future.apply}, and \code{progressr}.
 
 \item{\code{global_event_df}}{A duckdb lazy query with all events combined.}
 
-\item{\code{.collected_global_event_df}}{Polars dataframe storing all global events.}
+\item{\code{.collected_global_event_df}}{dataframe storing all global events.}
 
 \item{\code{.unique_patient_ids}}{Character vector of unique patient IDs.}
 }
