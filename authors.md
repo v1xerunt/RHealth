@@ -23,7 +23,7 @@
 ## Citation
 
 Source:
-[`DESCRIPTION`](https://github.com/v1xerunt/RHealth/blob/dev/DESCRIPTION)
+[`DESCRIPTION`](https://github.com/v1xerunt/RHealth/blob/main/DESCRIPTION)
 
 Gao J, Song J, Ren Z, Wu Z, Wu J, Yang C, Sun J, Ma L, Harrison E
 (2025). *RHealth: A Deep Learning Toolkit for Healthcare Predictive
