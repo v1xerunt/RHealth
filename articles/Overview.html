@@ -35,11 +35,14 @@
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
 <li><a class="dropdown-item" href="../articles/quickstart.html">Quickstart: In-Hospital Mortality Prediction with RHealth</a></li>
-    <li><a class="dropdown-item" href="../articles/MedCode.html">DeepRHealth::medcode Module Demo</a></li>
+    <li><a class="dropdown-item" href="../articles/MedCode.html">RHealth Medical Code Module</a></li>
+    <li><a class="dropdown-item" href="../articles/ehrshot_quickstart.html">EHRShot Dataset Quick Start Guide</a></li>
+    <li><a class="dropdown-item" href="../articles/eicu_quickstart.html">Getting Started with eICU-CRD Dataset</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><a class="dropdown-item" href="../articles/index.html">More articles...</a></li>
   </ul>
 </li>
+<li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul>
 <ul class="navbar-nav">
 <li class="nav-item"><a class="external-link nav-link" href="https://github.com/v1xerunt/RHealth/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
@@ -59,7 +62,7 @@
       <h1>Descriptions</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/v1xerunt/RHealth/blob/main/vignettes/Overview.Rmd" class="external-link"><code>vignettes/Overview.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/v1xerunt/RHealth/blob/dev/vignettes/Overview.Rmd" class="external-link"><code>vignettes/Overview.Rmd</code></a></small>
       <div class="d-none name"><code>Overview.Rmd</code></div>
     </div>
 
@@ -106,7 +109,7 @@ Learning Toolkit for Healthcare Predictive Modeling”. GitHub.</p>
 <p>Once RHealth is installed, you can load the package to access medcode
 functionalities:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://v1xerunt.github.io/RHealth/dev">RHealth</a></span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://v1xerunt.github.io/RHealth">RHealth</a></span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="dataset-module">1. Dataset Module<a class="anchor" aria-label="anchor" href="#dataset-module"></a>
@@ -141,8 +144,8 @@ directly from PhysioNet using the following link: 👉 <a href="https://physione
 <td>One <em>CSV</em> (<code>.csv</code> / <code>.csv.gz</code>)
 <strong>per clinical table</strong>
 </td>
-<td>A lazy <em>Polars</em> <code>LazyFrame</code> for each table</td>
-<td>Streaming avoids loading GBs of text into RAM</td>
+<td></td>
+<td></td>
 </tr>
 <tr class="even">
 <td><strong>Harmonisation</strong></td>
@@ -168,7 +171,7 @@ rules</td>
 <td>
 <code>SampleDataset</code> (<strong>torch</strong>‑compatible)</td>
 <td>Produces <code>(input, target)</code> pairs ready for a
-<code>dataloader()</code>
+<code><a href="https://torch.mlverse.org/docs/reference/dataloader.html" class="external-link">dataloader()</a></code>
 </td>
 </tr>
 </tbody>
@@ -287,7 +290,7 @@ into a <code>torch_tensor</code>.</li>
 <p>The resulting <code>SampleDataset</code> supports:</p>
 <p>.__getitem__(i) # single sample .__len__() # length</p>
 <p>and plugs straight into <a href="https://torch.mlverse.org/docs" class="external-link">torch</a>’s
-<code>dataloader()</code>.</p>
+<code><a href="https://torch.mlverse.org/docs/reference/dataloader.html" class="external-link">dataloader()</a></code>.</p>
 <hr>
 </div>
 <div class="section level4">
@@ -422,12 +425,10 @@ zero, one, or many <strong>samples</strong> <em>(named lists)</em>.</td>
 <p>During <code>BaseDataset$set_task(task)</code> RHealth:</p>
 <ol style="list-style-type: decimal">
 <li>Reads <code>task$input_schema</code> /
-<code>task$output_schema</code>.<br>
-</li>
+<code>task$output_schema</code>.</li>
 <li>Calls <code>get_processor(type)</code> to instantiate the matching
 <strong>Processor</strong> (<code>TimeseriesProcessor</code>,
-<code>SequenceProcessor</code>, …).<br>
-</li>
+<code>SequenceProcessor</code>, …).</li>
 <li>Each sample emitted by <code>task$call()</code> is <strong>encoded
 on the fly</strong> into <code>torch_tensor</code>s before being stored
 in the <code>SampleDataset</code>.</li>
@@ -435,7 +436,66 @@ in the <code>SampleDataset</code>.</li>
 <p>That means you never import <a href="https://torch.mlverse.org/docs" class="external-link">torch</a> inside a task –
 stick to base R objects (<code>numeric</code>, <code>character</code>,
 <code>matrix</code>, <code>data.frame</code>, lists).</p>
+<div class="section level5">
+<h5 id="available-processors">Available Processors<a class="anchor" aria-label="anchor" href="#available-processors"></a>
+</h5>
+<table class="table">
+<colgroup>
+<col width="23%">
+<col width="26%">
+<col width="19%">
+<col width="30%">
+</colgroup>
+<thead><tr class="header">
+<th>Processor</th>
+<th>Input Type</th>
+<th>Purpose</th>
+<th>Key Features</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td><code>TimeseriesProcessor</code></td>
+<td><code>list(timestamps, matrix)</code></td>
+<td>Irregular time series</td>
+<td>Resampling, imputation (forward-fill/zero), z-score
+normalization</td>
+</tr>
+<tr class="even">
+<td><code>SequenceProcessor</code></td>
+<td><code>character vector</code></td>
+<td>Categorical sequences</td>
+<td>Vocabulary building, integer encoding</td>
+</tr>
+<tr class="odd">
+<td><code>BinaryProcessor</code></td>
+<td>
+<code>numeric</code> (0/1)</td>
+<td>Binary labels</td>
+<td>Converts to float tensor</td>
+</tr>
+<tr class="even">
+<td><code>MulticlassProcessor</code></td>
+<td><code>integer</code></td>
+<td>Multi-class labels</td>
+<td>One-hot encoding</td>
+</tr>
+<tr class="odd">
+<td><code>RegressionProcessor</code></td>
+<td><code>numeric</code></td>
+<td>Continuous values</td>
+<td>Direct conversion to float</td>
+</tr>
+</tbody>
+</table>
+<p><strong>TimeseriesProcessor normalization:</strong></p>
+<p>The <code>TimeseriesProcessor</code> automatically applies z-score
+normalization to timeseries data: - Computes feature-wise mean and
+standard deviation from training data during <code>fit()</code> -
+Applies <code>(x - mean) / std</code> during <code>process()</code> to
+all samples (train/val/test) - Prevents data leakage by using only
+training statistics</p>
 <hr>
+</div>
 </div>
 <div class="section level4">
 <h4 id="builtin-example-tasks">2.4 Built‑in Example Tasks<a class="anchor" aria-label="anchor" href="#builtin-example-tasks"></a>
@@ -626,7 +686,7 @@ regression</strong> tasks.</li>
 <strong>Subclass</strong> <code>BaseModel</code> (or another
 concrete model).<br>
 </li>
-<li>Add layers in <code>initialize()</code>, making sure to call
+<li>Add layers in <code><a href="https://rdrr.io/r/methods/new.html" class="external-link">initialize()</a></code>, making sure to call
 <code>super$initialize(dataset)</code>.<br>
 </li>
 <li>Implement <code>forward(inputs)</code>.</li>
@@ -640,14 +700,14 @@ concrete model).<br>
 <span>    <span class="va">super</span><span class="op">$</span><span class="fu">initialize</span><span class="op">(</span><span class="va">dataset</span><span class="op">)</span></span>
 <span>    <span class="va">in_dim</span>  <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="fu">purrr</span><span class="fu">::</span><span class="fu"><a href="https://purrr.tidyverse.org/reference/map.html" class="external-link">map_int</a></span><span class="op">(</span><span class="va">dataset</span><span class="op">$</span><span class="va">input_processors</span>, <span class="st">"size"</span><span class="op">)</span><span class="op">)</span></span>
 <span>    <span class="va">out_dim</span> <span class="op">&lt;-</span> <span class="va">self</span><span class="op">$</span><span class="fu">get_output_size</span><span class="op">(</span><span class="op">)</span></span>
-<span>    <span class="va">self</span><span class="op">$</span><span class="va">fc1</span> <span class="op">&lt;-</span> <span class="fu">nn_linear</span><span class="op">(</span><span class="va">in_dim</span>, <span class="va">hidden</span><span class="op">)</span></span>
-<span>    <span class="va">self</span><span class="op">$</span><span class="va">fc2</span> <span class="op">&lt;-</span> <span class="fu">nn_linear</span><span class="op">(</span><span class="va">hidden</span>, <span class="va">out_dim</span><span class="op">)</span></span>
+<span>    <span class="va">self</span><span class="op">$</span><span class="va">fc1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://torch.mlverse.org/docs/reference/nn_linear.html" class="external-link">nn_linear</a></span><span class="op">(</span><span class="va">in_dim</span>, <span class="va">hidden</span><span class="op">)</span></span>
+<span>    <span class="va">self</span><span class="op">$</span><span class="va">fc2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://torch.mlverse.org/docs/reference/nn_linear.html" class="external-link">nn_linear</a></span><span class="op">(</span><span class="va">hidden</span>, <span class="va">out_dim</span><span class="op">)</span></span>
 <span>  <span class="op">}</span>,</span>
 <span></span>
 <span>  forward <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">inputs</span><span class="op">)</span> <span class="op">{</span></span>
 <span>    <span class="co"># Flatten and concat all features</span></span>
 <span>    <span class="va">x</span> <span class="op">&lt;-</span> <span class="fu">torch</span><span class="fu">::</span><span class="fu"><a href="https://torch.mlverse.org/docs/reference/torch_cat.html" class="external-link">torch_cat</a></span><span class="op">(</span><span class="fu">purrr</span><span class="fu">::</span><span class="fu">flatten</span><span class="op">(</span><span class="va">inputs</span><span class="op">)</span>, dim <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
-<span>    <span class="va">logits</span> <span class="op">&lt;-</span> <span class="va">self</span><span class="op">$</span><span class="fu">fc2</span><span class="op">(</span><span class="fu">torch_relu</span><span class="op">(</span><span class="va">self</span><span class="op">$</span><span class="fu">fc1</span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span>    <span class="va">logits</span> <span class="op">&lt;-</span> <span class="va">self</span><span class="op">$</span><span class="fu">fc2</span><span class="op">(</span><span class="fu"><a href="https://torch.mlverse.org/docs/reference/torch_relu.html" class="external-link">torch_relu</a></span><span class="op">(</span><span class="va">self</span><span class="op">$</span><span class="fu">fc1</span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span>    <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
 <span>      loss   <span class="op">=</span> <span class="va">self</span><span class="op">$</span><span class="fu">get_loss_function</span><span class="op">(</span><span class="op">)</span><span class="op">(</span><span class="va">logits</span>, <span class="va">inputs</span><span class="op">[[</span><span class="va">self</span><span class="op">$</span><span class="va">label_keys</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="fu">to</span><span class="op">(</span><span class="va">logits</span><span class="op">$</span><span class="va">device</span><span class="op">)</span><span class="op">)</span>,</span>
@@ -867,7 +927,7 @@ loops/restarts to hit the target count.</td>
 <h4 id="minimal-working-example">4.3 Minimal working example<a class="anchor" aria-label="anchor" href="#minimal-working-example"></a>
 </h4>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://v1xerunt.github.io/RHealth/dev">RHealth</a></span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://v1xerunt.github.io/RHealth">RHealth</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">## 1.  Build dataset &amp; task -----------------------------------------------</span></span>
 <span><span class="va">ds</span>      <span class="op">&lt;-</span> <span class="va">MIMIC4Dataset</span><span class="op">$</span><span class="fu">new</span><span class="op">(</span>root <span class="op">=</span> <span class="st">"~/mimic4"</span>,</span>
@@ -886,7 +946,7 @@ loops/restarts to hit the target count.</td>
 <span></span>
 <span><span class="co">## 3.  Kick off training ---------------------------------------------------</span></span>
 <span><span class="va">trainer</span> <span class="op">&lt;-</span> <span class="va"><a href="../reference/Trainer.html">Trainer</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="va">model</span>,</span>
-<span>                       metrics      <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"auroc"</span>, <span class="st">"auprc"</span><span class="op">)</span>,</span>
+<span>                       metrics      <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"roc_auc"</span>, <span class="st">"pr_auc"</span><span class="op">)</span>,</span>
 <span>                       output_path  <span class="op">=</span> <span class="st">"experiments"</span>,</span>
 <span>                       exp_name     <span class="op">=</span> <span class="st">"mortality_rnn"</span><span class="op">)</span></span>
 <span></span>
@@ -1047,7 +1107,7 @@ or submitting issues.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
     </footer>

@@ -1,0 +1,236 @@
+# RHealth Medical Code Module
+
+## Introduction
+
+- Goal: Showcase the core functionalities of the `RHealth::medcode`
+  module.
+
+- Supports major medical coding systems (e.g., ICD, ATC) natively in R.
+
+- Built with inspiration from the Python-based `PyHealth.medcode`.
+
+&nbsp;
+
+- **Key Features to Demo:**
+  - Code Lookup
+
+  - Hierarchy Navigation (Ancestors/Descendants)
+
+  - Cross-System Mapping
+
+  - ATC Specific Utilities
+
+## Environment Setup
+
+**Loading Package & Dependencies**
+
+``` r
+library(RHealth)
+library(knitr)
+```
+
+## Data Handling
+
+### Download & Caching
+
+The package automatically downloads required medical code datasets
+(CSVs) and caches them locally for faster and offline use.
+
+- Uses `rappdirs` to find a user-specific cache directory.
+- The
+  [`download_medcode()`](https://v1xerunt.github.io/RHealth/reference/download_medcode.md)
+  function checks the cache first; only downloads if the file is
+  missing.
+
+**Let’s see where the data is/will be cached:**
+
+``` r
+# Get the platform-specific cache directory path
+cache_dir <- rappdirs::user_cache_dir("RHealth", "medcode")
+print(paste("Data cache directory:", cache_dir))
+```
+
+#### **Demonstrating `download_medcode()`:**
+
+(This step ensures the data file exists locally, downloading only if
+necessary)
+
+``` r
+# Specify the dataset name (e.g., "ICD9CM")
+dataset_name <- "ICD9CM"
+
+# Call the function - returns path. Downloads ONLY if not cached.
+# NOTE: For a live demo, ensure network access OR pre-cache the file!
+#       We assume it's pre-cached here.
+file_path <- download_medcode(name = dataset_name)
+
+print(paste("Path for", dataset_name, ":", file_path))
+print(paste("File exists:", fs::file_exists(file_path)))
+```
+
+### Loading Data (`load_medcode`)
+
+The
+[`load_medcode()`](https://v1xerunt.github.io/RHealth/reference/load_medcode.md)
+function is used internally by most other functions (`lookup_code`,
+`get_ancestors`, etc.).
+
+1.  It first calls
+    [`download_medcode()`](https://v1xerunt.github.io/RHealth/reference/download_medcode.md)
+    to ensure the data file is available locally.
+
+2.  Then, it reads the CSV file into an R data frame (tibble) using
+    [`readr::read_csv`](https://readr.tidyverse.org/reference/read_delim.html).
+
+**Example: Loading the ICD9CM data**
+
+``` r
+# Load the data using the function
+# This implicitly calls download_medcode first
+icd9_data_example <- load_medcode("ICD9CM")
+
+# Confirm data is loaded by checking dimensions and showing first few rows
+print(paste("Loaded ICD9CM - Dimensions:", paste(dim(icd9_data_example), collapse = " x ")))
+print("First few rows:")
+kable(head(icd9_data_example))
+```
+
+## Feature 1: Code Lookup (`lookup_code`)
+
+This function retrieves the description and potentially other details
+for a specific medical code within a given coding system.
+
+**Example: Look up ICD-9-CM code “428.0”**
+
+``` r
+# Input: code string and system name
+code_info <- lookup_code(code = "428.0", system = "ICD9CM")
+
+# Output: A tibble/data frame row with information
+# Using kable() for potentially nicer table output in the presentation
+kable(code_info)
+```
+
+## Feature 2: Hierarchy - Ancestors (`get_ancestors`)
+
+This function navigates the code hierarchy *upwards* to find all parent
+and ancestor codes.
+
+**Example: Find ancestors for ICD-9-CM code “428.22”** (Systolic heart
+failure, acute on chronic)
+
+``` r
+# Input: code string and system name
+ancestors <- get_ancestors(code = "428.22", system = "ICD9CM")
+
+# Output: A character vector of ancestor codes
+print(ancestors)
+```
+
+## Feature 3: Hierarchy - Descendants (`get_descendants`)
+
+This function navigates the code hierarchy *downwards* to find all child
+and descendant codes.
+
+**Example: Find descendants for ICD-9-CM code “428”** (Heart failure)
+
+``` r
+# Input: code string and system name
+descendants <- get_descendants(code = "428", system = "ICD9CM")
+
+# Output: A character vector of descendant codes (can be long!)
+print(head(descendants)) # Show only the first few for brevity
+print(paste("Total descendants found:", length(descendants)))
+```
+
+## Feature 4: Cross-System Mapping
+
+### Feature 4a: Supported Map
+
+let’s see which mappings (crosswalks) are currently supported: The
+[`supported_cross()`](https://v1xerunt.github.io/RHealth/reference/supported_cross.md)
+function returns a list of identifiers for all available code system
+mappings within the package.
+
+``` r
+# Call the function to get the list of supported crosswalks
+available_crosswalks <- supported_cross()
+
+# Print the available mapping identifiers
+print(available_crosswalks)
+```
+
+### Feature 4b：Translate codes(`map_code`)
+
+This function translates codes from one coding system to another using
+pre-defined mapping tables.
+
+**Example: Map ICD-9-CM “428.0” to the CCSCM system** (Clinical
+Classifications Software)
+
+``` r
+# Input: code, source system (from), target system (to)
+mapped_code <- map_code(code = "428.0", from = "ICD9CM", to = "CCSCM")
+
+# Output: The corresponding code(s) in the target system
+print(mapped_code)
+```
+
+## Feature 5: ATC Specific Functions
+
+Now let’s look at utilities specifically designed for the ATC
+(Anatomical Therapeutic Chemical) classification system for drugs.
+
+### Feature 5a: ATC Level Conversion (`atc_convert`)
+
+This utility function truncates an ATC code to get its representation at
+different classification levels (L1 to L5).
+
+**Example: Convert ATC code “L01BA01” (Methotrexate)**
+
+``` r
+atc_code <- "L01BA01"
+
+# Get code representations at different levels
+print(paste("L1 (Anatomical Main Group):", atc_convert(atc_code, level = 1))) # L
+print(paste("L3 (Therapeutic Subgroup):", atc_convert(atc_code, level = 3))) # L01
+print(paste("L4 (Chemical Subgroup):", atc_convert(atc_code, level = 4))) # L01B
+# Level 5 is usually the full substance code
+```
+
+### Feature 5b: ATC Drug-Drug Interactions (`get_ddi`)
+
+This function loads a predefined dataset of potential Drug-Drug
+Interactions (DDIs), typically represented by pairs of interacting ATC
+codes.
+
+**Example: Load and view the first few DDI pairs**
+
+``` r
+# Load the DDI dataset bundled with the package/data
+ddi_data <- get_ddi()
+
+# Display the structure (first few rows)
+# Assumes columns are ATC_i, ATC_j
+kable(head(ddi_data))
+
+# Optionally, show total number of interactions listed
+# print(paste("Total DDI records loaded:", nrow(ddi_data)))
+```
+
+## Summary & Future Work
+
+### Summary
+
+- `medcode` enables standardized handling of clinical code vocabularies
+- Unified functions for code lookup, hierarchy navigation, and
+  cross-system mapping
+- Easily extendable to support new coding systems or custom vocabularies
+- Ready for integration into R-based medical informatics pipelines
+
+### Next Steps
+
+- **Expand Coverage:** Add support for more coding systems and mapping
+  tables based on user needs
+- **Integration:** Use medical codes in predictive modeling workflows
+  with RHealth’s Dataset and Model modules

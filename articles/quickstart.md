@@ -1,0 +1,90 @@
+# Quickstart: In-Hospital Mortality Prediction with RHealth
+
+## 📁 Step 1: Initialize MIMIC-IV Dataset
+
+You can download a sample dataset (MIMIC-IV Demo, version 2.2) directly
+from PhysioNet using the following link:
+
+👉 <https://physionet.org/content/mimic-iv-demo/2.2/#files-panel>
+
+You need to specify the root directory where your MIMIC-IV CSV files are
+stored:
+
+``` r
+data_dir <- "/Users/yourname/datasets/mimiciv/"
+
+ds <- MIMIC4EHRDataset$new(
+  root = data_dir,
+  tables = c("patients", "admissions", "diagnoses_icd", "procedures_icd", "prescriptions"),
+  dataset_name = "mimic4_ehr",
+  dev = TRUE
+)
+
+ds$stats()
+```
+
+## 🧠 Step 2: Set Prediction Task
+
+Here we choose **30-day readmission** as the prediction target:
+
+``` r
+sd <- ds$set_task(task = Readmission30DaysMIMIC4$new())
+```
+
+This will process the raw tables and generate a task-specific sample
+dataset.
+
+## 🧪 Step 3: Split Dataset
+
+Split the data by patient into train/val/test (80%/10%/10%):
+
+``` r
+splits <- split_by_patient(sd, c(0.8, 0.1, 0.1))
+
+train_dl <- get_dataloader(splits[[1]], batch_size = 32, shuffle = TRUE)
+val_dl <- get_dataloader(splits[[2]], batch_size = 32)
+test_dl <- get_dataloader(splits[[3]], batch_size = 32)
+```
+
+## 🔧 Step 4: Build Model
+
+We use a GRU-based recurrent neural network model:
+
+``` r
+model <- RNN(
+  dataset = sd,
+  embedding_dim = 128,
+  rnn_type = "GRU",
+  num_layers = 1
+)
+```
+
+## 🏋️‍♂️ Step 5: Train Model
+
+Create a `Trainer` object and start training:
+
+``` r
+trainer <- Trainer$new(model = model)
+
+trainer$train(
+  train_dataloader = train_dl,
+  val_dataloader = val_dl,
+  epochs = 10,
+  optimizer_params = list(lr = 1e-3),
+  monitor = "roc_auc"
+)
+```
+
+## 📈 Step 6: Evaluate Model
+
+Finally, evaluate on the test set:
+
+``` r
+result <- trainer$evaluate(test_dl)
+print(result)
+```
+
+## ✅ Done!
+
+You have successfully completed a full deep learning pipeline for EHR
+prediction using the RHealth package.

@@ -20,10 +20,13 @@
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/quickstart.html">Quickstart: In-Hospital Mortality Prediction with RHealth</a></li>
-    <li><a class="dropdown-item" href="../articles/MedCode.html">DeepRHealth::medcode Module Demo</a></li>
+    <li><a class="dropdown-item" href="../articles/MedCode.html">RHealth Medical Code Module</a></li>
+    <li><a class="dropdown-item" href="../articles/ehrshot_quickstart.html">EHRShot Dataset Quick Start Guide</a></li>
+    <li><a class="dropdown-item" href="../articles/eicu_quickstart.html">Getting Started with eICU-CRD Dataset</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><a class="dropdown-item" href="../articles/index.html">More articles...</a></li>
   </ul></li>
+<li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><a class="external-link nav-link" href="https://github.com/v1xerunt/RHealth/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
       </ul></div>
 
@@ -41,8 +44,7 @@
 
       <div class="section-desc"><p>Classes for representing EHR datasets and configuration.</p></div>
 
-
-    </div><div class="section level2">
+      <dl></dl></div><div class="section level2">
 
 
 
@@ -53,79 +55,113 @@
 
         </dt>
         <dd>BaseDataset — R6 infrastructure for clinical event datasets</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="SampleDataset.html">SampleDataset()</a></code>
 
         </dt>
         <dd>SampleDataset</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="MIMIC3Dataset.html">MIMIC3Dataset</a></code>
 
         </dt>
         <dd>MIMIC3Dataset: Dataset class for MIMIC-III</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="MIMIC4EHRDataset.html">MIMIC4EHRDataset</a></code>
 
         </dt>
         <dd>MIMIC4EHRDataset: Dataset class for MIMIC-IV EHR</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="MIMIC4NoteDataset.html">MIMIC4NoteDataset</a></code>
 
         </dt>
         <dd>MIMIC4NoteDataset: Dataset class for MIMIC-IV Clinical Notes</dd>
-      </dl><dl><dt>
+
+        <dt>
+
+          <code><a href="OMOPDataset.html">OMOPDataset</a></code>
+
+        </dt>
+        <dd>OMOPDataset</dd>
+
+        <dt>
+
+          <code><a href="eICUDataset.html">eICUDataset</a></code>
+
+        </dt>
+        <dd>eICUDataset: Dataset class for eICU-CRD</dd>
+
+        <dt>
+
+          <code><a href="EHRShotDataset.html">EHRShotDataset</a></code>
+
+        </dt>
+        <dd>EHRShotDataset: Dataset class for EHRShot Benchmark</dd>
+
+        <dt>
 
           <code><a href="Patient.html">Patient</a></code>
 
         </dt>
         <dd>Patient: R6 Class for a Sequence of Events</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="Event.html">Event</a></code>
 
         </dt>
         <dd>Event: R6 Class for a Single Clinical Event</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="DatasetConfig.html">DatasetConfig</a></code>
 
         </dt>
         <dd>DatasetConfig: Root dataset configuration</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="load_yaml_config.html">load_yaml_config()</a></code>
 
         </dt>
         <dd>Load and validate dataset configuration from YAML</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="get_dataloader.html">get_dataloader()</a></code>
 
         </dt>
         <dd>Create DataLoader</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="split_by_patient.html">split_by_patient()</a></code>
 
         </dt>
         <dd>split_by_patient</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="split_by_visit.html">split_by_visit()</a></code>
 
         </dt>
         <dd>split_by_visit</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="split_by_sample.html">split_by_sample()</a></code>
 
         </dt>
         <dd>Dataset Split Functions</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="load_sample_dataset.html">load_sample_dataset()</a></code>
 
@@ -136,8 +172,7 @@
 
       <div class="section-desc"><p>Preprocessors for handling input/output features.</p></div>
 
-
-    </div><div class="section level2">
+      <dl></dl></div><div class="section level2">
 
 
 
@@ -148,73 +183,85 @@
 
         </dt>
         <dd>Abstract Processor Base Classes</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="DatasetProcessor.html">DatasetProcessor</a></code>
 
         </dt>
         <dd>DatasetProcessor: Processor applied to entire datasets</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="SampleProcessor.html">SampleProcessor</a></code>
 
         </dt>
         <dd>SampleProcessor: Processor for sample-level transformations</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="FeatureProcessor.html">FeatureProcessor</a></code>
 
         </dt>
         <dd>FeatureProcessor: Base class for all data processors</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="TextProcessor.html">TextProcessor</a></code>
 
         </dt>
         <dd>Text Processor</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="SequenceProcessor.html">SequenceProcessor</a></code>
 
         </dt>
         <dd>Sequence Processor</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="TimeseriesProcessor.html">TimeseriesProcessor</a></code>
 
         </dt>
         <dd>Time Series Processor</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="BinaryLabelProcessor.html">BinaryLabelProcessor</a></code>
 
         </dt>
         <dd>Binary Label Processor</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="MultiClassLabelProcessor.html">MultiClassLabelProcessor</a></code>
 
         </dt>
         <dd>Multi-Class Label Processor</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="MultiLabelProcessor.html">MultiLabelProcessor</a></code>
 
         </dt>
         <dd>Multi-Label Processor</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="RegressionLabelProcessor.html">RegressionLabelProcessor</a></code>
 
         </dt>
         <dd>Regression Label Processor</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="RawProcessor.html">RawProcessor</a></code>
 
         </dt>
         <dd>Raw Processor</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="get_processor.html">get_processor()</a></code>
 
@@ -223,10 +270,9 @@
       </dl></div><div class="section level2">
       <h2 id="tasks">Tasks<a class="anchor" aria-label="anchor" href="#tasks"></a></h2>
 
-      <div class="section-desc"><p>Benchmark prediction tasks based on MIMIC-IV.</p></div>
+      <div class="section-desc"><p>Benchmark prediction tasks for various EHR datasets.</p></div>
 
-
-    </div><div class="section level2">
+      <dl></dl></div><div class="section level2">
 
 
 
@@ -237,43 +283,82 @@
 
         </dt>
         <dd>BaseTask (Abstract Base Class)</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="InHospitalMortalityMIMIC3.html">InHospitalMortalityMIMIC3</a></code>
 
         </dt>
         <dd>InHospitalMortalityMIMIC3 Task</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="InHospitalMortalityMIMIC4.html">InHospitalMortalityMIMIC4</a></code>
 
         </dt>
         <dd>InHospitalMortalityMIMIC4 Task</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="NextMortalityMIMIC3.html">NextMortalityMIMIC3</a></code>
 
         </dt>
         <dd>NextMortalityMIMIC3 Task</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="NextMortalityMIMIC4.html">NextMortalityMIMIC4</a></code>
 
         </dt>
         <dd>NextMortalityMIMIC4 Task</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="Readmission30DaysMIMIC4.html">Readmission30DaysMIMIC4</a></code>
 
         </dt>
         <dd>Readmission30DaysMIMIC4 Task</dd>
+
+        <dt>
+
+          <code><a href="MortalityPredictionOMOP.html">MortalityPredictionOMOP</a></code>
+
+        </dt>
+        <dd>MortalityPredictionOMOP Task</dd>
+
+        <dt>
+
+          <code><a href="ReadmissionPredictionOMOP.html">ReadmissionPredictionOMOP</a></code>
+
+        </dt>
+        <dd>ReadmissionPredictionOMOP Task</dd>
+
+        <dt>
+
+          <code><a href="MortalityPredictionEICU.html">MortalityPredictionEICU</a></code>
+
+        </dt>
+        <dd>MortalityPredictionEICU Task</dd>
+
+        <dt>
+
+          <code><a href="MortalityPredictionEICU2.html">MortalityPredictionEICU2</a></code>
+
+        </dt>
+        <dd>MortalityPredictionEICU2 Task (Alternative Feature Set)</dd>
+
+        <dt>
+
+          <code><a href="BenchmarkEHRShot.html">BenchmarkEHRShot</a></code>
+
+        </dt>
+        <dd>BenchmarkEHRShot: Benchmark predictive tasks using EHRShot</dd>
       </dl></div><div class="section level2">
       <h2 id="models">Models<a class="anchor" aria-label="anchor" href="#models"></a></h2>
 
-      <div class="section-desc"><p>Neural network models and layers built on torch.</p></div>
+      <div class="section-desc"><p>Neural network models built on torch.</p></div>
 
-
-    </div><div class="section level2">
+      <dl></dl></div><div class="section level2">
 
 
 
@@ -284,31 +369,54 @@
 
         </dt>
         <dd>BaseModel Class</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="EmbeddingModel.html">EmbeddingModel()</a></code>
 
         </dt>
         <dd>EmbeddingModel</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="RNN.html">RNN()</a></code>
 
         </dt>
         <dd>RNN Model Class</dd>
-      </dl><dl><dt>
 
-          <code><a href="RNNLayer.html">RNNLayer()</a></code>
+        <dt>
+
+          <code><a href="Transformer.html">Transformer()</a></code>
 
         </dt>
-        <dd>RNNLayer Class</dd>
+        <dd>Transformer Model Class</dd>
+
+        <dt>
+
+          <code><a href="CNN.html">CNN()</a></code>
+
+        </dt>
+        <dd>CNN Model Class</dd>
+
+        <dt>
+
+          <code><a href="AdaCare.html">AdaCare()</a></code>
+
+        </dt>
+        <dd>AdaCare Model Class (Version 2 - With Timeseries Support)</dd>
+
+        <dt>
+
+          <code><a href="ConCare.html">ConCare()</a></code>
+
+        </dt>
+        <dd>ConCare Model Class</dd>
       </dl></div><div class="section level2">
       <h2 id="training-evaluation">Training &amp; Evaluation<a class="anchor" aria-label="anchor" href="#training-evaluation"></a></h2>
 
       <div class="section-desc"><p>Trainer class and supporting functions for training deep learning models.</p></div>
 
-
-    </div><div class="section level2">
+      <dl></dl></div><div class="section level2">
 
 
 
@@ -319,37 +427,64 @@
 
         </dt>
         <dd>Generic Trainer for torch models</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="collate_fn_dict_with_padding.html">collate_fn_dict_with_padding()</a></code>
 
         </dt>
         <dd>Collate Function with Padding</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="get_metrics_fn.html">get_metrics_fn()</a></code>
 
         </dt>
         <dd>Get Metrics Function</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="binary_metrics_fn.html">binary_metrics_fn()</a></code>
 
         </dt>
         <dd>Binary Classification Metrics (Python‐style API)</dd>
-      </dl><dl><dt>
+
+        <dt>
+
+          <code><a href="multiclass_metrics_fn.html">multiclass_metrics_fn()</a></code>
+
+        </dt>
+        <dd>Multiclass Classification Metrics</dd>
+
+        <dt>
+
+          <code><a href="multilabel_metrics_fn.html">multilabel_metrics_fn()</a></code>
+
+        </dt>
+        <dd>Multilabel Classification Metrics</dd>
+
+        <dt>
+
+          <code><a href="regression_metrics_fn.html">regression_metrics_fn()</a></code>
+
+        </dt>
+        <dd>Regression Metrics</dd>
+
+        <dt>
 
           <code><a href="is_best.html">is_best()</a></code>
 
         </dt>
         <dd>Check if Score is Best</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="set_logger.html">set_logger()</a></code>
 
         </dt>
         <dd>Initialize Logger</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="ece_confidence_binary.html">ece_confidence_binary()</a></code>
 
@@ -360,8 +495,7 @@
 
       <div class="section-desc"><p>Tools in the MedCode Module.</p></div>
 
-
-    </div><div class="section level2">
+      <dl></dl></div><div class="section level2">
 
 
 
@@ -372,43 +506,50 @@
 
         </dt>
         <dd>Truncate an ATC Code to a Specified Level</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="get_ancestors.html">get_ancestors()</a></code>
 
         </dt>
         <dd>Get Ancestor Codes in the Hierarchy</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="get_ddi.html">get_ddi()</a></code>
 
         </dt>
         <dd>Load the Drug–Drug Interaction (DDI) Table for ATC Codes</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="get_descendants.html">get_descendants()</a></code>
 
         </dt>
         <dd>Get Descendant Codes in the Hierarchy</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="lookup_code.html">lookup_code()</a></code>
 
         </dt>
         <dd>Lookup a Medical Code Entry</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="map_code.html">map_code()</a></code>
 
         </dt>
         <dd>Map a Code from One System to Another</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="supported_cross.html">supported_cross()</a></code>
 
         </dt>
         <dd>List Supported Crosswalk Code Systems</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="supported_inner.html">supported_inner()</a></code>
 
@@ -419,8 +560,7 @@
 
       <div class="section-desc"><p>Other tools.</p></div>
 
-
-    </div><div class="section level2">
+      <dl></dl></div><div class="section level2">
 
 
 
@@ -431,31 +571,29 @@
 
         </dt>
         <dd>Create Directory if Not Exists</dd>
-      </dl><dl><dt>
 
-          <code><a href="dot-csv2parquet_path.html">.csv2parquet_path()</a></code>
-
-        </dt>
-        <dd>Given a *.csv(.gz) path, return *.parquet path in a /subset folder</dd>
-      </dl><dl><dt>
+        <dt>
 
           <code><a href="Event-from_list.html">Event-from_list</a></code>
 
         </dt>
         <dd>from_list: Create Event from row</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="JoinConfig.html">JoinConfig</a></code>
 
         </dt>
         <dd>JoinConfig: Configuration for joining tables in a dataset</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="rhealth.config.html">rhealth.config</a></code>
 
         </dt>
         <dd>Dataset Configuration</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="TableConfig.html">TableConfig</a></code>
 
@@ -471,7 +609,7 @@
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
     </footer></div>
