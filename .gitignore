@@ -22,6 +22,8 @@
 .Rproj.user/
 *.Rproj~
 
+.claude
+
 # produced vignettes
 vignettes/*.html
 vignettes/*.pdf
@@ -55,3 +57,5 @@ rsconnect/
 
 # Quarto specific
 .quarto/
+/doc/
+/Meta/

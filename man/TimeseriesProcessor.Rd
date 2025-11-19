@@ -5,7 +5,73 @@
 \title{Time Series Processor}
 \description{
 Processor for irregular time series data with missing values.
-Supports uniform resampling and two imputation strategies: forward-fill and zero-fill.
+Supports uniform resampling, two imputation strategies (forward-fill and zero-fill),
+and automatic z-score normalization using training data statistics.
+}
+\details{
+The processor performs three main steps:
+\enumerate{
+\item \strong{Resampling}: Converts irregular time series to uniform time grid based on \code{sampling_rate}
+\item \strong{Imputation}: Fills missing values using either forward-fill or zero-fill strategy
+\item \strong{Normalization} (default): Applies z-score normalization: \code{(x - mean) / std}
+}
+
+Normalization is enabled by default (\code{normalize = TRUE}):
+\itemize{
+\item Call \code{fit()} on training samples to compute feature-wise mean and standard deviation
+\item The same statistics are used for all subsequent \code{process()} calls (train/val/test)
+\item This ensures no data leakage between training and validation/test sets
+}
+}
+\examples{
+\dontrun{
+library(torch)
+library(lubridate)
+
+# Create training samples with timeseries data
+train_samples <- list(
+  list(
+    patient_id = 1,
+    labs = list(
+      timestamps = as.POSIXct(c("2020-01-01 00:00:00", "2020-01-01 02:00:00"), tz = "UTC"),
+      values = matrix(c(100, 50, 150, 60), ncol = 2)
+    )
+  ),
+  list(
+    patient_id = 2,
+    labs = list(
+      timestamps = as.POSIXct(c("2020-01-01 00:00:00", "2020-01-01 01:00:00"), tz = "UTC"),
+      values = matrix(c(120, 55, 180, 65), ncol = 2)
+    )
+  )
+)
+
+# Example 1: Default behavior (with normalization)
+processor <- TimeseriesProcessor$new(
+  sampling_rate = dhours(1),
+  impute_strategy = "forward_fill"
+  # normalize = TRUE by default
+)
+
+# Fit on training data to compute statistics
+processor$fit(train_samples, "labs")
+
+# Process samples (applies normalization)
+result <- processor$process(train_samples[[1]]$labs)
+
+# Check normalization statistics
+print(processor$feature_means)  # Feature means from training data
+print(processor$feature_stds)   # Feature standard deviations
+
+# Example 2: Disable normalization if needed
+processor_no_norm <- TimeseriesProcessor$new(
+  sampling_rate = dhours(1),
+  impute_strategy = "forward_fill",
+  normalize = FALSE  # Explicitly disable normalization
+)
+result_no_norm <- processor_no_norm$process(train_samples[[1]]$labs)
+}
+
 }
 \section{Super classes}{
 \code{\link[RHealth:Processor]{RHealth::Processor}} -> \code{\link[RHealth:FeatureProcessor]{RHealth::FeatureProcessor}} -> \code{TimeseriesProcessor}
@@ -17,6 +83,12 @@ Supports uniform resampling and two imputation strategies: forward-fill and zero
 
 \item{\code{impute_strategy}}{A character string: 'forward_fill' or 'zero'.}
 
+\item{\code{normalize}}{Logical flag indicating whether to apply z-score normalization. Default TRUE.}
+
+\item{\code{feature_means}}{Numeric vector of feature means (computed during fit).}
+
+\item{\code{feature_stds}}{Numeric vector of feature standard deviations (computed during fit).}
+
 \item{\code{.size}}{Number of features (set on first call to process()).}
 }
 \if{html}{\out{</div>}}
@@ -25,6 +97,7 @@ Supports uniform resampling and two imputation strategies: forward-fill and zero
 \subsection{Public methods}{
 \itemize{
 \item \href{#method-TimeseriesProcessor-new}{\code{TimeseriesProcessor$new()}}
+\item \href{#method-TimeseriesProcessor-fit}{\code{TimeseriesProcessor$fit()}}
 \item \href{#method-TimeseriesProcessor-process}{\code{TimeseriesProcessor$process()}}
 \item \href{#method-TimeseriesProcessor-size}{\code{TimeseriesProcessor$size()}}
 \item \href{#method-TimeseriesProcessor-print}{\code{TimeseriesProcessor$print()}}
@@ -36,7 +109,6 @@ Supports uniform resampling and two imputation strategies: forward-fill and zero
 <ul>
 <li><span class="pkg-link" data-pkg="RHealth" data-topic="Processor" data-id="load"><a href='../../RHealth/html/Processor.html#method-Processor-load'><code>RHealth::Processor$load()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="RHealth" data-topic="Processor" data-id="save"><a href='../../RHealth/html/Processor.html#method-Processor-save'><code>RHealth::Processor$save()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="RHealth" data-topic="FeatureProcessor" data-id="fit"><a href='../../RHealth/html/FeatureProcessor.html#method-FeatureProcessor-fit'><code>RHealth::FeatureProcessor$fit()</code></a></span></li>
 </ul>
 </details>
 }}
@@ -44,11 +116,12 @@ Supports uniform resampling and two imputation strategies: forward-fill and zero
 \if{html}{\out{<a id="method-TimeseriesProcessor-new"></a>}}
 \if{latex}{\out{\hypertarget{method-TimeseriesProcessor-new}{}}}
 \subsection{Method \code{new()}}{
-Initialize the processor with a sampling rate and imputation strategy.
+Initialize the processor with a sampling rate, imputation strategy, and normalization option.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{TimeseriesProcessor$new(
   sampling_rate = lubridate::dhours(1),
-  impute_strategy = "forward_fill"
+  impute_strategy = "forward_fill",
+  normalize = TRUE
 )}\if{html}{\out{</div>}}
 }
 
@@ -58,6 +131,27 @@ Initialize the processor with a sampling rate and imputation strategy.
 \item{\code{sampling_rate}}{A lubridate duration (e.g., lubridate::dhours(1)).}
 
 \item{\code{impute_strategy}}{Either 'forward_fill' or 'zero'.}
+
+\item{\code{normalize}}{Logical, whether to apply z-score normalization. Default TRUE.}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-TimeseriesProcessor-fit"></a>}}
+\if{latex}{\out{\hypertarget{method-TimeseriesProcessor-fit}{}}}
+\subsection{Method \code{fit()}}{
+Fit the processor by computing feature-wise mean and std from training data.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{TimeseriesProcessor$fit(samples, field)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{samples}}{A list of named lists representing sample records.}
+
+\item{\code{field}}{A string giving the field name to fit on.}
 }
 \if{html}{\out{</div>}}
 }
@@ -69,6 +163,7 @@ Initialize the processor with a sampling rate and imputation strategy.
 Process irregular time series into uniformly sampled tensor.
 Step 1: uniformly sample time points and place values at correct positions.
 Step 2: impute missing entries using selected strategy.
+Step 3: (optional) apply z-score normalization using training statistics.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{TimeseriesProcessor$process(value)}\if{html}{\out{</div>}}
 }

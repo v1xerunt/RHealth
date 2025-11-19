@@ -15,19 +15,23 @@ collate_fn_dict_with_padding <- function(batch) {
       shapes <- lapply(values, function(v) v$shape)
       same_shape <- all(sapply(shapes, function(s) all(s == shapes[[1]])))
 
-      if (same_shape) {
+      if (values[[1]]$dim() == 0) {
+        # Scalar tensors - just stack them
         collated[[key]] <- torch_stack(values)
-      } else {
-        if (values[[1]]$dim() == 0) {
-          collated[[key]] <- torch_stack(values)
-        } else if (values[[1]]$dim() >= 1) {
-          # Store original lengths before padding
-          lengths <- torch_tensor(sapply(values, function(v) v$shape[1]), dtype = torch_long())
-          collated[[paste0(key, "_len")]] <- lengths
-          collated[[key]] <- nn_utils_rnn_pad_sequence(values, batch_first = TRUE, padding_value = 0)
+      } else if (values[[1]]$dim() >= 1) {
+        # Always create length keys for 1D+ tensors (sequences)
+        lengths <- torch_tensor(sapply(values, function(v) v$shape[1]), dtype = torch_long())
+        collated[[paste0(key, "_len")]] <- lengths
+
+        if (same_shape) {
+          # If all sequences have same length, use stack (more efficient)
+          collated[[key]] <- torch_stack(values)$contiguous()
         } else {
-          stop(sprintf("Unsupported tensor shape: %s", paste0(values[[1]]$shape, collapse = ",")))
+          # If sequences have different lengths, use pad_sequence
+          collated[[key]] <- nn_utils_rnn_pad_sequence(values, batch_first = TRUE, padding_value = 0)$contiguous()
         }
+      } else {
+        stop(sprintf("Unsupported tensor shape: %s", paste0(values[[1]]$shape, collapse = ",")))
       }
     } else {
       collated[[key]] <- values

@@ -77,7 +77,7 @@ You can download a sample dataset (MIMIC-IV Demo, version 2.2) directly from Phy
 
 | Stage | Raw Input | Dataset Module Output | Why it Matters |
 |-------|-----------|----------------------|----------------|
-| **Ingestion** | One *CSV* (`.csv` / `.csv.gz`) **per clinical table** | A lazy *Polars* `LazyFrame` for each table | Streaming avoids loading GBs of text into RAM |
+| **Ingestion** | One *CSV* (`.csv` / `.csv.gz`) **per clinical table**
 | **Harmonisation** | Heterogeneous schemas, mixed timestamp formats, upper/lower‑case headers | A single, canonical **event table** with<br>`patient_id`, `event_type`, `timestamp`, `attr_*` | Uniform layout lets every task, processor & model share the same rules |
 | **Entity Split** | Monolithic event table | `Patient` objects (one per subject) | Encapsulates per‑patient logic & keeps memory steady |
 | **Task Sampling** | Arbitrary event streams | `SampleDataset` (**torch**‑compatible) | Produces `(input, target)` pairs ready for a `dataloader()` |
@@ -268,14 +268,31 @@ MyCoolTask <- R6::R6Class(
 
 During `BaseDataset$set_task(task)` RHealth:
 
-1. Reads `task$input_schema` / `task$output_schema`.  
+1. Reads `task$input_schema` / `task$output_schema`.
 2. Calls `get_processor(type)` to instantiate the matching **Processor**
-   (`TimeseriesProcessor`, `SequenceProcessor`, …).  
+   (`TimeseriesProcessor`, `SequenceProcessor`, …).
 3. Each sample emitted by `task$call()` is **encoded on the fly** into
    `torch_tensor`s before being stored in the `SampleDataset`.
 
 That means you never import `{torch}` inside a task – stick to base R
 objects (`numeric`, `character`, `matrix`, `data.frame`, lists).
+
+#### Available Processors
+
+| Processor | Input Type | Purpose | Key Features |
+|-----------|------------|---------|--------------|
+| `TimeseriesProcessor` | `list(timestamps, matrix)` | Irregular time series | Resampling, imputation (forward-fill/zero), z-score normalization |
+| `SequenceProcessor` | `character vector` | Categorical sequences | Vocabulary building, integer encoding |
+| `BinaryProcessor` | `numeric` (0/1) | Binary labels | Converts to float tensor |
+| `MulticlassProcessor` | `integer` | Multi-class labels | One-hot encoding |
+| `RegressionProcessor` | `numeric` | Continuous values | Direct conversion to float |
+
+**TimeseriesProcessor normalization:**
+
+The `TimeseriesProcessor` automatically applies z-score normalization to timeseries data:
+- Computes feature-wise mean and standard deviation from training data during `fit()`
+- Applies `(x - mean) / std` during `process()` to all samples (train/val/test)
+- Prevents data leakage by using only training statistics
 
 ---
 
@@ -501,7 +518,7 @@ model <- RNN(samples, embedding_dim = 128, hidden_dim = 128)
 
 ## 3.  Kick off training ---------------------------------------------------
 trainer <- Trainer$new(model,
-                       metrics      = c("auroc", "auprc"),
+                       metrics      = c("roc_auc", "pr_auc"),
                        output_path  = "experiments",
                        exp_name     = "mortality_rnn")
 

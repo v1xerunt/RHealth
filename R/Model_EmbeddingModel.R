@@ -1,5 +1,5 @@
-#' EmbeddingModel
-#'
+#' @include Model_BaseModel.R
+#' @title EmbeddingModel
 #' @description
 #' EmbeddingModel is responsible for creating embedding layers for different types of input data.
 #'

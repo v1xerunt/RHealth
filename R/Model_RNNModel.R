@@ -2,7 +2,7 @@
 #' @description Recurrent neural network layer (GRU/LSTM/RNN) with built‑in
 #' 1‑based‑index safety, masking, dropout, bidirectionality and a learnable
 #' fallback hidden vector for empty sequences.
-#' 
+#'
 #' @details
 #' **Key design points**
 #' * Accepts `mask` indicating valid time steps (1‑based indexing respected).
@@ -13,9 +13,10 @@
 #' * Works for unidirectional or bidirectional networks. In the bidirectional
 #'   case, the last hidden state is built from the **forward last step** and the
 #'   **backward first step**, then projected back to `hidden_size`.
-#' 
+#'
 #' @inheritParams torch::nn_gru
 #' @param rnn_type Character, one of "GRU", "LSTM", or "RNN". Default "GRU".
+#' @keywords internal
 #' @export
 #' @importFrom torch nn_module nn_dropout nn_linear nn_parameter
 #'   torch_float torch_long torch_zeros torch_randn torch_sum torch_cat
@@ -61,6 +62,9 @@ RNNLayer <- torch::nn_module(
   forward = function(x, mask = NULL, lengths = NULL) {
     x <- self$dropout_layer(x)
 
+    # Ensure tensor is contiguous before packing for cuDNN compatibility
+    x <- x$contiguous()
+
     B <- x$size(1)
     T <- x$size(2)
 
@@ -71,7 +75,7 @@ RNNLayer <- torch::nn_module(
         torch_sum(mask$to(dtype = torch_long()), dim = -1)$cpu()
       }
     }
-    
+
     packed <- nn_utils_rnn_pack_padded_sequence(
       x, lengths$to(dtype = torch_int()), batch_first = TRUE, enforce_sorted = FALSE
     )
@@ -185,11 +189,11 @@ RNN <- torch::nn_module(
       x <- embedded[[feature_key]]
       len_key <- paste0(feature_key, "_len")
       lengths <- if (len_key %in% names(inputs)) inputs[[len_key]] else NULL
-      
+
       # The mask is now only needed if lengths are not provided.
       # For backwards compatibility or other use cases.
       mask <- if (is.null(lengths)) (x$sum(dim = -1)$abs() > 1e-6)$to(dtype = torch_long()) else NULL
-      
+
       result <- self$rnn[[feature_key]](x = x, mask = mask, lengths = lengths)
       result[[2]]
     })

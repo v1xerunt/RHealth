@@ -49,3 +49,4 @@ case, the last hidden state is built from the \strong{forward last step} and the
 \strong{backward first step}, then projected back to \code{hidden_size}.
 }
 }
+\keyword{internal}

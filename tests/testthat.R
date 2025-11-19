@@ -7,6 +7,8 @@
 # * https://testthat.r-lib.org/articles/special-files.html
 
 library(testthat)
-library(RHealth)
+library(dplyr)
+library(torch)
+library(futile.logger)
 
 test_check("RHealth")

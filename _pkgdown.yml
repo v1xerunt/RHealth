@@ -23,6 +23,8 @@ articles:
     contents:
       - quickstart
       - MedCode
+      - ehrshot_quickstart
+      - eicu_quickstart
   - title: "Internal"
     contents:
       - Overview
@@ -37,6 +39,9 @@ reference:
       - MIMIC3Dataset
       - MIMIC4EHRDataset
       - MIMIC4NoteDataset
+      - OMOPDataset
+      - eICUDataset
+      - EHRShotDataset
       - Patient
       - Event
       - DatasetConfig
@@ -68,7 +73,7 @@ reference:
 
   - title: "Tasks"
     desc: >
-      Benchmark prediction tasks based on MIMIC-IV.
+      Benchmark prediction tasks for various EHR datasets.
     contents:
       - BaseTask
       - InHospitalMortalityMIMIC3
@@ -76,15 +81,23 @@ reference:
       - NextMortalityMIMIC3
       - NextMortalityMIMIC4
       - Readmission30DaysMIMIC4
+      - MortalityPredictionOMOP
+      - ReadmissionPredictionOMOP
+      - MortalityPredictionEICU
+      - MortalityPredictionEICU2
+      - BenchmarkEHRShot
 
   - title: "Models"
     desc: >
-      Neural network models and layers built on torch.
+      Neural network models built on torch.
     contents:
       - BaseModel
       - EmbeddingModel
       - RNN
-      - RNNLayer
+      - Transformer
+      - CNN
+      - AdaCare
+      - ConCare
 
   - title: "Training & Evaluation"
     desc: >
@@ -94,6 +107,9 @@ reference:
       - collate_fn_dict_with_padding
       - get_metrics_fn
       - binary_metrics_fn
+      - multiclass_metrics_fn
+      - multilabel_metrics_fn
+      - regression_metrics_fn
       - is_best
       - set_logger
       - ece_confidence_binary
@@ -109,7 +125,6 @@ reference:
       Other tools.
     contents:
       - create_directory
-      - .csv2parquet_path
       - Event-from_list
       - JoinConfig
       - rhealth.config

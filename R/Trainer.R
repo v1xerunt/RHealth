@@ -49,10 +49,6 @@ create_directory <- function(directory) {
   }
 }
 
-multiclass_metrics_fn <- NULL
-multilabel_metrics_fn <- NULL
-regression_metrics_fn <- NULL
-
 #' @title Get Metrics Function
 #' @description Returns appropriate metric function according to task mode.
 #'
@@ -168,6 +164,15 @@ Trainer <- R6::R6Class(
                      load_best_model_at_last = TRUE,
                      use_progress_bar = TRUE) {
 
+      # Ensure monitor metric is in metrics list
+      if (!is.null(monitor)) {
+        if (is.null(self$metrics)) {
+          self$metrics <- c(monitor)
+        } else if (!(monitor %in% self$metrics)) {
+          self$metrics <- c(self$metrics, monitor)
+        }
+      }
+
       flog.info("Training:")
       flog.info("Batch size: %d", train_dataloader$batch_size)
       flog.info("Optimizer: %s", deparse(substitute(optimizer_class)))
@@ -256,7 +261,9 @@ Trainer <- R6::R6Class(
           message(scores_log)
           if (!is.null(monitor)) {
             current <- scores[[monitor]]
-            if (is_best(best_score, current, monitor_criterion)) {
+            if (is.null(current) || length(current) == 0 || is.na(current)) {
+              warning(sprintf("Monitor metric '%s' not found or invalid in scores", monitor))
+            } else if (is_best(best_score, current, monitor_criterion)) {
               best_score <- current
               flog.info("New best %s score (%.4f) at epoch-%d, step-%d",
                         monitor, current, epoch, global_step)

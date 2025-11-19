@@ -24,11 +24,11 @@ MultiClassLabelProcessor <- R6::R6Class("MultiClassLabelProcessor",
       num_classes <- length(labels)
 
       if (identical(sort(labels), seq_len(num_classes) - 1)) {
-        # Already 0..(n-1)
-        self$label_vocab <- setNames(0:(num_classes - 1), 0:(num_classes - 1))
+        # Convert 0-based labels to 1-based for R conventions
+        self$label_vocab <- setNames(1:num_classes, 0:(num_classes - 1))
       } else {
         labels <- sort(labels)
-        self$label_vocab <- setNames(0:(num_classes - 1), labels)
+        self$label_vocab <- setNames(1:num_classes, labels)
       }
 
       message(sprintf("Label '%s' vocab: %s", field, paste(names(self$label_vocab), collapse = ", ")))

@@ -1,0 +1,104 @@
+version: "1.0"
+tables:
+  patient:
+    file_path: "patient.csv"
+    patient_id: "patientunitstayid"
+    timestamp: null
+    join:
+      - file_path: "hospital.csv"
+        "on": "hospitalid"
+        how: "left"
+        columns:
+          - "region"
+    attributes:
+      - "uniquepid"
+      - "patienthealthsystemstayid"
+      - "gender"
+      - "age"
+      - "ethnicity"
+      - "hospitalid"
+      - "wardid"
+      - "apacheadmissiondx"
+      - "admissionheight"
+      - "admissionweight"
+      - "hospitaladmittime24"
+      - "hospitaladmitoffset"
+      - "hospitaladmitsource"
+      - "hospitaldischargeyear"
+      - "hospitaldischargetime24"
+      - "hospitaldischargeoffset"
+      - "hospitaldischargelocation"
+      - "hospitaldischargestatus"
+      - "unitadmittime24"
+      - "unitadmitsource"
+      - "unitvisitnumber"
+      - "unitstaytype"
+      - "admissionweight"
+      - "dischargeweight"
+      - "unitdischargeoffset"
+      - "unitdischargelocation"
+      - "unitdischargestatus"
+
+  diagnosis:
+    file_path: "diagnosis.csv"
+    patient_id: "patientunitstayid"
+    timestamp: "diagnosisoffset"
+    attributes:
+      - "diagnosisid"
+      - "diagnosisstring"
+      - "icd9code"
+      - "diagnosispriority"
+
+  treatment:
+    file_path: "treatment.csv"
+    patient_id: "patientunitstayid"
+    timestamp: "treatmentoffset"
+    attributes:
+      - "treatmentid"
+      - "treatmentstring"
+
+  medication:
+    file_path: "medication.csv"
+    patient_id: "patientunitstayid"
+    timestamp: "drugstartoffset"
+    attributes:
+      - "medicationid"
+      - "drugname"
+      - "dosage"
+      - "routeadmin"
+      - "frequency"
+      - "loadingdose"
+      - "prn"
+      - "drugstopoffset"
+
+  lab:
+    file_path: "lab.csv"
+    patient_id: "patientunitstayid"
+    timestamp: "labresultoffset"
+    attributes:
+      - "labid"
+      - "labname"
+      - "labresult"
+      - "labresulttext"
+      - "labmeasurenamesystem"
+      - "labmeasurenameinterface"
+
+  physicalexam:
+    file_path: "physicalExam.csv"
+    patient_id: "patientunitstayid"
+    timestamp: "physicalexamoffset"
+    attributes:
+      - "physicalexamid"
+      - "physicalexampath"
+      - "physicalexamvalue"
+      - "physicalexamtext"
+
+  admissiondx:
+    file_path: "admissionDx.csv"
+    patient_id: "patientunitstayid"
+    timestamp: "admitdxenteredoffset"
+    attributes:
+      - "admissiondxid"
+      - "admitdxpath"
+      - "admitdxname"
+      - "admitdxtext"

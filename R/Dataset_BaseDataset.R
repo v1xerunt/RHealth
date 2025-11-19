@@ -21,7 +21,7 @@
 #' input/output pairs).
 #'
 #' @section Dependencies:
-#' Polars is used via the \code{polars} R package.  Parallelism and progress
+#' Parallelism and progress
 #' reporting require \code{future}, \code{future.apply}, and \code{progressr}.
 #' @importFrom R6 R6Class
 #' @importFrom dplyr tbl collect filter select mutate left_join union_all distinct pull rename rename_with
@@ -60,7 +60,7 @@ BaseDataset <- R6::R6Class(
 
     #--------------------------------------------------------------------
     # Private-cache fields ----------------------------------------------
-    #' @field .collected_global_event_df Polars dataframe storing all global events.
+    #' @field .collected_global_event_df dataframe storing all global events.
     .collected_global_event_df = NULL,
     #' @field .unique_patient_ids Character vector of unique patient IDs.
     .unique_patient_ids        = NULL,
@@ -171,11 +171,6 @@ BaseDataset <- R6::R6Class(
       # ── timestamp expression ─────────────────────────────────────
       ts_col <- if (!is.null(cfg$timestamp)) {
         if (is.list(cfg$timestamp)) {
-          # This is tricky to replicate directly without more info on what concat_str does.
-          # Assuming it concatenates columns to form a string.
-          # We can do this with paste. The equivalent in SQL is CONCAT.
-          # For now, I will assume it creates a string representation.
-          # This might need adjustment based on the exact polars behavior.
           rlang::parse_expr(paste0("paste(", paste0(cfg$timestamp, collapse=", "), ")"))
         } else {
           rlang::sym(cfg$timestamp)
@@ -188,8 +183,6 @@ BaseDataset <- R6::R6Class(
       pid_col <- if (!is.null(cfg$patient_id)) {
         rlang::sym(cfg$patient_id)
       } else {
-        # polars `pl$int_range(0, pl$count())` creates a sequence from 0 to N-1
-        # The equivalent in dplyr/SQL is row_number() - 1
         rlang::expr(row_number() - 1)
       }
       
@@ -417,6 +410,13 @@ BaseDataset <- R6::R6Class(
       samples <- all_samples
 
       message(sprintf("Generated %d samples", length(samples)))
+
+      # Report truncation statistics if applicable
+      if (!is.null(task$truncation_count) && task$truncation_count > 0) {
+        message(sprintf("[INFO] Truncated %d samples to max_seq_length=%d",
+                       task$truncation_count, task$max_seq_length))
+      }
+
       result <- SampleDataset(
         samples       = samples,
         input_schema  = task$input_schema,
@@ -530,7 +530,7 @@ BaseDataset <- R6::R6Class(
     ",
     normalizePath(csv_path, winslash = "/"),
     db_separator,
-    normalizePath(tmp_parq, winslash = "/")
+    normalizePath(tmp_parq, winslash = "/", mustWork = FALSE)
   )
 
   DBI::dbExecute(con, sql)

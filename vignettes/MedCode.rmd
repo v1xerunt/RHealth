@@ -1,31 +1,18 @@
 ---
-title: "DeepRHealth::medcode Module Demo"
-subtitle: "R/medicine 2025 Prototype Showcase" 
+title: "RHealth Medical Code Module"
+subtitle: "R/medicine 2025 Prototype Showcase"
+output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{DeepRHealth::medcode Module Demo}
+  %\VignetteIndexEntry{RHealth Medical Code Module}
   %\VignetteEngine{knitr::rmarkdown}
-  \usepackage[utf8]{inputenc}
+  %\VignetteEncoding{UTF-8}
 author: "Zhixia Ren"
-date: 05/25/2025
-format: 
-  # revealjs:
-  #   theme: sky 
-  #   slide-number: true 
-  #   controls: true 
-  #   progress: true 
-  #   
-  html:
-    toc: true        
-    toc_float: true   
-    code-fold: false  
-    embed-resources: true
-lang: en
-editor: visual
+date: "2025-05-25"
 ---
 
 # Introduction
 
--   Goal: Showcase the core functionalities of the `DeepRHealth::medcode` module.
+-   Goal: Showcase the core functionalities of the `RHealth::medcode` module.
 
 -   Supports major medical coding systems (e.g., ICD, ATC) natively in R.
 
@@ -46,26 +33,17 @@ editor: visual
 
 **Loading Package & Dependencies**
 
--   We'll load the package directly from source using `devtools::load_all()`.
--   This requires running the presentation from the package's root directory.
--   We also load other necessary packages like `knitr`.
+```{r setup-environment, include=FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  eval = FALSE
+)
+```
 
-```{r setup-environment, echo=TRUE, message=FALSE, warning=FALSE}
-# Load required libraries for loading and display
-library(devtools)
+```{r load-library, eval=TRUE, message=FALSE, warning=FALSE}
+library(RHealth)
 library(knitr)
-library(rappdirs) # Used by DeepRHealth internally for caching
-library(fs) # Used by DeepRHealth internally for caching
-
-# Load all functions, data, etc. from the DeepRHealth package source
-# IMPORTANT: Ensure R's working directory is the package root!
-load_all(".")
-
-# Optional: Display where medcode data would be cached
-# cache_dir <- user_cache_dir("DeepRHealth", "medcode")
-# print(paste("Data cache directory:", cache_dir))
-
-# NOTE: Assume necessary data (e.g., ICD9CM.csv) is pre-cached for demo speed.
 ```
 
 # Data Handling
@@ -81,7 +59,7 @@ The package automatically downloads required medical code datasets (CSVs) and ca
 
 ```{r show_cache_path, echo=TRUE, message=FALSE, warning=FALSE}
 # Get the platform-specific cache directory path
-cache_dir <- rappdirs::user_cache_dir("DeepRHealth", "medcode")
+cache_dir <- rappdirs::user_cache_dir("RHealth", "medcode")
 print(paste("Data cache directory:", cache_dir))
 ```
 
@@ -242,9 +220,7 @@ kable(head(ddi_data))
 -   Easily extendable to support new coding systems or custom vocabularies
 -   Ready for integration into R-based medical informatics pipelines
 
-## Next step/Future work
+## Next Steps
 
--   **Finalize Vignettes:** Complete detailed tutorials (vignettes) showcasing common use cases and workflows.
--   **Complete `pkgdown` Website:** Finish the documentation website for easy access to all documentation (including existing help pages) and examples.
--   **Expand Coverage:** Add support for more coding systems and mapping tables based on user needs.
--   **Implement Testing:** Create comprehensive unit tests using `testthat` to ensure code quality and stability.
+-   **Expand Coverage:** Add support for more coding systems and mapping tables based on user needs
+-   **Integration:** Use medical codes in predictive modeling workflows with RHealth's Dataset and Model modules
